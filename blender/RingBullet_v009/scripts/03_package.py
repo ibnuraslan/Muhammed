@@ -17,6 +17,7 @@ sc.render.image_settings.color_mode = 'RGB'
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1080, 1920, 100
 sc.render.fps, sc.render.fps_base = 60, 1.0
 sc.frame_start, sc.frame_end = 1, 1395
+cy = sc.cycles; cy.samples = 20; cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.08   # farm speed: <=120 s per frame
 for o in [o for o in bpy.data.objects if o.name.startswith("Smoke")]:   # unused (hidden all film)
     bpy.data.objects.remove(o, do_unlink=True)
 # de-duplicate images appended twice (same file), then shrink background textures (alpha kept: Image.pack of the buffer)

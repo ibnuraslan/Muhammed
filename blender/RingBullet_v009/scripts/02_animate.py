@@ -254,34 +254,46 @@ def body_points_near(f, c, ax, half=0.003, rmax=0.016):
             if r < rmax: out.append((r, p))
     return out
 fs(300)
-RC, RAX = finger_frame(300)
-# the finger's own surface radius at the ring: the nearest ring of body points around the bone axis (the neighbours are further)
-near = sorted(body_points_near(300, RC, RAX), key=lambda t: t[0])
-rf = sum(r for r, p in near[:10]) / max(1, len(near[:10])) if near else 0.008
-rads = [r for r, p in near if r < rf * 1.6]
-RF = max(rads) if rads else 0.009
-log("finger radius at the ring mm", round(RF * 1000, 2), "points", len(rads))
-bpy.ops.mesh.primitive_torus_add(major_radius=RF + 0.0017, minor_radius=0.0016, major_segments=64, minor_segments=16)
+RC0, RAX = finger_frame(300)
+# fit the band to the finger's real cross-section (the bone does not run through the middle of the finger): the
+# ring-finger skin vertices in a 4 mm slab at the ring -> their centre and their widest distance from it
+DOMB = dom_bones(OWB, OW)
+RING_VERTS = [i for i, b in DOMB.items() if b in ("finger4-1.L",)]
+def ring_slab(f, c, ax, half=0.002):
+    pts = eval_points(OWB, filt=lambda i: i in RSET)
+    return [(p - c) - ax * (p - c).dot(ax) for i, p, n in pts if abs((p - c).dot(ax)) < half]
+RSET = set(RING_VERTS)
+sl = ring_slab(300, RC0, RAX)
+u_ = (sl[0] - RAX * sl[0].dot(RAX)).normalized(); v_ = RAX.cross(u_)
+us = [d.dot(u_) for d in sl]; vs_ = [d.dot(v_) for d in sl]
+off = u_ * (min(us) + max(us)) / 2 + v_ * (min(vs_) + max(vs_)) / 2          # centre of the cross-section's extent
+RC = RC0 + off
+RF = max(((d - off).length for d in sl))
+log("ring fit: finger skin points", len(sl), "centre offset from bone mm", round(off.length * 1000, 2), "max skin radius mm", round(RF * 1000, 2))
+R_IN = RF + 0.0015; R_MINOR = 0.0014; R_ZS = 1.45
+bpy.ops.mesh.primitive_torus_add(major_radius=R_IN + R_MINOR, minor_radius=R_MINOR, major_segments=64, minor_segments=16)
 RING = bpy.context.active_object; RING.name = "Ring"
-RING.scale = (1, 1, 1.75); bpy.ops.object.transform_apply(scale=True)
+RING.scale = (1, 1, R_ZS); bpy.ops.object.transform_apply(scale=True)
 for p_ in RING.data.polygons: p_.use_smooth = True
 gold = bpy.data.materials.new("M_Gold"); gold.use_nodes = True; pg = gold.node_tree.nodes["Principled BSDF"]
 pg.inputs["Base Color"].default_value = (1.0, 0.66, 0.20, 1); pg.inputs["Metallic"].default_value = 1.0; pg.inputs["Roughness"].default_value = 0.18
 RING.data.materials.append(gold)
-# place: axis along the finger, at RC; owned by the finger bone (Child Of) for the whole film
+# place: axis along the proximal phalanx, centred on its skin; owned by the finger bone (Child Of) for the whole film
 RING.rotation_mode = 'QUATERNION'
 RING.matrix_world = Matrix.Translation(RC) @ Vector((0, 0, 1)).rotation_difference(RAX).to_matrix().to_4x4()
 c = RING.constraints.new('CHILD_OF'); c.target = OW; c.subtarget = "finger4-1.L"
 fs(300); upd(); c.inverse_matrix = (OW.matrix_world @ OW.pose.bones["finger4-1.L"].matrix).inverted()
 upd()
+def ring_center(f): fs(f); return RING.matrix_world.translation.copy()
 
 # ================================================================== where the bullet strikes (f518 pose) and where the pieces go
 fs(B_HIT)
-RC, RAX = finger_frame(B_HIT)
+_, RAX = finger_frame(B_HIT)
+RC = ring_center(B_HIT)                                                       # the band's real centre at the hit
 RPOS = (1.25, -1.45)                                                          # the robber: at his front-left
 ROB_AIM = Vector((RPOS[0] - 0.10, RPOS[1] + 0.35, 1.55))
 NP = ROB_AIM - RC; NP = (NP - RAX * NP.dot(RAX)).normalized()                  # the ring side facing the gun
-P_IMP = RC + NP * (RF + 0.0035)                                               # front face of the ring
+P_IMP = RC + NP * (R_IN + 2 * R_MINOR + 0.0004)                               # front face of the ring
 log("ring centre", tuple(round(x, 4) for x in RC), "impact", tuple(round(x, 4) for x in P_IMP))
 BODY_HIT = [OWB, OWC]
 # fragment B: from just in front of the gap between the ring finger and the little finger, back THROUGH the gap to the
@@ -319,7 +331,7 @@ fs(B_SPLIT + 10)
 for aa in (0.008, 0.016, 0.026, 0.036, 0.05):
     for bb in (-0.08, -0.06, -0.045, -0.03, 0.0, 0.03, 0.045, 0.06, 0.08):
         for cc in (-0.03, -0.015, 0.0, 0.015, 0.03):
-            Q = RC + NP * (RF + aa) + sideG * bb + RAX * cc
+            Q = RC + NP * (R_IN + 2 * R_MINOR + aa) + sideG * bb + RAX * cc
             c1 = seg_clear(P_IMP + NP * 0.003, Q, skip_end=0.0)
             C1MAX[0] = max(C1MAX[0], c1)
             if c1 < 0.002: continue
@@ -484,6 +496,27 @@ fs(B_FING); mark("CutFinger", S_A, N_A, "finger4-2.L", B_FING, size=0.0028)
 fs(B_NECK)
 mark("NeckGraze", N_B, NN_B, "neck02", B_NECK + 1, size=0.0045)
 
+# ---- every-frame check: no body vertex inside the gold band's tube (the band sits ON the finger)
+def ring_pen(f):
+    fs(f); upd(); Mi = RING.matrix_world.inverted(); cen = RING.matrix_world.translation
+    pts = eval_points(OWB, filt=lambda i: i in NEAR_IDX)
+    n_in = 0; n_nb = 0; worst = 9.0
+    for i, p, n in pts:
+        q = Mi @ p; rho = math.hypot(q.x, q.y)
+        e = ((rho - (R_IN + R_MINOR)) / R_MINOR) ** 2 + (q.z / (R_MINOR * R_ZS)) ** 2
+        own = (DOMB.get(i) or "").startswith(("finger4", "metacarpal4"))
+        if own: worst = min(worst, e)
+        if e < 1.0:
+            if own: n_in += 1
+            else: n_nb += 1
+    return n_in, worst, n_nb
+fs(300); upd(); cen0 = RING.matrix_world.translation
+NEAR_IDX = {i for i, p, n in eval_points(OWB) if (p - cen0).length < 0.03}
+PEN = [(f,) + ring_pen(f) for f in range(1, END + 1)]
+bad = [(f, n) for f, n, w, nb in PEN if n]
+nbf = [(f, nb) for f, n, w, nb in PEN if nb]
+log("ring check EVERY frame:", len(PEN), "frames; ring-finger skin inside the band on", len(bad), "frames", bad[:10],
+    "| min metric (1.0 = touching)", round(min(w for f, n, w, nb in PEN), 2), "| neighbour-finger contact frames", len(nbf), "max verts", max([nb for f, nb in nbf] or [0]))
 # ---- the dent in the ring: a shape key pushing the struck side in and flattening it (keyed on at the hit)
 RING.shape_key_add(name="Basis"); dk = RING.shape_key_add(name="dent")
 fs(B_HIT); upd()
@@ -492,7 +525,7 @@ for i, v in enumerate(RING.data.vertices):
     d = (v.co - pl).length
     if d < 0.006:
         w = 0.5 * (1 + math.cos(math.pi * d / 0.006))
-        dk.data[i].co = v.co - nl * 0.0011 * w
+        dk.data[i].co = v.co - nl * 0.0008 * w
 for f, v in ((1, 0.0), (B_HIT, 0.0), (B_HIT + 3, 1.0), (END, 1.0)):
     dk.value = v; dk.keyframe_insert("value", frame=f)
 

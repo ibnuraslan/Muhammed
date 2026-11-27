@@ -916,6 +916,12 @@
     "Owner arm.R inside own torso (2 pts)"
    ]
   ],
+  "505": [
+   [
+    "ARMBODY",
+    "Owner arm.R inside own torso (2 pts)"
+   ]
+  ],
   "509": [
    [
     "ARMBODY",
@@ -1091,175 +1097,463 @@
    ],
    [
     "PROPHEAD",
-    "FragB inside Owner's head/face (7 pts)"
+    "FragB inside Owner's head/face (4 pts)"
    ]
   ],
   "897": [
    [
     "ARMBODY",
     "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (48 pts)"
    ]
   ],
   "901": [
    [
     "ARMBODY",
     "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (85 pts)"
    ]
   ],
   "905": [
    [
     "ARMBODY",
     "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (112 pts)"
    ]
   ],
   "909": [
    [
-    "ARMBODY",
-    "Owner arm.L inside own torso (2 pts)"
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "913": [
    [
     "ARMBODY",
     "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "917": [
    [
     "ARMBODY",
     "Owner arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (114 pts)"
+   ]
+  ],
+  "921": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (111 pts)"
+   ]
+  ],
+  "925": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (108 pts)"
+   ]
+  ],
+  "929": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (106 pts)"
+   ]
+  ],
+  "933": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (105 pts)"
+   ]
+  ],
+  "937": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (103 pts)"
+   ]
+  ],
+  "941": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (101 pts)"
+   ]
+  ],
+  "945": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (98 pts)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (95 pts)"
+   ]
+  ],
+  "953": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (92 pts)"
+   ]
+  ],
+  "957": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (88 pts)"
+   ]
+  ],
+  "961": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (81 pts)"
+   ]
+  ],
+  "965": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (78 pts)"
+   ]
+  ],
+  "969": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (78 pts)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (79 pts)"
+   ]
+  ],
+  "977": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (81 pts)"
+   ]
+  ],
+  "981": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (83 pts)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (85 pts)"
+   ]
+  ],
+  "989": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (87 pts)"
+   ]
+  ],
+  "993": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (89 pts)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (89 pts)"
+   ]
+  ],
+  "1001": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (92 pts)"
+   ]
+  ],
+  "1005": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (94 pts)"
+   ]
+  ],
+  "1009": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (95 pts)"
+   ]
+  ],
+  "1013": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (95 pts)"
+   ]
+  ],
+  "1017": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (95 pts)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (95 pts)"
+   ]
+  ],
+  "1025": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (96 pts)"
+   ]
+  ],
+  "1029": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (97 pts)"
    ]
   ],
   "1033": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (100 pts)"
    ]
   ],
   "1037": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (100 pts)"
    ]
   ],
   "1041": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (100 pts)"
    ]
   ],
   "1045": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (102 pts)"
    ]
   ],
   "1049": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (104 pts)"
    ]
   ],
   "1053": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (104 pts)"
    ]
   ],
   "1057": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (104 pts)"
    ]
   ],
   "1061": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (104 pts)"
    ]
   ],
   "1065": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (104 pts)"
    ]
   ],
   "1069": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (103 pts)"
    ]
   ],
   "1073": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (100 pts)"
    ]
   ],
   "1077": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (99 pts)"
    ]
   ],
   "1081": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (95 pts)"
    ]
   ],
   "1085": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (89 pts)"
    ]
   ],
   "1089": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (87 pts)"
    ]
   ],
   "1093": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (84 pts)"
    ]
   ],
   "1097": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (80 pts)"
    ]
   ],
   "1101": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (75 pts)"
    ]
   ],
   "1105": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (72 pts)"
    ]
   ],
   "1109": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (67 pts)"
    ]
   ],
   "1113": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (62 pts)"
    ]
   ],
   "1117": [
    [
     "ARMBODY",
     "Owner arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (62 pts)"
+   ]
+  ],
+  "1121": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (71 pts)"
+   ]
+  ],
+  "1125": [
+   [
+    "PROPHEAD",
+    "NeckGraze inside Owner's head/face (77 pts)"
    ]
   ],
   "1129": [
@@ -1269,7 +1563,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (10 pts)"
+    "NeckGraze inside Owner's head/face (88 pts)"
    ]
   ],
   "1133": [
@@ -1283,7 +1577,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (43 pts)"
+    "NeckGraze inside Owner's head/face (100 pts)"
    ]
   ],
   "1137": [
@@ -1297,7 +1591,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (109 pts)"
    ]
   ],
   "1141": [
@@ -1311,7 +1605,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1145": [
@@ -1325,7 +1619,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (112 pts)"
    ]
   ],
   "1149": [
@@ -1339,7 +1633,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (112 pts)"
    ]
   ],
   "1153": [
@@ -1353,7 +1647,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1157": [
@@ -1367,7 +1661,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1161": [
@@ -1381,7 +1675,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (56 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1165": [
@@ -1395,7 +1689,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (109 pts)"
    ]
   ],
   "1169": [
@@ -1409,7 +1703,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (108 pts)"
    ]
   ],
   "1173": [
@@ -1423,7 +1717,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (106 pts)"
    ]
   ],
   "1177": [
@@ -1437,7 +1731,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (106 pts)"
    ]
   ],
   "1181": [
@@ -1447,7 +1741,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1185": [
@@ -1457,7 +1751,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1189": [
@@ -1467,7 +1761,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1193": [
@@ -1477,7 +1771,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1197": [
@@ -1487,7 +1781,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (66 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1201": [
@@ -1497,7 +1791,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (66 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1205": [
@@ -1507,7 +1801,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (65 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1209": [
@@ -1517,7 +1811,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (65 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1213": [
@@ -1527,7 +1821,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (65 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1217": [
@@ -1537,7 +1831,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (65 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1221": [
@@ -1547,7 +1841,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (64 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1225": [
@@ -1557,7 +1851,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (63 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1229": [
@@ -1567,7 +1861,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (62 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1233": [
@@ -1577,7 +1871,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (61 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1237": [
@@ -1587,7 +1881,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (60 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1241": [
@@ -1597,7 +1891,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (59 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1245": [
@@ -1607,7 +1901,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (58 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1249": [
@@ -1617,7 +1911,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1253": [
@@ -1627,7 +1921,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (113 pts)"
    ]
   ],
   "1257": [
@@ -1637,7 +1931,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (56 pts)"
+    "NeckGraze inside Owner's head/face (113 pts)"
    ]
   ],
   "1261": [
@@ -1647,7 +1941,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (56 pts)"
+    "NeckGraze inside Owner's head/face (112 pts)"
    ]
   ],
   "1265": [
@@ -1657,7 +1951,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1269": [
@@ -1667,7 +1961,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1273": [
@@ -1677,7 +1971,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1277": [
@@ -1687,7 +1981,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1281": [
@@ -1697,7 +1991,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1285": [
@@ -1707,7 +2001,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (109 pts)"
    ]
   ],
   "1289": [
@@ -1717,7 +2011,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (109 pts)"
    ]
   ],
   "1293": [
@@ -1727,7 +2021,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (107 pts)"
    ]
   ],
   "1297": [
@@ -1737,7 +2031,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (107 pts)"
    ]
   ],
   "1301": [
@@ -1747,7 +2041,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (107 pts)"
    ]
   ],
   "1305": [
@@ -1757,7 +2051,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (107 pts)"
    ]
   ],
   "1309": [
@@ -1767,7 +2061,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (107 pts)"
    ]
   ],
   "1313": [
@@ -1777,7 +2071,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (54 pts)"
+    "NeckGraze inside Owner's head/face (108 pts)"
    ]
   ],
   "1317": [
@@ -1787,7 +2081,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (108 pts)"
    ]
   ],
   "1321": [
@@ -1797,7 +2091,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (55 pts)"
+    "NeckGraze inside Owner's head/face (109 pts)"
    ]
   ],
   "1325": [
@@ -1807,7 +2101,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (56 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1329": [
@@ -1817,7 +2111,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (56 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1333": [
@@ -1827,7 +2121,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1337": [
@@ -1837,7 +2131,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (57 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1341": [
@@ -1847,7 +2141,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (59 pts)"
+    "NeckGraze inside Owner's head/face (111 pts)"
    ]
   ],
   "1345": [
@@ -1857,7 +2151,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (60 pts)"
+    "NeckGraze inside Owner's head/face (112 pts)"
    ]
   ],
   "1349": [
@@ -1867,7 +2161,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (61 pts)"
+    "NeckGraze inside Owner's head/face (112 pts)"
    ]
   ],
   "1353": [
@@ -1877,7 +2171,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (62 pts)"
+    "NeckGraze inside Owner's head/face (113 pts)"
    ]
   ],
   "1357": [
@@ -1887,7 +2181,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (63 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1361": [
@@ -1897,7 +2191,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (63 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1365": [
@@ -1907,7 +2201,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (64 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1369": [
@@ -1917,7 +2211,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (64 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1373": [
@@ -1927,7 +2221,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (65 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1377": [
@@ -1937,7 +2231,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (65 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1381": [
@@ -1947,7 +2241,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1385": [
@@ -1957,7 +2251,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1389": [
@@ -1967,7 +2261,7 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ],
   "1393": [
@@ -1977,12 +2271,12 @@
    ],
    [
     "PROPHEAD",
-    "NeckGraze inside Owner's head/face (67 pts)"
+    "NeckGraze inside Owner's head/face (114 pts)"
    ]
   ]
  },
  "counts": {
   "ARMBODY": 309,
-  "PROPHEAD": 68
+  "PROPHEAD": 126
  }
 }

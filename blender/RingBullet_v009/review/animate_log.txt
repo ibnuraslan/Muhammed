@@ -2,17 +2,18 @@ sole offsets mm {'Owner': 20.7, 'Robber': 29.0}
 limit signs (knee, elbow, hip) Owner {'L': (1, -1, 1), 'R': (1, -1, 1)}
 limit signs (knee, elbow, hip) Robber {'L': (1, -1, 1), 'R': (1, -1, 1)}
 eyes at 300 (-0.027, -0.213, 1.69)
-finger radius at the ring mm 9.43 points 10
-ring centre (0.02, -0.3941, 1.6309) impact (0.0306, -0.4013, 1.6293)
+ring fit: finger skin points 15 centre offset from bone mm 7.81 max skin radius mm 11.29
+ring centre (0.0272, -0.3956, 1.6282) impact (0.0403, -0.4046, 1.6262)
 neck candidates 5
-glance clearance max mm 5.22
-parts mm glance/B/A 5.22 7.14 -5.84 necks [(-0.003, -0.178, 1.563), (0.015, -0.167, 1.563), (-0.004, -0.205, 1.577), (0.015, -0.176, 1.577), (0.017, -0.193, 1.591)]
-fragment B path clearance mm 5.22 q (0.008, 0.0, 0.015) Q (0.0402, -0.398, 1.6412) neck (0.0146, -0.1672, 1.5629)
-split point clearance mm: B path 7.14
-fragment A lodge point (little finger, outer side) (0.0462, -0.404, 1.6446) clear 9000.0
-robber yaw -130.6 dir (-0.76, 0.65, 0.0) right (0.65, 0.76, 0.0)
+glance clearance max mm 0.04
+parts mm glance/B/A -2.02 5.8 12.0 necks [(-0.003, -0.178, 1.563), (0.015, -0.167, 1.563), (-0.004, -0.205, 1.577), (0.015, -0.176, 1.577), (0.017, -0.193, 1.591)]
+fragment B path clearance mm -1000 q None Q (0.0727, -0.3761, 1.5974) neck (-0.0032, -0.178, 1.5629)
+split point clearance mm: B path 5.8
+fragment A lodge point (little finger, outer side) (0.0675, -0.4289, 1.6606) clear 4.7
+robber yaw -130.8 dir (-0.76, 0.65, 0.0) right (0.65, 0.76, 0.0)
 gun grip search (bad, -near) (-22, 4) offset mm (17.4, 12.4, 16.5)
 muzzle local (0.1738, 0.0006, 0.0618)
-muzzle at fire (0.662, -0.801, 1.583) barrel->impact deg 11.4
+muzzle at fire (0.663, -0.8, 1.582) barrel->impact deg 11.4
 owner FragA 787 Owner finger4-2.L jump_mm 0.0
+ring check EVERY frame: 1395 frames; ring-finger skin inside the band on 0 frames [] | min metric (1.0 = touching) 3.02 | neighbour-finger contact frames 1388 max verts 3
 quat flips fixed 0 0

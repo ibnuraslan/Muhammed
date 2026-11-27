@@ -41,6 +41,9 @@
 153,
 157,
 161,
+165,
+169,
+253,
 257,
 261,
 265,
@@ -129,23 +132,6 @@
 597,
 601,
 605,
-609,
-613,
-617,
-621,
-625,
-629,
-633,
-637,
-641,
-645,
-649,
-653,
-657,
-661,
-665,
-669,
-673,
 677,
 681,
 685,
@@ -176,7 +162,11 @@
 785,
 789,
 793,
+797,
+801,
+885,
 889,
+925,
 929,
 933,
 937,
@@ -297,7 +287,8 @@
 ],
 "frames": {
 "1": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -312,7 +303,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "5": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -327,7 +319,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "9": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -342,7 +335,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "13": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -357,7 +351,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "17": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -372,7 +367,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "21": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -387,7 +383,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "25": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -402,7 +399,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "29": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -417,7 +415,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "33": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -432,7 +431,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "37": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -447,7 +447,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "41": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -462,7 +463,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "45": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -477,7 +479,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "49": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -492,7 +495,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "53": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -507,7 +511,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "57": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -522,7 +527,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "61": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|VIS": 24,
 "finger3-1.R|service_pistol_pistol_a|VIS": 14,
 "finger4-1.R|service_pistol_pistol_a|VIS": 14,
@@ -537,7 +543,8 @@
 "finger5-3.R|service_pistol_pistol_a|VIS": 1
 },
 "65": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -552,7 +559,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "69": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -567,7 +575,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "73": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -582,7 +591,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "77": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -597,7 +607,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "81": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -612,7 +623,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "85": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -627,7 +639,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "89": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -642,7 +655,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "93": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -657,7 +671,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "97": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -672,7 +687,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "101": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -687,7 +703,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "105": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -702,7 +719,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "109": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -717,7 +735,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "113": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -732,7 +751,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "117": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -747,7 +767,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "121": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -762,7 +783,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "125": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -777,7 +799,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "129": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -792,7 +815,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "133": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -807,7 +831,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "137": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -822,7 +847,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "141": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -837,7 +863,9 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "145": {
-"finger4-1.L|Ring|VIS": 6,
+"finger3-1.L|Ring|VIS": 3,
+"finger5-1.L|Ring|VIS": 4,
+"finger3-1.L|Ring|off": 1,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -852,8 +880,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "149": {
-"finger4-1.L|Ring|off": 2,
-"finger4-1.L|Ring|VIS": 4,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -868,8 +896,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "153": {
-"finger4-1.L|Ring|off": 2,
-"finger4-1.L|Ring|VIS": 4,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -884,8 +912,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "157": {
-"finger4-1.L|Ring|off": 2,
-"finger4-1.L|Ring|VIS": 4,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -900,8 +928,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "161": {
-"finger4-1.L|Ring|off": 2,
-"finger4-1.L|Ring|VIS": 4,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -916,7 +944,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "165": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -931,7 +960,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "169": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -946,7 +976,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "173": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -961,7 +992,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "177": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -976,7 +1008,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "181": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -991,7 +1024,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "185": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1006,7 +1040,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "189": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1021,7 +1056,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "193": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1036,7 +1072,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "197": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1051,7 +1088,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "201": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1066,7 +1104,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "205": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1081,7 +1120,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "209": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1096,7 +1136,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "213": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1111,7 +1152,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "217": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1126,7 +1168,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "221": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1141,7 +1184,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "225": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1156,7 +1200,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "229": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1171,7 +1216,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "233": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1186,7 +1232,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "237": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1201,7 +1248,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "241": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1216,7 +1264,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "245": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1231,7 +1280,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "249": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|off": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1246,7 +1296,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "253": {
-"finger4-1.L|Ring|off": 6,
+"finger3-1.L|Ring|off": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1261,7 +1312,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "257": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 4,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1276,7 +1328,8 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "261": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 4,
+"finger5-1.L|Ring|VIS": 1,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1291,7 +1344,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "265": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 3,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1306,7 +1359,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "269": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 5,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1321,7 +1374,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "273": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1336,7 +1389,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "277": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1351,7 +1404,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "281": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1366,7 +1419,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "285": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1381,7 +1434,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "289": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1396,7 +1449,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "293": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1411,7 +1464,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "297": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1426,7 +1479,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "301": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1441,7 +1494,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "305": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1456,7 +1509,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "309": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1471,7 +1524,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "313": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1486,7 +1539,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "317": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1501,7 +1554,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "321": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1516,7 +1569,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "325": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1531,7 +1584,7 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "329": {
-"finger4-1.L|Ring|VIS": 5,
+"finger3-1.L|Ring|VIS": 7,
 "finger2-1.R|service_pistol_pistol_a|off": 24,
 "finger3-1.R|service_pistol_pistol_a|off": 14,
 "finger4-1.R|service_pistol_pistol_a|off": 14,
@@ -1546,824 +1599,1114 @@
 "finger5-3.R|service_pistol_pistol_a|off": 1
 },
 "333": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "337": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "341": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "345": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "349": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "353": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "357": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "361": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "365": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "369": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "373": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "377": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "381": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "385": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "389": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "393": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "397": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "401": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "405": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "409": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "413": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "417": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "421": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "425": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "429": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "433": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "437": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "441": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "445": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "449": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "453": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "457": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "461": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "465": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "469": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "473": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "477": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "481": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "485": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "489": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "493": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "497": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "501": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "505": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "509": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "513": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "517": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "521": {
-"finger4-1.L|BulletFlat|VIS": 4,
-"finger3-1.L|BulletFlat|VIS": 2,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "525": {
-"finger4-1.L|BulletFlat|VIS": 4,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "529": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "533": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "537": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "541": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "545": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "549": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "553": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "557": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "561": {
-"finger4-1.L|Ring|VIS": 5,
-"finger4-1.L|BulletFlat|VIS": 2
+"finger3-1.L|Ring|VIS": 7
 },
 "565": {
-"finger4-1.L|Ring|VIS": 5,
-"finger4-1.L|BulletFlat|VIS": 2
+"finger3-1.L|Ring|VIS": 7
 },
 "569": {
-"finger4-1.L|BulletFlat|VIS": 3,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "573": {
-"finger4-1.L|BulletFlat|VIS": 3,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "577": {
-"finger4-1.L|BulletFlat|VIS": 3,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "581": {
-"finger4-1.L|BulletFlat|VIS": 3,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "585": {
-"finger4-1.L|BulletFlat|VIS": 5,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "589": {
-"finger4-1.L|BulletFlat|VIS": 5,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "593": {
-"finger4-1.L|BulletFlat|VIS": 5,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "597": {
-"finger4-1.L|BulletFlat|VIS": 4,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "601": {
-"finger4-1.L|BulletFlat|VIS": 4,
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "605": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 4,
+"finger3-1.L|Ring|off": 3
 },
 "609": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "613": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "617": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "621": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "625": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "629": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "633": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "637": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "641": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "645": {
-"finger4-1.L|Ring|off": 1,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|off": 7
 },
 "649": {
-"finger4-1.L|Ring|off": 1,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|off": 7
 },
 "653": {
-"finger4-1.L|Ring|off": 1,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|off": 7
 },
 "657": {
-"finger4-1.L|Ring|off": 1,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|off": 7
 },
 "661": {
-"finger4-1.L|Ring|off": 1,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|off": 7
 },
 "665": {
-"finger4-1.L|Ring|off": 1,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|off": 7
 },
 "669": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "673": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|off": 7
 },
 "677": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "681": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "685": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "689": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "693": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "697": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "701": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "705": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger5-2.L|FragA|VIS": 1
 },
 "709": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger5-2.L|FragA|VIS": 1
 },
 "713": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger5-2.L|FragA|VIS": 4
 },
 "717": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "721": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "725": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "729": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "733": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "737": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "741": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "745": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger4-2.L|FragA|VIS": 1
 },
 "749": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "753": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "757": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "761": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "765": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "769": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "773": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "777": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7
 },
 "781": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger4-2.L|FragA|VIS": 1
 },
 "785": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger4-2.L|FragA|VIS": 4
 },
 "789": {
-"finger4-1.L|Ring|VIS": 5
+"finger3-1.L|Ring|VIS": 7,
+"finger4-2.L|FragA|VIS": 4
 },
 "793": {
-"finger4-1.L|Ring|off": 3,
-"finger4-1.L|Ring|VIS": 4
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 4
 },
 "797": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 5,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "801": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "805": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "809": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "813": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "817": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "821": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "825": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "829": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "833": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "837": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "841": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "845": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "849": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "853": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "857": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "861": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "865": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "869": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "873": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "877": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "881": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "885": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"jaw|FragB|VIS": 1,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "889": {
-"finger4-1.L|Ring|off": 8,
-"neck02|FragB|VIS": 1
+"finger3-1.L|Ring|off": 3,
+"jaw|FragB|VIS": 1,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "893": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "897": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "901": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "905": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "909": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "913": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "917": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "921": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|off": 6
 },
 "925": {
-"finger4-1.L|Ring|off": 8
+"finger3-1.L|Ring|off": 3,
+"finger4-2.L|FragA|off": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "929": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "933": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "937": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "941": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "945": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "949": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "953": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "957": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "961": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "965": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "969": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "973": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "977": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "981": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "985": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "989": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "993": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "997": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1001": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1005": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1009": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1013": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1017": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1021": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1025": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1029": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1033": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1037": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1041": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1045": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1049": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1053": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1057": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1061": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1065": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1069": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1073": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1077": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1081": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1085": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1089": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1093": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1097": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1101": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1105": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1109": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1113": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1117": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1121": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1125": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1129": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1133": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1137": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1141": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1145": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1149": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1153": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1157": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1161": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1165": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1169": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1173": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1177": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1181": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1185": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1189": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1193": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1197": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1201": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1205": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1209": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1213": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1217": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1221": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1225": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1229": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1233": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1237": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1241": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1245": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1249": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1253": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1257": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1261": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1265": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1269": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1273": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1277": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1281": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1285": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1289": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1293": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1297": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1301": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1305": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1309": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1313": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1317": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1321": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1325": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1329": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1333": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1337": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1341": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1345": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1349": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1353": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1357": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1361": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1365": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1369": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1373": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1377": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1381": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1385": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1389": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 },
 "1393": {
-"finger4-1.L|Ring|VIS": 8
+"finger3-1.L|Ring|VIS": 3,
+"finger4-2.L|FragA|VIS": 4,
+"finger5-1.L|Ring|VIS": 6
 }
 }
 }
