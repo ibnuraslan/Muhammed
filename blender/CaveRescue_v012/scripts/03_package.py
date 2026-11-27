@@ -26,6 +26,24 @@ for i, im in enumerate(list(bpy.data.images)):
     if im.packed_file: im.unpack(method='REMOVE')
     im.filepath = fn; im.reload(); im.pack()
 bpy.ops.file.pack_all()
+# v012 farm settings (measured: <= 112 s per 1080x1920 frame on a 4-core CPU, see README)
+cy = sc.cycles
+cy.samples = 12; cy.adaptive_threshold = 0.08; cy.use_adaptive_sampling = True
+cy.use_denoising = True; cy.denoiser = 'OPENIMAGEDENOISE'
+cy.max_bounces = 3; cy.diffuse_bounces = 1; cy.glossy_bounces = 1; cy.transmission_bounces = 3; cy.transparent_max_bounces = 8
+for m in bpy.data.materials:            # the underwater fog is a look, not a light: never sample it as an emitter
+    if m.node_tree and any(n.type == 'GROUP' and n.node_tree and n.node_tree.name == "UW_Fog" for n in m.node_tree.nodes):
+        m.cycles.emission_sampling = 'NONE'
+for o in bpy.data.objects:              # clear water bodies / soft FX: camera + transmission rays only
+    if o.name.startswith(("Water", "FX_Silt", "FX_Bub")):
+        o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False
+# no linked data on the farm: make every library datablock local (auto-smooth node group from Blender's essentials)
+for coll in (bpy.data.node_groups, bpy.data.materials, bpy.data.objects, bpy.data.meshes):
+    for idb in list(coll):
+        if idb.library: idb.make_local()
+for nm in [l.name for l in bpy.data.libraries]:
+    lib = bpy.data.libraries.get(nm)
+    if lib is not None: bpy.data.libraries.remove(lib)
 for _ in range(3): bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 sc.render.filepath = "//render/CaveRescue_v012_####"; sc.render.image_settings.file_format = 'PNG'
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1080, 1920, 100
