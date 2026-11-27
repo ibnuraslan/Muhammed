@@ -1,9 +1,9 @@
-person Dad walk (-2.95, -13.0) run end (-2.95, 55.6, 0.0)
-person Mom walk (-1.56, -12.9) run end (-1.56, 55.7, 0.0)
-person Boy walk (-0.18, -14.2) run end (-0.18, 54.4, 0.0)
-person Girl walk (1.5, -13.6) run end (1.5, 55.0, 0.0)
-WARN rubble top above the flood at its rise end Rubble44_1 1585
-WARN rubble top above the flood at its rise end Rubble45_0 1585
+person Dad walk (-3.18, -13.0) run end (-3.18, 55.6, 0.0)
+person Mom walk (-1.74, -12.9) run end (-1.74, 55.7, 0.0)
+person Boy walk (-0.05, -14.2) run end (-0.05, 54.4, 0.0)
+person Girl walk (1.71, -13.6) run end (1.71, 55.0, 0.0)
+WARN rubble top above the flood at its rise end Rubble55_1 1585
+WARN rubble top above the flood at its rise end Rubble55_2 1585
 HIDE frame 1224
 FAMVIEW 1221 ['Dad', 'Mom', 'Boy', 'Girl']
 FAMVIEW 1224 []

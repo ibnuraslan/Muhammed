@@ -100,10 +100,10 @@ def water_mat():
     c2 = nt.nodes.new("ShaderNodeMix"); c2.data_type = 'RGBA'; L(mud.outputs["Fac"], c2.inputs["Factor"])
     L(c1.outputs["Result"], c2.inputs["A"]); c2.inputs["B"].default_value = (0.36, 0.22, 0.08, 1)
     fa = nt.nodes.new("ShaderNodeAttribute"); fa.attribute_name = "face"
-    sk = nt.nodes.new("ShaderNodeTexNoise"); sk.inputs["Scale"].default_value = 0.08; sk.inputs["Detail"].default_value = 5
-    mpp = nt.nodes.new("ShaderNodeMapping"); mpp.inputs["Scale"].default_value = (1.0, 1.0, 0.12)
+    sk = nt.nodes.new("ShaderNodeTexNoise"); sk.inputs["Scale"].default_value = 0.15; sk.inputs["Detail"].default_value = 3
+    mpp = nt.nodes.new("ShaderNodeMapping"); mpp.inputs["Scale"].default_value = (1.0, 0.25, 0.04)
     L(geo.outputs["Position"], mpp.inputs["Vector"]); L(mpp.outputs["Vector"], sk.inputs["Vector"])
-    skr = nt.nodes.new("ShaderNodeValToRGB"); skr.color_ramp.elements[0].color = (0.0, 0.16, 0.20, 1); skr.color_ramp.elements[1].color = (0.05, 0.45, 0.45, 1)
+    skr = nt.nodes.new("ShaderNodeValToRGB"); skr.color_ramp.elements[0].color = (0.0, 0.20, 0.24, 1); skr.color_ramp.elements[1].color = (0.02, 0.36, 0.38, 1)
     L(sk.outputs["Fac"], skr.inputs["Fac"])
     c15 = nt.nodes.new("ShaderNodeMix"); c15.data_type = 'RGBA'; L(fa.outputs["Fac"], c15.inputs["Factor"])
     L(c2.outputs["Result"], c15.inputs["A"]); L(skr.outputs["Color"], c15.inputs["B"])
@@ -229,7 +229,7 @@ def build_ocean_gn():
     var = M('ADD', 0.82, M('MULTIPLY', nz.outputs["Fac"], 0.36))
     hw = M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', A, rise), decay), M('MULTIPLY', taper, var))
     dx = M('SUBTRACT', X, sq.outputs[0]); dy = M('SUBTRACT', Y, sq.outputs[1])
-    gq = M('EXPONENT', M('ADD', M('DIVIDE', M('MULTIPLY', dx, dx), -16200.0), M('DIVIDE', M('MULTIPLY', dy, dy), -9800.0)))
+    gq = M('EXPONENT', M('ADD', M('DIVIDE', M('MULTIPLY', dx, dx), -9800.0), M('DIVIDE', M('MULTIPLY', dy, dy), -3200.0)))
     hq = M('MULTIPLY', sq.outputs[2], gq)
     # ripples: 4D noise, phase keyed on WaveCtl.scale.z (no scene clock)
     rn = node("ShaderNodeTexNoise"); rn.noise_dimensions = '4D'; rn.inputs["Scale"].default_value = 0.18; rn.inputs["Detail"].default_value = 3
@@ -243,7 +243,7 @@ def build_ocean_gn():
     off = node("ShaderNodeCombineXYZ"); off.inputs[0].default_value = 0.0; Lk(dyo, off.inputs[1]); Lk(z, off.inputs[2])
     setp = node("GeometryNodeSetPosition"); Lk(gi.outputs[0], setp.inputs["Geometry"]); Lk(off.outputs[0], setp.inputs["Offset"])
     # foam: on the face and crest, and a fading wake behind
-    fcrest = M('MULTIPLY', SS(M('MULTIPLY', wf, 0.45), M('MULTIPLY', wf, 0.8), u), M('SUBTRACT', 1.0, SS(M('MULTIPLY', wf, 1.2), M('MULTIPLY', wf, 3.0), u)))
+    fcrest = M('MULTIPLY', SS(M('MULTIPLY', wf, 0.3), M('MULTIPLY', wf, 0.7), u), M('SUBTRACT', 1.0, SS(M('MULTIPLY', wf, 1.2), M('MULTIPLY', wf, 3.0), u)))
     ftoe = M('MULTIPLY', SS(M('MULTIPLY', wf, -0.18), M('MULTIPLY', wf, -0.02), u), M('SUBTRACT', 1.0, SS(M('MULTIPLY', wf, 0.02), M('MULTIPLY', wf, 0.15), u)))
     fface = M('MAXIMUM', fcrest, ftoe)
     fwake = M('MULTIPLY', M('MULTIPLY', 0.55, SS(0.0, 4.0, u)), M('SUBTRACT', 1.0, SS(0.0, M('MULTIPLY', wb, 2.5), u)))
@@ -380,7 +380,7 @@ for i, (x, y, rz) in enumerate([(-28, -3, 1.4), (18, -4, 1.7), (34, -1, 1.5)]):
     BOATS.append(place("longtail", "Longtail%d" % i, (x, y), rz=rz, sink=0.25))
 BOATS.append(place("rowboat", "Rowboat0", (-36, 1), rz=0.9, sink=0.08))
 # the stranded boat on the exposed seabed, on its side (rests on the sand: hull bilge on the ground)
-TIPPED = place("longtail", "LongtailTipped", (4.0, -31.0), rz=math.radians(25), ry=math.radians(62), sink=-0.35)
+TIPPED = place("longtail", "LongtailTipped", (14.0, -34.0), rz=math.radians(25), ry=math.radians(62), sink=-0.35)
 for i, (x, y, s) in enumerate([(-9, -46, 1.0), (-5, -52, 0.8), (7, -55, 1.2), (12, -44, 0.7), (-14, -60, 1.1), (2, -66, 0.9), (16, -63, 1.0)]):
     place("coral", "Coral%d" % i, (x, y), rz=random.uniform(0, 6.28), s=s, sink=0.05)
 FISH = []
@@ -462,8 +462,8 @@ for o in hotel: to_col(o, C_SET)
 HOUSES = []
 spots = []
 for j, y in enumerate((62, 88, 114, 142, 170, 200, 228)):
-    for i, x in enumerate((-110, -84, -58, -32, 36, 62, 88, 114)):
-        if (x, y) in ((36, 170), (62, 170), (36, 200), (62, 200)): continue          # the mosque square
+    for i, x in enumerate((-110, -84, -58, -36, -18, 18, 38, 62, 88, 114)):
+        if (x, y) in ((38, 170), (62, 170), (38, 200), (62, 200), (18, 170), (18, 200)): continue          # the mosque square
         if math.hypot(x - HILL[0], y - HILL[1]) < 60: continue                          # the hill stays open
         spots.append((x + random.uniform(-3, 3), y + random.uniform(-3, 3)))
 kinds = ["house", "house2", "b_slum1"]
@@ -484,10 +484,10 @@ road.data.materials.append(M_ROAD); to_col(road, C_TOWN)
 RUBBLE = []
 rk = ["rubble_roof", "rubble_brick", "rubble_wood"]
 for n, (x, y) in enumerate(spots):
-    for m_ in range(3):
+    for m_ in range(4):
         k = rk[(n + m_) % 3]
-        o = place(k, "Rubble%02d_%d" % (n, m_), (x + random.uniform(-5, 5), y + random.uniform(-5, 5)),
-                  rz=random.uniform(0, 6.28), s=random.uniform(0.9, 1.4), coll=C_TOWN)
+        o = place(k, "Rubble%02d_%d" % (n, m_), (x + random.uniform(-7, 7), y + random.uniform(-7, 7)),
+                  rz=random.uniform(0, 6.28), s=random.uniform(1.3, 2.0), coll=C_TOWN)
         o["z_final"] = o.location.z - 0.05; RUBBLE.append(o)
 for n in range(18):     # more debris along the beach front and the road
     x, y = random.uniform(-90, 110), random.uniform(28, 58)
@@ -500,7 +500,7 @@ M_OCRUST = noise_mat("M_OceanCrust", (0.42, 0.06, 0.05), (0.55, 0.10, 0.06), sca
 M_CONT1 = noise_mat("M_ContA", (0.20, 0.42, 0.08), (0.30, 0.52, 0.10), scale=0.05, bump=0.1)
 M_CONT2 = noise_mat("M_ContB", (0.62, 0.36, 0.08), (0.72, 0.44, 0.10), scale=0.05, bump=0.1)
 M_MANTLE = mat("M_Mantle", (0.95, 0.30, 0.03), rough=0.6, emit=((1.0, 0.35, 0.05), 0.6))
-YT = -600.0                    # the trench
+YT = -250.0                    # the trench
 def prism(name, poly_yz, x0, x1, material):
     """extrude a (y,z) polygon along x from x0 to x1 (the cut face is at x0)"""
     me = bpy.data.meshes.new(name); bm = bmesh.new()
@@ -540,7 +540,7 @@ RING = bpy.context.active_object; RING.name = "SEC_Ring"; RING.data.materials.ap
 for o in (FOCUS, RING): to_col(o, C_SEC)
 FOCUS.scale = (0.01,) * 3; RING.scale = (0.01,) * 3
 # a cyan 'water column' glow wall behind the cut so the dive reads as water (not sky): a gradient plane far behind
-bpy.ops.mesh.primitive_plane_add(size=1, location=(400.0, -600.0, -85.0), rotation=(0, math.radians(90), 0))
+bpy.ops.mesh.primitive_plane_add(size=1, location=(400.0, -250.0, -85.0), rotation=(0, math.radians(90), 0))
 BACK = bpy.context.active_object; BACK.name = "SEC_WaterBack"; BACK.scale = (150, 700, 1)
 mb = bpy.data.materials.new("M_WaterBack"); mb.use_nodes = True; ntb = mb.node_tree
 for n_ in list(ntb.nodes):
@@ -554,7 +554,7 @@ BACK.data.materials.append(mb); to_col(BACK, C_SEC)
 BACK.visible_shadow = False; BACK.visible_diffuse = False; BACK.visible_glossy = False
 # lights for the cut-away only (light linking would be nicer; an area light right in front of the cut face is enough)
 la = bpy.data.lights.new("SEC_Light", 'AREA'); la.energy = 250000; la.shape = 'RECTANGLE'; la.size = 40; la.size_y = 160; la.color = (1.0, 0.96, 0.9)
-LA = bpy.data.objects.new("SEC_Light", la); C_SEC.objects.link(LA); LA.location = (-90.0, -600.0, -14.0)
+LA = bpy.data.objects.new("SEC_Light", la); C_SEC.objects.link(LA); LA.location = (-90.0, -250.0, -14.0)
 LA.rotation_euler = (0, math.radians(-90), 0); LA.location.z = -28.0
 LA.visible_camera = False; LA.visible_glossy = False; LA.visible_diffuse = True
 

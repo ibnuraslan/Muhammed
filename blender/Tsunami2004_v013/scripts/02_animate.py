@@ -27,11 +27,11 @@ def log(*a):
 O["Ocean"].modifiers["Ocean"].show_viewport = False        # keying speed; restored before saving
 
 # ================================================================== the sea: WaveCtl loc=(L, Yf, A) scale=(p, curl, phase)
-Lk_ = pchip([(1, 0.0), (40, -0.6), (127, -2.6), (250, -3.5), (1150, -3.5), (1260, 0.0), (END, 0.0)])
-YF = pchip([(1, -2600), (399, -2600), (400, -1700), (470, -1620), (503, -1580), (648, -1320), (740, -1190), (800, -1110), (909, -920), (1025, -450),
+Lk_ = pchip([(1, 0.0), (55, -0.12), (127, -0.9), (259, -1.8), (400, -3.5), (1150, -3.5), (1260, 0.0), (END, 0.0)])
+YF = pchip([(1, -2600), (399, -2600), (400, -900), (470, -820), (503, -780), (648, -650), (740, -610), (800, -590), (909, -540), (1025, -430),
             (1060, -230), (1100, -125), (1150, -62), (1200, -27), (1229, -8), (1260, 25), (1300, 60), (1375, 110), (1450, 160),
             (1509, 210), (1600, 300), (1660, 370), (1700, 430), (END, 470)])
-AF = pchip([(1, 0.0), (400, 0.0), (470, 5.0), (503, 7.0), (648, 9.0), (800, 10.5), (909, 13.0), (1025, 20.0), (1060, 28.0), (1100, 33.0),
+AF = pchip([(1, 0.0), (400, 0.0), (470, 6.0), (503, 8.0), (648, 10.0), (800, 11.5), (909, 13.0), (1025, 20.0), (1060, 28.0), (1100, 33.0),
             (1150, 35.0), (1200, 35.0), (1229, 34.0), (1260, 30.0), (1300, 22.0), (1375, 14.0), (1450, 10.0), (1509, 8.0), (1600, 6.0),
             (1660, 3.5), (1700, 0.0), (END, 0.0)])
 CURL = pchip([(1, 0.0), (900, 0.05), (1060, 0.25), (1229, 0.35), (1300, 0.1), (1400, 0.0), (END, 0.0)])
@@ -46,7 +46,7 @@ def surf(x, y, f): return wave_z(x, y, Lk_(f), YF(f), AF(f), PLATEAU, q=tuple(QC
 # ---- the earthquake (cut-away at y=-600): the wedge snaps up, a flash at the focus, a shock ring, the bulge above
 QB = pchip([(1, 0.0), (800, 0.0), (812, 1.8), (850, 5.0), (900, 5.5), (960, 2.0), (1010, 0.0), (END, 0.0)])
 for f in range(1, END + 1, 4):
-    QC.location = (60.0, -585.0, QB(f)); QC.keyframe_insert("location", frame=f)
+    QC.location = (60.0, -240.0, QB(f)); QC.keyframe_insert("location", frame=f)
 set_interp(QC, 'LINEAR')
 WEDGE, FOCUS, RING = O["SEC_Wedge"], O["SEC_Focus"], O["SEC_Ring"]
 WEDGE.rotation_mode = 'XYZ'
@@ -86,10 +86,11 @@ LAT = Vector((math.cos(DIR), math.sin(DIR)))
 HILLPOS = {"Dad": HC + LAT * -1.25, "Boy": HC + LAT * -0.45 + Vector((0.2, 0.15)), "Mom": HC + LAT * 0.5, "Girl": HC + LAT * 1.35 + Vector((0.15, 0.1))}
 SHOW_HILL = 1682
 
-def arm(ct, s, f, lower=38.0, swing=0.0, elbow=18.0, out=0.0):
+def arm(ct, s, f, lower=38.0, swing=0.0, elbow=18.0, out=0.0, inward=None):
     sg = 1 if s == "L" else -1
+    if inward is None: inward = 0.35 * max(0.0, elbow - 20.0)       # a bent forearm comes across the body a little, never out
     ct.key_rot("upperarm01." + s, f, [("Y", sg * (lower - out)), ("X", -swing)])
-    ct.key_rot("lowerarm01." + s, f, [("X", -elbow)])
+    ct.key_rot("lowerarm01." + s, f, [("X", -elbow), ("Z", sg * inward)])
 
 def stand(h, f, pos2, yaw, flex=2.0, side=0.0, twist=0.0, head=(0.0, 0.0), dz=0.0, stance=1.0):
     z = G(pos2.x, pos2.y) + h.root_head.z - 0.012 + dz
@@ -131,13 +132,15 @@ for name, (rig, ct, h) in PEOPLE.items():
             arm(ct, s, f, lower=43.0, swing=10.0 + sg * amp * math.cos(2 * math.pi * cyc), elbow=20.0 + 65.0 * smooth((f - RUN0) / 30.0))
         h.key_spine(f, flex=11.0, twist=-8 * math.sin(2 * math.pi * cyc), head=(-6.0, 0.0))
     # ---- the hill (from 1680): standing, quiet, facing the town; breathing, head turns
-    hp = HILLPOS[name]; yh = math.degrees(DIR)
+    hp = HILLPOS[name]; yh = math.degrees(DIR) + 180.0        # they face inland, the ruins behind them
     stand(h, SHOW_HILL - 3, path_r(RUN1).to_2d(), 180.0)        # holds the run's end pose while hidden
     for f in range(SHOW_HILL - 2, END + 1, 12):
         bow = {"Mom": 10.0, "Dad": 3.0, "Boy": 2.0, "Girl": 6.0}[name]
-        look = {"Dad": 0.0, "Mom": -4.0, "Boy": 10.0 if (f // 150) % 2 else -2.0, "Girl": 4.0}[name]
-        stand(h, f, hp, yh, flex=2.0 + 1.0 * math.sin(f / 30.0), side=0.8 * math.sin(f / 60.0 + rnd.random()),
-              head=(bow + 3 * math.sin(f / 55.0), look + 5.0 * math.sin(f / 90.0 + rnd.random() * 3)))
+        look = {"Dad": pchip([(1680, 0.0), (1860, 0.0), (1900, 38.0), (1960, 38.0), (2000, 5.0), (END, 0.0)])(f),
+                "Mom": -6.0 + 8.0 * math.sin(f / 70.0), "Boy": pchip([(1680, 0.0), (1770, 0.0), (1800, -22.0), (1880, -22.0), (1910, 0.0), (END, 0.0)])(f),
+                "Girl": 8.0 * math.sin(f / 60.0)}[name]
+        stand(h, f, hp, yh, flex=2.0 + 1.5 * math.sin(f / 30.0), side=1.5 * math.sin(f / 45.0 + rnd.random()), twist=4.0 * math.sin(f / 80.0 + rnd.random()),
+              head=(bow + 4 * math.sin(f / 55.0), look + 4.0 * math.sin(f / 90.0 + rnd.random() * 3)))
     # ---- arms outside the run: relaxed, slightly bent, small sway
     for f in list(range(1, RUN0, 8)) + list(range(SHOW_HILL - 2, END + 1, 10)):
         if f > RUN0 - 3 and f < SHOW_HILL - 2: continue
@@ -249,7 +252,7 @@ SUN = O["Sun"]; SUN.rotation_mode = 'XYZ'
 for f, u in ((1, 0.0), (1650, 0.0), (1900, 1.0), (END, 1.0)):
     SM.inputs["Factor"].default_value = u; SM.inputs["Factor"].keyframe_insert("default_value", frame=f)
     CC.inputs["Factor"].default_value = u; CC.inputs["Factor"].keyframe_insert("default_value", frame=f)
-    SUN.rotation_euler = (math.radians(45 + 31 * u), 0, math.radians(20 + 31.5 * u)); SUN.keyframe_insert("rotation_euler", frame=f)
+    SUN.rotation_euler = (math.radians(45 + 27 * u), 0, math.radians(20 - 58.5 * u)); SUN.keyframe_insert("rotation_euler", frame=f)
     SUN.data.color = (1.0, 0.95 - 0.33 * u, 0.86 - 0.56 * u); SUN.data.keyframe_insert("color", frame=f)
     SUN.data.energy = 4.5 - 1.3 * u; SUN.data.keyframe_insert("energy", frame=f)
 
@@ -259,48 +262,53 @@ cam_d = bpy.data.cameras.new("CAM_Film"); CAM = bpy.data.objects.new("CAM_Film",
 cam_d.sensor_fit = 'VERTICAL'; cam_d.sensor_height = 36.0; cam_d.clip_start = 0.05; cam_d.clip_end = 30000.0; cam_d.dof.use_dof = False
 CAM.rotation_mode = 'QUATERNION'
 K = [  # frame, position, aim, lens
-    (1, (2.4, -13.4, 1.05), (-0.7, -8.6, 1.15), 32),
-    (60, (3.0, -15.6, 0.95), (-0.5, -8.8, 1.0), 30),
-    (127, (5.0, -21.0, 0.85), (1.5, -30.0, 0.3), 24),        # skims the bare sea floor: fish, the stranded boat
-    (190, (3.6, -25.5, 0.75), (-1.0, -17.0, 0.5), 24),
-    (259, (1.5, -21.0, 1.1), (-0.6, -12.0, 1.0), 32),         # they walk out toward the camera, the hotel and its sign behind
-    (340, (1.4, -19.2, 1.1), (-0.8, -12.8, 1.05), 32),
+    (1, (2.4, -13.4, 1.05), (-0.7, -8.6, 1.15), 32),          # faces; the water pulls away from their feet
+    (50, (3.0, -15.0, 1.0), (-0.5, -8.8, 1.0), 30),
+    (95, (4.0, -17.5, 1.0), (7.0, -60.0, 0.0), 26),           # turn: low over the retreating sea, the edge racing away
+    (127, (5.0, -21.0, 0.85), (11.0, -38.0, 0.2), 26),         # the bare sea floor: fish, the stranded boat
+    (165, (3.5, -22.5, 0.9), (-0.5, -11.0, 0.9), 30),
+    (210, (2.0, -19.5, 1.05), (-0.6, -10.5, 1.0), 34),
+    (259, (1.5, -18.0, 1.1), (-0.6, -11.5, 1.0), 35),         # they walk out toward the camera
+    (340, (1.4, -18.0, 1.1), (-0.8, -12.8, 1.05), 35),
     (395, (4.0, -18.0, 1.35), (-1.0, -13.0, 1.3), 30),
-    (450, (5.6, -14.6, 1.6), (-2.5, -14.6, 1.4), 28),         # beside them: faces in three-quarter, the sea horizon behind
-    (503, (-3.0, -19.0, 2.0), (-6.0, -800.0, 2.0), 60),         # a wave, heading for the shore: the white line on the horizon
-    (540, (-2.6, -19.5, 1.7), (-6.0, -800.0, 2.0), 55),
+    (450, (5.6, -14.6, 1.6), (-2.5, -14.6, 1.4), 28),         # beside them: faces in three-quarter, Dad points
+    (503, (-3.0, -18.5, 2.0), (-6.0, -780.0, 2.5), 60),       # a wave, heading for the shore: push in on the white line
+    (545, (-2.6, -21.0, 2.0), (-6.0, -760.0, 3.0), 90),
     (575, (2.0, -19.0, 1.6), (-0.6, -12.8, 1.5), 32),         # back to their faces: the shout, the turn
-    (612, (2.0, -16.0, 6.0), (-0.5, -60.0, 1.0), 26),
-    (648, (0.0, -60.0, 70.0), (0.0, -1300.0, 0.0), 30),       # high above the coast: the front across the whole ocean
-    (700, (-20.0, -330.0, 60.0), (-10.0, -1700.0, 0.0), 34),
-    (745, (-75.0, -580.0, 14.0), (0.0, -600.0, -25.0), 24),   # dive toward the cut-away
-    (766, (-92.0, -598.0, -6.0), (0.0, -600.0, -30.0), 22),   # through the surface
-    (790, (-150.0, -608.0, -18.0), (0.0, -598.0, -38.0), 20),
-    (860, (-140.0, -582.0, -16.0), (0.0, -598.0, -34.0), 20),
-    (885, (-96.0, -585.0, -6.0), (-20.0, -640.0, 2.0), 22),
-    (902, (-80.0, -590.0, 6.0), (-20.0, -1300.0, 6.0), 26),   # up and out: the wave coming
-    (960, (-50.0, -430.0, 20.0), (-10.0, -1200.0, 9.0), 26),
-    (1025, (-20.0, -150.0, 24.0), (-5.0, -600.0, 12.0), 24),
+    (612, (2.0, -16.0, 6.0), (-0.5, -200.0, 2.0), 26),
+    (648, (0.0, -90.0, 45.0), (0.0, -640.0, 2.0), 30),        # high above the coast: the front across the whole ocean
+    (700, (-40.0, -190.0, 32.0), (-20.0, -600.0, 0.0), 30),
+    (745, (-75.0, -232.0, 12.0), (0.0, -250.0, -22.0), 24),   # dive toward the cut-away
+    (766, (-95.0, -248.0, -5.0), (0.0, -250.0, -30.0), 22),   # through the surface
+    (790, (-150.0, -258.0, -22.0), (0.0, -248.0, -40.0), 20),
+    (860, (-140.0, -236.0, -20.0), (0.0, -248.0, -36.0), 20),
+    (884, (-112.0, -242.0, -9.0), (-40.0, -330.0, 0.0), 22),
+    (900, (-105.0, -245.0, 5.0), (-60.0, -700.0, 6.0), 24),   # straight up and out: the wave coming
+    (960, (-60.0, -150.0, 18.0), (-20.0, -600.0, 8.0), 26),
+    (1025, (-20.0, -60.0, 22.0), (-5.0, -500.0, 12.0), 24),
     (1050, (-0.7, 22.0, 10.0), (-0.7, -60.0, 6.0), 24),       # backward over the beach (still looking at the sea), over their heads
     (1062, (-0.7, 45.0, 3.6), (-0.7, 30.0, 2.4), 24),         # their faces as they run, the wall behind them
     (1110, (-0.7, 49.5, 3.6), (-0.7, 20.0, 5.5), 24),
     (1170, (2.0, 75.0, 6.0), (0.0, -20.0, 12.0), 32),         # pull back inland: the wall towers over the palms and the hotel
     (1205, (6.0, 82.0, 12.0), (10.0, -15.0, 20.0), 30),
-    (1229, (-4.0, 78.0, 26.0), (0.0, -10.0, 20.0), 26),       # it hits the coast (the family has run off frame left)
+    (1229, (-4.0, 78.0, 26.0), (0.0, -10.0, 20.0), 26),       # it hits the coast (the family has run off the bottom of frame)
     (1260, (0.0, 98.0, 36.0), (4.0, 20.0, 4.0), 26),
     (1300, (5.0, 140.0, 48.0), (5.0, 40.0, 6.0), 24),
-    (1375, (-20.0, 178.0, 13.0), (-8.0, 110.0, 3.0), 24),     # rides ahead of the surge in the town
-    (1450, (-15.0, 215.0, 11.0), (-5.0, 155.0, 3.0), 24),
-    (1509, (-25.0, 262.0, 30.0), (0.0, 170.0, 2.0), 24),
+    (1375, (0.0, 178.0, 14.0), (-4.0, 110.0, 3.0), 24),       # rides ahead of the surge up the road: houses go under
+    (1450, (0.0, 222.0, 13.0), (-2.0, 155.0, 3.0), 24),
+    (1509, (-15.0, 262.0, 30.0), (0.0, 170.0, 2.0), 24),
     (1565, (-60.0, 310.0, 70.0), (15.0, 150.0, 0.0), 26),     # whole neighbourhoods gone
     (1621, (-45.0, 300.0, 62.0), (35.0, 175.0, 4.0), 28),
     (1689, (-28.0, 258.0, 30.0), (45.0, 186.0, 8.0), 30),     # the rubble, the mosque standing
-    (1745, (-67.9, 277.0, 10.1), (-70.9, 279.1, 9.9), 35),    # the family on the high ground, faces (Dad and the boy)
-    (1830, (-66.6, 278.5, 9.95), (-69.4, 280.7, 9.7), 35),    # Mom and the girl
-    (1920, (-64.5, 275.5, 11.0), (-69.8, 280.3, 9.6), 28),
-    (2000, (-60.0, 262.0, 17.0), (-30.0, 232.0, 6.0), 26),
-    (END, (-58.0, 258.0, 23.0), (10.0, 200.0, 4.0), 26),
 ]
+D3 = Vector((math.sin(DIR), -math.cos(DIR), 0.0)); L3 = Vector((LAT.x, LAT.y, 0.0)); HC3 = Vector((HC.x, HC.y, G(HC.x, HC.y)))
+def hk(f, back, lat, up, aim_fwd, aim_lat, aim_up, lens):
+    return (f, tuple(HC3 - D3 * back + L3 * lat + Vector((0, 0, up))), tuple(HC3 + D3 * aim_fwd + L3 * aim_lat + Vector((0, 0, aim_up))), lens)
+K += [hk(1745, 3.6, -0.8, 1.55, 0.0, -0.8, 1.35, 35),        # the family on the high ground, faces; the ruins behind them
+      hk(1830, 3.6, 0.9, 1.5, 0.0, 0.9, 1.3, 35),
+      hk(1920, 6.0, 0.2, 3.5, 12.0, 0.0, 0.0, 28),
+      hk(2000, 7.5, 1.0, 7.0, 40.0, 0.0, -2.0, 28),
+      hk(END, 9.0, 2.0, 9.0, 45.0, 0.0, -7.0, 28)]
 ks = [(k[0], Vector(k[1]), Vector(k[2]), k[3]) for k in K]
 fx = [pchip([(k[0], k[1][i]) for k in ks]) for i in range(3)]
 ax = [pchip([(k[0], k[2][i]) for k in ks]) for i in range(3)]
