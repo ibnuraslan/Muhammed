@@ -259,7 +259,11 @@ for f in range(1, END + 1, 2):
         YW[t].rotation_euler = (0, math.radians(yr(f) + shake(f, 1830, 2006, 3.0, 1.1, 2)), 0)
         YW[t].keyframe_insert("rotation_euler", frame=f)
 THR = [O["THR_piv0"], O["THR_piv1"]]
-for f, a in ((1, -12), (2840, -12), (2880, -4), (2900, -4), (END, -4)):
+# v012 round 1: the lever arm ends inside the knob (it poked 5 cm above it, through his hand)
+for k in (0, 1):
+    arm = O["THR_arm%d" % k]; h = max(c[2] for c in arm.bound_box)
+    arm.scale.z = (0.162 - arm.location.z) / h
+for f, a in ((1, -12), (2812, -12), (2840, -4), (2852, -5), (2880, 4), (2900, 4), (END, 4)):
     for t in THR:
         t.rotation_euler = (math.radians(a), 0, 0); t.keyframe_insert("rotation_euler", frame=f)
 
@@ -593,9 +597,10 @@ for s in "LR":
         HERO.pole(s, f, sh + rt * sg * 0.35 - UP * 0.45 - fw_ * 0.1)
 # loses grip: hands fly off, he stumbles back, then drops into the seat (sit_down 1505)
 for s in "LR":                                  # grip lost: hands spring up and back off his shoulder (clear of the headrest)
-    fs(1498); HERO.ikw(s, 1506, Matrix.Translation(Vector((-0.10, -0.04, 0.16))) @ HERO.ik_world(s))
+    fs(1498); fw_ = yaw_vec(128); rt = Vector((fw_.y, -fw_.x, 0)); sg = -1 if s == "L" else 1
+    HERO.ikw(s, 1506, Matrix.Translation(-fw_ * 0.12 + UP * 0.12 + rt * sg * 0.12) @ HERO.ik_world(s))
     apply_pose(HERO.rig, s, "open_alarm", 1506)
-    chest_hand(HERO, s, 1520, yaw_vec(128), height=0.05, ahead=0.22, out=0.20)
+    chest_hand(HERO, s, 1520, yaw_vec(128), height=0.05, ahead=0.26, out=0.30)
 SIT2 = 1505
 sit_down(SIT2, HAUL_P + yaw_vec(128) * -0.18, 128)
 for s in "LR":
@@ -624,14 +629,20 @@ for s in "LR":
 hold(HERO, "L", GRIP["L"], relY["L"], 1832, END, step=2)
 hold(HERO, "R", GRIP["R"], relY["R"], 1832, 2700, step=2)
 THK = O["THR_knob0"]
-relT = grip_rel(HERO, "R", 2800, THK, Vector((0.25, 0.35, -1.0)).normalized())
-fs(2760); HERO.ikw("R", 2760, Matrix.Translation(Vector((0.0, -0.04, 0.10))) @ (THK.matrix_world @ relT))
+relT = grip_rel(HERO, "R", 2800, THK, Vector((0.05, 1.0, -0.30)).normalized())
+fs(2760); HERO.ikw("R", 2760, Matrix.Translation(Vector((0.0, -0.09, 0.05))) @ (THK.matrix_world @ relT))
 apply_pose(HERO.rig, "R", "shield", 2760)
-fs(2730); HERO.ikw("R", 2730, Matrix.Translation(Vector((-0.08, -0.12, 0.12))) @ (GRIP["R"].matrix_world @ relY["R"]))
+fs(2700); MA = GRIP["R"].matrix_world @ relY["R"]
+fs(2760); MB = Matrix.Translation(Vector((0.0, -0.09, 0.05))) @ (THK.matrix_world @ relT)
+for f_, u in ((2715, 0.3), (2730, 0.55), (2745, 0.8)):
+    q_ = MA.to_quaternion().slerp(MB.to_quaternion(), u); t_ = MA.translation.lerp(MB.translation, u) + Vector((0.02, -0.03, 0.04 * math.sin(math.pi * u)))
+    HERO.ikw("R", f_, Matrix.Translation(t_) @ q_.to_matrix().to_4x4())
 apply_pose(HERO.rig, "R", "relaxed", 2730)
+log("throttle reach path", [round(v, 3) for v in MA.translation], [round(v, 3) for v in MB.translation])
 hold(HERO, "R", THK, relT, 2800, 2900, step=2)
+for f_ in (2790, 2800, 2850, 2900): apply_pose(HERO.rig, "R", "wrap_grip", f_, amount=0.75)
 apply_pose(HERO.rig, "R", "shield", 2915)
-fs(2915); HERO.ikw("R", 2915, Matrix.Translation(Vector((0.0, -0.05, 0.10))) @ (THK.matrix_world @ relT))
+fs(2915); HERO.ikw("R", 2915, Matrix.Translation(Vector((0.0, -0.09, 0.06))) @ (THK.matrix_world @ relT))
 fs(2935); HERO.ikw("R", 2935, Matrix.Translation(Vector((0.0, -0.08, 0.05))) @ (GRIP["R"].matrix_world @ relY["R"]))
 grip_rel(HERO, "R", 2950, GRIP["R"], Vector((-1, 0.15, 0)).normalized())
 hold(HERO, "R", GRIP["R"], relY["R"], 2950, END, step=2)
@@ -642,13 +653,13 @@ for s in "LR":
 # spine and head while flying
 FLY_FLEX = [(1832, 10), (1880, 8), (1950, 0), (2006, -2), (2100, 2), (2225, 4), (2300, 10), (2420, 4), (2500, 12), (2650, 8),
             (2760, 14), (2900, 10), (2975, 2), (3060, 0), (3150, 4), (3250, 10), (3344, 6), (END, 4)]
-FLY_TWIST = [(1832, 0), (2700, 0), (2780, -8), (2900, -6), (2975, 0), (3020, -22), (3110, -26), (3160, -4), (END, 0)]
+FLY_TWIST = [(1832, 0), (2700, 0), (2780, -8), (2900, -6), (2975, 0), (3020, 18), (3110, 20), (3160, 0), (END, 0)]
 seat_spine(1832, END, pchip(FLY_FLEX), twist_fn=pchip(FLY_TWIST),
            side_fn=lambda f: 2.5 * math.sin(f / 23.0) if f < 2006 else 0.0, per=120, amp=1.3)
 HEAD_F = [(1832, 0, 4, 0), (1880, -6, -6, 4), (1920, 8, -4, -4), (1960, -4, -2, 2), (2006, 0, 2, 0), (2080, 4, 6, 0),
           (2160, 0, 2, 0), (2225, -4, 6, 0), (2280, -14, 30, 0), (2380, -12, 30, 0), (2430, 0, 4, 0), (2479, -14, 0, 0),
           (2560, -16, -4, 0), (2600, 0, -2, 0), (2653, 0, 0, 0), (2700, -24, 24, 0), (2800, -30, 32, 0), (2880, -20, 26, 0), (2940, 0, 2, 0),
-          (2975, 0, 0, 0), (3030, -62, 4, 0), (3110, -68, 6, 0), (3150, -20, 2, 0), (3190, -15, -2, 0), (3260, -16, 0, 0), (3300, 0, -2, 0),
+          (2975, 0, 0, 0), (3030, 52, 4, 0), (3110, 56, 6, 0), (3150, 10, 2, 0), (3190, -15, -2, 0), (3260, -16, 0, 0), (3300, 0, -2, 0),
           (3344, 0, -2, 0), (3420, 0, -4, 0), (END, 0, -3, 0)]
 hf = [pchip([(k[0], k[i]) for k in HEAD_F]) for i in (1, 2, 3)]
 for f in range(1832, END + 1, 3):
@@ -715,7 +726,7 @@ for tag in "LR":
 G = {n: O[n + "_needle"] for n in ("ALT", "SPD", "VSI", "ALT2")}
 for f in range(1, END + 1, 3):
     al = ALT[f]; vs = (ALT[min(END, f + 1)] - ALT[max(1, f - 1)]) * 30.0
-    G["ALT"].rotation_euler = (0, -2 * math.pi * al / 1000.0, 0); G["ALT2"].rotation_euler = (0, -2 * math.pi * al / 1000.0, 0)
+    G["ALT"].rotation_euler = (0, -2 * math.pi * al / 100.0, 0); G["ALT2"].rotation_euler = (0, -2 * math.pi * al / 100.0, 0)
     G["SPD"].rotation_euler = (0, -math.radians(140 + 40 * max(0, -pp(f)) / 27.0 + 3 * math.sin(f * 0.4)), 0)
     G["VSI"].rotation_euler = (0, -math.radians(max(-160, min(160, vs * 2.2))), 0)
     for g in G.values(): g.keyframe_insert("rotation_euler", frame=f)
@@ -725,7 +736,7 @@ for f in range(1, END + 1):
     on = 1550 <= f <= 2230 and ((f - 1550) % 24) < 12
     if f == 1 or (f >= 1545 and f <= 2240):
         WM.default_value = 30.0 if on else 0.3; WM.keyframe_insert("default_value", frame=f)
-        AL.energy = 160.0 if on else 0.0; AL.keyframe_insert("energy", frame=f)
+        AL.energy = 480.0 if on else 0.0; AL.keyframe_insert("energy", frame=f)
 for fc in iter_fcurves(bpy.data.materials["M_Warn"].node_tree.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 for fc in iter_fcurves(AL.animation_data.action):
@@ -755,6 +766,15 @@ def around(ch, f, off, lens, tgt_off=(0, 0, 0)):
 # in the altimeter and throttle inserts.
 FC = Vector((0.05, 4.62, 1.46)); FL = Vector((-0.92, 4.58, 1.42)); FR = Vector((0.28, 4.62, 1.44))
 COR = Vector((0.14, 3.58, 1.56)); BACK = Vector((-0.10, 3.25, 1.52)); WS = Vector((-0.85, 6.5, 0.96))
+# v012 round 1: front <-> back moves go round his LEFT side (SIDE -> BACKL -> BACK), never across the glareshield, so his
+# head stays in frame the whole way
+SIDE = Vector((-0.98, 4.12, 1.55)); BACKL = Vector((-0.80, 3.55, 1.62))
+BACK = Vector((0.0, 3.92, 1.50))
+def back_k(f, off=(0, 0, 0), lens=16):
+    p_ = BACK + Vector(off); e_ = face_of(HERO, f)
+    K(f, p_, p_ + ((e_ - p_).normalized() + (WS - p_).normalized()) * 0.8, lens)
+def side_k(f, lens=24): K(f, SIDE, face_of(HERO, f), lens)
+def backl_k(f, lens=22): K(f, BACKL, face_of(HERO, f) + Vector((0.05, 0.60, -0.10)), lens)
 def mid(a, b, u=0.5): return a.lerp(b, u)
 # 0-4 s: wake up (close on his face from the aisle front-left, slowly arcing), then who is around him
 around(HERO, 1, (-0.55, 0.52, 0.20), 36, (0, 0, -0.04))
@@ -765,9 +785,10 @@ e3 = face_of(C["PAX3"], 150); eh = face_of(HERO, 150); K(150, Vector((-0.05, -0.
 e1 = face_of(C["PAX1"], 200); eh = face_of(HERO, 200); K(200, Vector((-0.02, -0.40, 1.44)), eh.lerp(e1, 0.30), 24)
 eh = face_of(HERO, 228); K(228, Vector((0.25, -1.02, 1.42)), eh, 26)
 # 4-6.7 s: flying perfectly level: from above the empty window seat: his face, a pan to the window (wing, level horizon), back
-eh = face_of(HERO, 255); K(255, Vector((1.28, -1.28, 1.32)), eh, 28)
-K(285, Vector((1.33, -1.32, 1.28)), Vector((1.80, -1.60, 1.24)), 30)
-K(322, Vector((1.34, -1.34, 1.27)), Vector((1.80, -1.62, 1.22)), 30)
+eh = face_of(HERO, 255); K(255, Vector((0.95, -1.10, 1.40)), eh, 26)
+# over his shoulder to the window (wing, level horizon) with his head in frame
+eh = face_of(HERO, 285); K(285, Vector((0.32, -1.22, 1.46)), eh.lerp(Vector((1.80, -1.62, 1.22)), 0.5), 20)
+eh = face_of(HERO, 322); K(322, Vector((0.30, -1.26, 1.44)), eh.lerp(Vector((1.80, -1.62, 1.22)), 0.5), 21)
 eh = face_of(HERO, 352); K(352, Vector((1.28, -1.28, 1.32)), eh, 28)
 around(HERO, 395, (0.40, 0.55, 0.10), 28)
 # 6.7-9.2 s: stands up into the aisle
@@ -782,11 +803,11 @@ around(HERO, 650, (0.05, 1.30, -0.05), 26, (-0.25, 0.4, -0.35))
 ec = face_of(CAPT, 690); eh = face_of(HERO, 690); K(690, Vector((0.10, 3.45, 1.00)), ec.lerp(eh, 0.55), 20)   # corridor between the pilot seats, clear of both seat backs
 ec = face_of(CAPT, 745); eh = face_of(HERO, 745); K(745, Vector((0.12, 3.55, 1.08)), ec.lerp(eh, 0.60), 20)
 # 13.2-15.5 s: the first officer slumped in his seat: he shakes him by the shoulder (two-shot from the front)
-ef = face_of(FO, 800); eh = face_of(HERO, 800); K(800, FC + Vector((0.10, 0, 0)), mid(ef, eh), 22)
-ef = face_of(FO, 860); eh = face_of(HERO, 860); K(860, FR, mid(ef, eh), 22)
+ef = face_of(FO, 800); eh = face_of(HERO, 800); K(800, FC + Vector((0.10, 0, 0)), mid(ef, eh, 0.62), 21)
+ef = face_of(FO, 860); eh = face_of(HERO, 860); K(860, FR, mid(ef, eh, 0.62), 21)
 ef = face_of(FO, 910); eh = face_of(HERO, 910); K(910, FC + Vector((0.05, 0, 0.02)), mid(ef, eh, 0.6), 22)
 # 15.5-20.4 s: he gets into the left seat and grabs the radio: front-left, close
-eh = face_of(HERO, 955); K(955, FC + Vector((-0.20, 0, 0.04)), eh, 24)
+eh = face_of(HERO, 955); K(955, FL + Vector((0.30, 0.0, 0.06)), eh, 22)
 eh = face_of(HERO, 1005); K(1005, FL, eh, 26)
 eh = face_of(HERO, 1045); K(1045, FL + Vector((-0.02, -0.04, -0.03)), mid(eh, Vector((-1.0, 4.1, 1.0)), 0.35), 24)
 eh = face_of(HERO, 1100); K(1100, FL + Vector((0.18, 0.03, -0.02)), eh, 30)
@@ -796,8 +817,8 @@ eh = face_of(HERO, 1220); K(1220, FL + Vector((0.20, 0.03, 0.0)), eh, 30)
 eh = face_of(HERO, 1258); K(1258, Vector((0.05, 4.60, 1.32)), mid(eh, Vector((0.0, 4.40, 0.72)), 0.45), 24)
 # 21.2-25.8 s: hangs the mic up, gets up and tries to pull the FO out: from the front between the seats
 eh = face_of(HERO, 1305); K(1305, FC + Vector((-0.25, 0, -0.02)), eh, 26)
-eh = face_of(HERO, 1370); K(1370, FC, eh, 24)
-ef = face_of(FO, 1420); eh = face_of(HERO, 1420); K(1420, FC + Vector((0.05, 0, 0.02)), mid(ef, eh), 20)
+eh = face_of(HERO, 1370); K(1370, FC + Vector((0.0, 0.0, -0.08)), eh, 20)
+ef = face_of(FO, 1420); eh = face_of(HERO, 1420); K(1420, FC + Vector((0.05, 0, 0.02)), mid(ef, eh, 0.62), 20)
 ef = face_of(FO, 1470); eh = face_of(HERO, 1470); K(1470, FR, mid(ef, eh) + Vector((0, 0, -0.06)), 20)
 ef = face_of(FO, 1505); eh = face_of(HERO, 1505); K(1505, FR + Vector((-0.08, 0, 0.0)), mid(ef, eh) + Vector((0, 0, -0.08)), 20)
 # 25.8-28.7 s: alarms, red light: he drops into the seat; on his face, with the red beacon flashing behind him
@@ -806,43 +827,42 @@ eh = face_of(HERO, 1600); K(1600, FC + Vector((-0.35, 0, -0.04)), eh, 28)
 eh = face_of(HERO, 1660); K(1660, FL + Vector((0.12, 0.02, -0.02)), eh, 28)
 eh = face_of(HERO, 1700); K(1700, FC + Vector((-0.20, 0, -0.03)), eh, 26)
 # 28.7-30.3 s: diving: the camera rides the corridor back to over his shoulder: the windscreen with the ground rushing up
-K(1716, FC + Vector((0.05, -0.05, 0.03)), WS + Vector((0, 0, 0.3)), 22)
-K(1732, COR, WS, 20)
-K(1748, BACK, WS, 20)
-K(1786, BACK + Vector((-0.02, 0.03, 0.0)), WS + Vector((0.05, 0, -0.03)), 20)
+side_k(1716); backl_k(1732)
+back_k(1750); back_k(1776, (-0.02, 0.04, 0.0))
 # 30.3-37 s: he grabs the controls: back through the corridor to the front, face + hands on the yoke, orbit left
-K(1800, COR, WS, 20)
-eh = face_of(HERO, 1816); K(1816, FC + Vector((0.0, 0, 0.02)), eh, 22)
+backl_k(1792); side_k(1805)
+eh = face_of(HERO, 1818); K(1818, FC + Vector((0.0, 0, 0.02)), eh, 22)
 eh = face_of(HERO, 1840); K(1840, FC + Vector((-0.30, 0, -0.04)), mid(eh, Vector((-0.56, 4.40, 0.88)), 0.40), 22)
 eh = face_of(HERO, 1920); K(1920, FL + Vector((0.15, 0.03, 0.0)), mid(eh, Vector((-0.56, 4.40, 0.88)), 0.35), 22)
-eh = face_of(HERO, 2006); K(2006, FL, mid(eh, Vector((-0.56, 4.40, 0.88)), 0.30), 22)
+eh = face_of(HERO, 1965); K(1965, FL + Vector((0.08, 0.02, 0.06)), mid(eh, Vector((-0.56, 4.40, 0.88)), 0.32), 23)
+eh = face_of(HERO, 2006); K(2006, FL + Vector((0.0, -0.02, -0.02)), mid(eh, Vector((-0.56, 4.40, 0.88)), 0.30), 22)
+eh = face_of(HERO, 2050); K(2050, FC + Vector((-0.30, 0, 0.02)), eh, 25)
 eh = face_of(HERO, 2100); K(2100, FL + Vector((0.30, 0.03, 0.02)), eh, 26)
 eh = face_of(HERO, 2195); K(2195, FC + Vector((-0.10, 0, 0)), eh, 26)
 # 37-41.3 s: level but sinking: down over the pedestal to the altimeter unwinding, then up to his face
-K(2240, Vector((-0.10, 4.70, 1.08)), Vector((-0.26, 5.01, 0.76)), 40)
-K(2280, Vector((-0.12, 4.72, 0.97)), Vector((-0.26, 5.01, 0.75)), 48)
-K(2330, Vector((-0.11, 4.72, 0.97)), Vector((-0.26, 5.01, 0.75)), 48)
-eh = face_of(HERO, 2380); K(2380, Vector((-0.05, 4.66, 1.30)), eh, 28)
+K(2248, Vector((-0.10, 4.70, 1.14)), Vector((-0.26, 5.01, 0.76)), 40)
+K(2272, Vector((-0.12, 4.72, 1.00)), Vector((-0.26, 5.01, 0.75)), 48)
+K(2322, Vector((-0.11, 4.73, 0.98)), Vector((-0.26, 5.01, 0.75)), 54)
+eh = face_of(HERO, 2352); K(2352, Vector((-0.05, 4.66, 1.30)), eh, 28)
 eh = face_of(HERO, 2440); K(2440, FC + Vector((-0.12, 0, 0)), eh, 28)
 # 41.3-44.2 s: the long field ahead: through the corridor to over his shoulder, then back to his face
-K(2470, COR, WS, 22)
-K(2496, BACK, WS, 20)
-K(2560, BACK + Vector((-0.02, 0.03, 0)), WS, 20)
-K(2588, COR, WS, 22)
+side_k(2464); backl_k(2482)
+back_k(2500); back_k(2560, (-0.02, 0.04, 0.0))
+backl_k(2578); side_k(2596)
 eh = face_of(HERO, 2615); K(2615, FC + Vector((0.05, 0, 0)), eh, 26)
 # 44.2-49.6 s: could land now; the throttles: his right hand to the levers and his face
 eh = face_of(HERO, 2690); K(2690, FR, eh, 26)
 eh = face_of(HERO, 2790); K(2790, Vector((0.30, 4.62, 1.30)), mid(eh, Vector((-0.05, 4.55, 0.87)), 0.55), 24)
-eh = face_of(HERO, 2880); K(2880, Vector((0.28, 4.62, 1.32)), mid(eh, Vector((-0.05, 4.55, 0.87)), 0.5), 24)
+eh = face_of(HERO, 2880); K(2880, Vector((0.22, 4.58, 1.26)), mid(eh, Vector((-0.05, 4.55, 0.87)), 0.5), 29)
 eh = face_of(HERO, 2950); K(2950, FR, eh, 28)
 # 49.6-52.5 s: or keep flying and hope someone wakes up: he looks back at the FO (his face and the FO)
-eh = face_of(HERO, 3040); K(3040, FR + Vector((-0.05, 0, 0)), mid(eh, face_of(FO, 3040), 0.35), 20)
-eh = face_of(HERO, 3120); K(3120, FC + Vector((0.08, 0, 0)), mid(eh, face_of(FO, 3120), 0.30), 20)
+eh = face_of(HERO, 3025); K(3025, FR + Vector((-0.05, 0, 0)), eh, 22)
+ef = face_of(FO, 3065); K(3065, FR + Vector((-0.02, 0.0, 0.02)), ef + Vector((0, 0, -0.05)), 22)
+eh = face_of(HERO, 3110); K(3110, FC + Vector((0.08, 0, 0)), eh, 22)
 # 52.5-55.7 s: this field might be your only chance: back to the windscreen, the field filling it
-K(3160, COR, WS, 22)
-K(3188, BACK, WS, 20)
-K(3262, BACK + Vector((-0.02, 0.04, 0)), WS, 20)
-K(3290, COR, WS, 22)
+side_k(3150); backl_k(3168)
+back_k(3188); back_k(3262, (-0.02, 0.05, 0.0))
+backl_k(3282); side_k(3302)
 # 55.7-58 s: what do you do? the camera floats round to his face
 eh = face_of(HERO, 3330); K(3330, FC + Vector((0.05, 0, 0)), eh, 28)
 around(HERO, 3400, (0.25, 0.55, 0.05), 34)
@@ -857,7 +877,7 @@ BASE = {f: cl(f) + SHK[f] for f in range(1, END + 1)}
 # ---------- clearance pass (v012 fix): the lens keeps MIN_SET from every set mesh (static + keyed: yokes, throttles,
 # mic, needles) and MIN_BODY from every character's bones (capsules round the bone axes). Pushes are solved on every
 # 2nd frame, smoothed over +-0.3 s so the move stays fluid, then re-checked; three rounds, then an exact final push.
-MIN_SET, MIN_BODY = 0.12, 0.10
+MIN_SET, MIN_BODY, MIN_HEAD = 0.12, 0.14, 0.34
 SETOBJS = [o for c in ("CABIN", "COCKPIT") for o in bpy.data.collections[c].all_objects if o.type == 'MESH' and not o.hide_render]
 def animated(o):
     while o:
@@ -891,7 +911,7 @@ def need(f, p, bm):
             for bn, r in CAPS:
                 if bn not in ch.rig.pose.bones: continue
                 d, qq = seg_dist(q, ch.wh(bn), Wt(ch.rig, bn))
-                gap = r + MIN_BODY - d
+                gap = r + (MIN_HEAD if bn == "head" else MIN_BODY) - d
                 if gap > 0 and (worst is None or gap > worst[0]):
                     n = q - qq; worst = (gap, n.normalized() if n.length > 1e-6 else Vector((0, -1, 0)))
         if worst is None: break
