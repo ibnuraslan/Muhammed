@@ -1,6 +1,7 @@
-revolver grip: fingers inside 0 near 14 shift -0.01
-revolver world after child-of (-0.455, -2.336, 1.285) want (-0.455, -2.336, 1.285)
-muzzle (-0.427, -2.22, 1.209) hit (-0.105, -0.211, 1.306) dist 2.038
+revolver grip: fingers inside 0 near 13 shift -0.02
+revolver world after child-of (-0.444, -2.333, 1.286) want (-0.444, -2.333, 1.286)
+muzzle (-0.416, -2.218, 1.21) hit (-0.104, -0.211, 1.306) dist 2.034
 hole in hall (-0.101, 59.768, 2.299)
+speech offset 0.04 hand points inside 0
 speech grip gap 0.0497 thickness 0.012
-owner Speech 1028 Hero wrist.R jump_mm 0.01
+owner Speech 1028 Hero wrist.R jump_mm 0.0

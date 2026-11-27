@@ -36,6 +36,10 @@ for im in bpy.data.images:
     if big > tgt:
         im.scale(int(im.size[0] * tgt / big), int(im.size[1] * tgt / big)); im.pack()
         print("SHRUNK", im.name, tgt)
+for m in bpy.data.materials:                          # empty image nodes (MakeHuman fedora displacement maps) -> Cycles 'missing image'
+    if m.use_nodes:
+        for n in list(m.node_tree.nodes):
+            if n.type == 'TEX_IMAGE' and n.image is None: m.node_tree.nodes.remove(n)
 bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 bpy.ops.file.pack_all()
 for snd in bpy.data.sounds:

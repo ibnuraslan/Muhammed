@@ -1,10 +1,16 @@
 # RooseveltSpeech_v012: the from-scratch rebuild (batch 1, film 24)
 
-**Status: ON HOLD. Not delivered.** After the two allowed fix rounds, my own watch and a fresh reviewer both rate the last preview FAIL. See `review/CHECK3.md` for the exact frames. The .blend is not pushed (no "Render check: PASS" yet). The film needs the director's OK for another round.
+**Status: delivered for the director's review (not yet marked READY).** This is the director-approved final round, and it passes the render check below. Watch `review/preview.mp4` before rendering. The known residuals are in `review/CHECK4.md`. The earlier rounds are in CHECK1 to CHECK3.
 
-Built to the client's VO (v011 timing, frames 1-1307 at 60 fps), with one continuous camera and the set changes inside short flashes:
-- **Street (f1-389):** a night street outside a hotel in 1912. The gunman fires from the foreground and the bullet flies in slow motion into Roosevelt's chest. He jolts, feels for the wound, then steadies. Onlookers stand around him. The DA KRAS FILMS hotel sign and the car door panel carry the logo.
-- **Cutaway (f390-1027):** a real-scale cut block of the chest wall: coat, the folded inked speech, a steel glasses case with spectacles inside, then shirt, skin, fat, pectoral muscle, ribs, pleura and lung. One geometry-nodes cut per layer is driven by the keyed `TipCtl` empty. The bullet stops in the muscle.
-- **Hall (f1028-1307):** he holds up the holed speech, then raises his fist. There are flags, bunting, a clock and a cheering audience, and the logo is on the lectern.
+Built to the client's VO (the v011 timing), frames **1–1307** at 60 fps, with one continuous camera. The render sheet is `SETTINGS.md`, attribution is in `CREDITS.md`, and the scripts are in `scripts/` (01 build, 02 animate, 03 package).
 
-Scripts: `scripts/01_build.py` (characters, sets), `02_animate.py` (acting, bullet, camera, VO), `03_package.py` (pack). The assets are CC0 MakeHuman/MPFB plus CC-BY Sketchfab models (Ford Model T, facade scan, street lamp, clock), the same models credited in v011's CREDITS.md.
+## The film
+- **Night street:** in 1912, outside a hotel with the DA KRAS FILMS sign, Roosevelt waves beside his car with onlookers around him. Over the gunman's shoulder, the nickel revolver fires with a big flash. The bullet flies in slow motion into his chest. He jolts, feels for the wound and steadies.
+- **The cutaway:** the camera pushes onto the coat hole and lands in a real-scale cut of his chest wall. The bullet tears through the folded, inked speech and the steel glasses case (spectacles inside). It slows through shirt, skin and fat and stops in the chest muscle above the ribs and lung.
+- **The hall:** he holds up the holed speech, then raises his fist. There are flags, bunting, a spinning clock and a cheering crowd, and the lectern carries the logo.
+
+## Render check: PASS
+On the exact file `RooseveltSpeech_v012_60fps.blend` (53 MB), opened with `blender --factory-startup -b`:
+- No linked libraries, no unpacked images, and the VO sound is packed. No drivers and no Python. No errors or warnings: the six empty image nodes on the MakeHuman fedora materials were removed in packaging, and a recheck logs nothing.
+- Camera `CAM_Film`, 1080×1920 at 100 %, 60 fps, frames 1–1307, PNG to `//render/RooseveltSpeech_v012_####.png`, with the VO strip at frame 1.
+- Test frames at full resolution with 64 adaptive samples, on a 4-core CPU with no GPU: f20 in 177 s, f650 in 197 s and f1240 in 281 s. None is black, empty or pink.

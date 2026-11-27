@@ -1,0 +1,3078 @@
+{
+"visible_frames": [
+1,
+4,
+7,
+10,
+13,
+16,
+19,
+22,
+25,
+28,
+31,
+34,
+37,
+40,
+43,
+46,
+49,
+52
+],
+"frames": {
+"1": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"4": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"7": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"10": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"13": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"16": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"19": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"22": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"25": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"28": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"31": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"34": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"37": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"40": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"43": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"46": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"49": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 13,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|VIS": 6
+},
+"52": {
+"metacarpal1.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|VIS": 12,
+"metacarpal2.R|Revolver|VIS": 10,
+"finger4-1.R|Revolver|VIS": 1,
+"metacarpal4.R|Revolver|off": 2,
+"metacarpal4.R|Revolver|VIS": 4,
+"metacarpal3.R|Revolver|off": 1
+},
+"55": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"58": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"61": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"64": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"67": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"70": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"73": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"76": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"79": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"82": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"85": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"88": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"91": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"94": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"97": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"100": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"103": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"106": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"109": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"112": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"115": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"118": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"121": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"124": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"127": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"130": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"133": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"136": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"139": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"142": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"145": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"148": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"151": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"154": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"157": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"160": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"163": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"166": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"169": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"172": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"175": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"178": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"181": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"184": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"187": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"190": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"193": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"196": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"199": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"202": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"205": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"208": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"211": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"214": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"217": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"220": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"223": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"226": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"229": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"232": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"235": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"238": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"241": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"244": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"247": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"250": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"253": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"256": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"259": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"262": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"265": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"268": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"271": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"274": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"277": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"280": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"283": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"286": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"289": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"292": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"295": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"298": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"301": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"304": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"307": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"310": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"313": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"316": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"319": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"322": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"325": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"328": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"331": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"334": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"337": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"340": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"343": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"346": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"349": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"352": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"355": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"358": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"361": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"364": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"367": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"370": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"373": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"376": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"379": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"382": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"385": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"388": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"391": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"394": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"397": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"400": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"403": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"406": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"409": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"412": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"415": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"418": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"421": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"424": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"427": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"430": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"433": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"436": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"439": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"442": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"445": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"448": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"451": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"454": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"457": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"460": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"463": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"466": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"469": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"472": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"475": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"478": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"481": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"484": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"487": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"490": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"493": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"496": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"499": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"502": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"505": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"508": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"511": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"514": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"517": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"520": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"523": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"526": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"529": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"532": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"535": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"538": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"541": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"544": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"547": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"550": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"553": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"556": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"559": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"562": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"565": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"568": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"571": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"574": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"577": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"580": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"583": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"586": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"589": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"592": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"595": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"598": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"601": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"604": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"607": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"610": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"613": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"616": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"619": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"622": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"625": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"628": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"631": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"634": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"637": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"640": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"643": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"646": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"649": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"652": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"655": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"658": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"661": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"664": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"667": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"670": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"673": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"676": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"679": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"682": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"685": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"688": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"691": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"694": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"697": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"700": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"703": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"706": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"709": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"712": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"715": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"718": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"721": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"724": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"727": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"730": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"733": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"736": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"739": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"742": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"745": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"748": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"751": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"754": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"757": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"760": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"763": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"766": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"769": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"772": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"775": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"778": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"781": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"784": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"787": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"790": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"793": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"796": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"799": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"802": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"805": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"808": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"811": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"814": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"817": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"820": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"823": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"826": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"829": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"832": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"835": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"838": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"841": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"844": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"847": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"850": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"853": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"856": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"859": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"862": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"865": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"868": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"871": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"874": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"877": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"880": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"883": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"886": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"889": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"892": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"895": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"898": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"901": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"904": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"907": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"910": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"913": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"916": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"919": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"922": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"925": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"928": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"931": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"934": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"937": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"940": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"943": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"946": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"949": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"952": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"955": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"958": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"961": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"964": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"967": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"970": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"973": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"976": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"979": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"982": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"985": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"988": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"991": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"994": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"997": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1000": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1003": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1006": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1009": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1012": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1015": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1018": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1021": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1024": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1027": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1030": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1033": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1036": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1039": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1042": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1045": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1048": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1051": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1054": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1057": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1060": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1063": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1066": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1069": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1072": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1075": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1078": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1081": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1084": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1087": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1090": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1093": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1096": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1099": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1102": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1105": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1108": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1111": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1114": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1117": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1120": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1123": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1126": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1129": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1132": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1135": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1138": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1141": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1144": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1147": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1150": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1153": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1156": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1159": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1162": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1165": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1168": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1171": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1174": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1177": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1180": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1183": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1186": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1189": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1192": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1195": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1198": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1201": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1204": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1207": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1210": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1213": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1216": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1219": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1222": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1225": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1228": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1231": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1234": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1237": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1240": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1243": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1246": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1249": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1252": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1255": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1258": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1261": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1264": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1267": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1270": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1273": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1276": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1279": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1282": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1285": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1288": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1291": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1294": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1297": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1300": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1303": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+},
+"1306": {
+"metacarpal1.R|Revolver|off": 4,
+"metacarpal3.R|Revolver|off": 13,
+"metacarpal2.R|Revolver|off": 10,
+"finger4-1.R|Revolver|off": 1,
+"metacarpal4.R|Revolver|off": 6
+}
+}
+}

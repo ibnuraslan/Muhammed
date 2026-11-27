@@ -1,0 +1,101 @@
+{
+ "frames": {
+  "1": {
+   "Hero": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "7": {
+   "Hero": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "13": {
+   "Hero": {
+    "self": 15,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "19": {
+   "Hero": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "25": {
+   "Hero": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "31": {
+   "Hero": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "265": {
+   "Hero": {
+    "self": 14,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "271": {
+   "Hero": {
+    "self": 21,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "277": {
+   "Hero": {
+    "self": 28,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1111": {
+   "Hero": {
+    "self": 38,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1117": {
+   "Hero": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1123": {
+   "Hero": {
+    "self": 13,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   277,
+   277
+  ],
+  [
+   1111,
+   1111
+  ]
+ ],
+ "fps": 60
+}

@@ -1,0 +1,4726 @@
+{
+ "frames": {
+  "1": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "5": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "9": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "13": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "17": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "21": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "29": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "33": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "37": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "41": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "45": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "49": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "53": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "57": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "61": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "65": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "69": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (27 pts)"
+   ]
+  ],
+  "77": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (26 pts)"
+   ]
+  ],
+  "81": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "85": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "89": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "93": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "97": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "101": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "105": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "109": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "113": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "117": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "121": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "129": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (16 pts)"
+   ]
+  ],
+  "137": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (17 pts)"
+   ]
+  ],
+  "141": [
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "145": [
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "149": [
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "153": [
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "157": [
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "161": [
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "165": [
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "169": [
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "173": [
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "177": [
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "181": [
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "185": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "189": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "193": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "197": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "201": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "205": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "209": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "213": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "217": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "221": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "225": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "229": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "233": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "237": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "241": [
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (31 pts)"
+   ]
+  ],
+  "245": [
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "249": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "253": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "257": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (29 pts)"
+   ]
+  ],
+  "261": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (29 pts)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "269": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (30 pts)"
+   ]
+  ],
+  "273": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (29 pts)"
+   ]
+  ],
+  "277": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (29 pts)"
+   ]
+  ],
+  "281": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (29 pts)"
+   ]
+  ],
+  "285": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (25 pts)"
+   ]
+  ],
+  "289": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "293": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "297": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "301": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "305": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (25 pts)"
+   ]
+  ],
+  "309": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "313": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "317": [
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "321": [
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "325": [
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "329": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "333": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "337": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "341": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "345": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "349": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "353": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "357": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "361": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "365": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "369": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "373": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "377": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "381": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "385": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "389": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "509": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "513": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "517": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "521": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "525": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "529": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "533": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "537": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "541": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "545": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "549": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "553": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "557": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "561": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "565": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "569": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "573": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "577": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "581": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "585": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "589": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "593": [
+   [
+    "ARMBODY",
+    "Aud0 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud7 arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1061": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1065": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1069": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (24 pts)"
+   ]
+  ],
+  "1073": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1077": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1081": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (24 pts)"
+   ]
+  ],
+  "1085": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1089": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1093": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (28 pts)"
+   ]
+  ],
+  "1097": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (28 pts)"
+   ]
+  ],
+  "1101": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1105": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (24 pts)"
+   ]
+  ],
+  "1109": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1113": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1117": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1121": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1125": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1129": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1133": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1137": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (23 pts)"
+   ]
+  ],
+  "1141": [
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1145": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1149": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1153": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1157": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1161": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1165": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1169": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1173": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1177": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1185": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1189": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1193": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (26 pts)"
+   ]
+  ],
+  "1197": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (27 pts)"
+   ]
+  ],
+  "1201": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1205": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1209": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1265": [
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (25 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (28 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1277": [
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1281": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1285": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1289": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1293": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1297": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ],
+  "1301": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (21 pts)"
+   ]
+  ],
+  "1305": [
+   [
+    "ARMBODY",
+    "Aud0 arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud3 arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Aud4 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra2 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Extra3 arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Hero arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "PinceNez inside Hero's head/face (22 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 940,
+  "PROPHEAD": 148
+ }
+}
