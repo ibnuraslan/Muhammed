@@ -84,7 +84,9 @@ def ground_mat():
     # sand ripples
     wv = nt.nodes.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 0.9; wv.inputs["Distortion"].default_value = 4
     wv.inputs["Detail"].default_value = 2; wv.bands_direction = 'Y'; L(geo.outputs["Position"], wv.inputs["Vector"])
-    bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25; bp.inputs["Distance"].default_value = 0.03
+    bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Distance"].default_value = 0.03
+    inv = nt.nodes.new("ShaderNodeMath"); inv.operation = 'MULTIPLY_ADD'; inv.inputs[1].default_value = -0.25; inv.inputs[2].default_value = 0.25
+    L(my.outputs[0], inv.inputs[0]); L(inv.outputs[0], bp.inputs["Strength"])          # sand ripples on the sand only, not the grass
     L(wv.outputs["Fac"], bp.inputs["Height"]); L(bp.outputs["Normal"], p.inputs["Normal"])
     return m
 
@@ -108,8 +110,9 @@ def water_mat():
     c15 = nt.nodes.new("ShaderNodeMix"); c15.data_type = 'RGBA'; L(fa.outputs["Fac"], c15.inputs["Factor"])
     L(c2.outputs["Result"], c15.inputs["A"]); L(skr.outputs["Color"], c15.inputs["B"])
     foam = nt.nodes.new("ShaderNodeAttribute"); foam.attribute_name = "foam"
-    fn = nt.nodes.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 0.25; fn.inputs["Detail"].default_value = 6
-    L(geo.outputs["Position"], fn.inputs["Vector"])
+    fn = nt.nodes.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 0.25; fn.inputs["Detail"].default_value = 8
+    fmp = nt.nodes.new("ShaderNodeMapping"); fmp.inputs["Scale"].default_value = (1.0, 0.5, 0.18)     # foam in streaks running down the face
+    L(geo.outputs["Position"], fmp.inputs["Vector"]); L(fmp.outputs["Vector"], fn.inputs["Vector"])
     fm = nt.nodes.new("ShaderNodeMath"); fm.operation = 'MULTIPLY'; L(foam.outputs["Fac"], fm.inputs[0]); L(fn.outputs["Fac"], fm.inputs[1])
     fr = nt.nodes.new("ShaderNodeMapRange"); fr.inputs[1].default_value = 0.18; fr.inputs[2].default_value = 0.42; L(fm.outputs[0], fr.inputs[0])
     c3 = nt.nodes.new("ShaderNodeMix"); c3.data_type = 'RGBA'; L(fr.outputs[0], c3.inputs["Factor"])

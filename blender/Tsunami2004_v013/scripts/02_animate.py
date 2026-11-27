@@ -28,10 +28,10 @@ O["Ocean"].modifiers["Ocean"].show_viewport = False        # keying speed; resto
 
 # ================================================================== the sea: WaveCtl loc=(L, Yf, A) scale=(p, curl, phase)
 Lk_ = pchip([(1, 0.0), (55, -0.12), (127, -0.9), (259, -1.8), (400, -3.5), (1150, -3.5), (1260, 0.0), (END, 0.0)])
-YF = pchip([(1, -2600), (399, -2600), (400, -900), (470, -820), (503, -780), (648, -650), (740, -610), (800, -590), (909, -540), (1025, -430),
+YF = pchip([(1, -2600), (399, -2600), (400, -900), (470, -820), (503, -780), (648, -650), (740, -580), (800, -530), (909, -400), (960, -360), (1025, -300),
             (1060, -230), (1100, -125), (1150, -62), (1200, -27), (1229, -8), (1260, 25), (1300, 60), (1375, 110), (1450, 160),
             (1509, 210), (1600, 300), (1660, 370), (1700, 430), (END, 470)])
-AF = pchip([(1, 0.0), (400, 0.0), (470, 6.0), (503, 8.0), (648, 10.0), (800, 11.5), (909, 13.0), (1025, 20.0), (1060, 28.0), (1100, 33.0),
+AF = pchip([(1, 0.0), (400, 0.0), (470, 6.0), (503, 8.0), (648, 10.0), (800, 11.5), (909, 14.0), (960, 17.0), (1025, 22.0), (1060, 28.0), (1100, 33.0),
             (1150, 35.0), (1200, 35.0), (1229, 34.0), (1260, 30.0), (1300, 22.0), (1375, 14.0), (1450, 10.0), (1509, 8.0), (1600, 6.0),
             (1660, 3.5), (1700, 0.0), (END, 0.0)])
 CURL = pchip([(1, 0.0), (900, 0.05), (1060, 0.25), (1229, 0.35), (1300, 0.1), (1400, 0.0), (END, 0.0)])
@@ -50,7 +50,7 @@ for f in range(1, END + 1, 4):
 set_interp(QC, 'LINEAR')
 WEDGE, FOCUS, RING = O["SEC_Wedge"], O["SEC_Focus"], O["SEC_Ring"]
 WEDGE.rotation_mode = 'XYZ'
-for f, rx, dz in ((1, 0.0, 0.0), (799, 0.0, 0.0), (803, -7.0, 2.2), (807, -5.5, 2.6), (812, -6.2, 2.5), (830, -6.0, 2.5), (END, -6.0, 2.5)):
+for f, rx, dz in ((1, 0.0, 0.0), (799, 0.0, 0.0), (803, -4.2, 0.9), (807, -3.2, 0.7), (812, -3.6, 0.8), (830, -3.5, 0.8), (END, -3.5, 0.8)):
     WEDGE.rotation_euler.x = math.radians(rx); WEDGE.keyframe_insert("rotation_euler", frame=f)
     WEDGE.delta_location = (0, 0, dz); WEDGE.keyframe_insert("delta_location", frame=f)
 set_interp(WEDGE, 'LINEAR')
@@ -88,9 +88,13 @@ SHOW_HILL = 1682
 
 def arm(ct, s, f, lower=38.0, swing=0.0, elbow=18.0, out=0.0, inward=None):
     sg = 1 if s == "L" else -1
-    if inward is None: inward = 0.35 * max(0.0, elbow - 20.0)       # a bent forearm comes across the body a little, never out
     ct.key_rot("upperarm01." + s, f, [("Y", sg * (lower - out)), ("X", -swing)])
-    ct.key_rot("lowerarm01." + s, f, [("X", -elbow), ("Z", sg * inward)])
+    # the elbow bends about its real hinge (perpendicular to the forearm and to 'forward'), so the forearm swings
+    # forward and up in the arm's own plane, never out to the side (no T/A-pose wings)
+    fr = (ct.BN["wrist." + s].head_local - ct.BN["lowerarm01." + s].head_local).normalized()
+    axh = fr.cross(Vector((0, -1, 0))).normalized()
+    if (Matrix.Rotation(math.radians(30), 3, axh) @ fr).y > 0: axh = -axh
+    ct.key_q("lowerarm01." + s, f, ct.local_q("lowerarm01." + s, Matrix.Rotation(math.radians(elbow), 3, axh)))
 
 def stand(h, f, pos2, yaw, flex=2.0, side=0.0, twist=0.0, head=(0.0, 0.0), dz=0.0, stance=1.0):
     z = G(pos2.x, pos2.y) + h.root_head.z - 0.012 + dz
@@ -238,7 +242,7 @@ for o in O:
 # rubble rises out of sight under the brown flood, where the houses stood
 for o in O:
     if o.name.startswith("Rubble"):
-        f0 = max(f_hit(o.location.y) + 45, 1300); f1 = min(f0 + 60, 1585)
+        f0 = max(f_hit(o.location.y) + 25, 1300); f1 = min(f0 + 50, 1540)
         zf = o["z_final"]
         o.location.z = zf - 4.0; o.keyframe_insert("location", frame=1); o.keyframe_insert("location", frame=f0)
         o.location.z = zf; o.keyframe_insert("location", frame=f1)
@@ -249,12 +253,12 @@ for o in O:
 # ================================================================== golden hour (from 1650): sky, clouds, sun
 W = bpy.context.scene.world; SM = W.node_tree.nodes["SkyMix"]; CC = W.node_tree.nodes["CloudCol"]
 SUN = O["Sun"]; SUN.rotation_mode = 'XYZ'
-for f, u in ((1, 0.0), (1650, 0.0), (1900, 1.0), (END, 1.0)):
+for f, u in ((1, 0.0), (1650, 0.0), (1900, 0.8), (END, 0.8)):
     SM.inputs["Factor"].default_value = u; SM.inputs["Factor"].keyframe_insert("default_value", frame=f)
     CC.inputs["Factor"].default_value = u; CC.inputs["Factor"].keyframe_insert("default_value", frame=f)
     SUN.rotation_euler = (math.radians(45 + 27 * u), 0, math.radians(20 - 58.5 * u)); SUN.keyframe_insert("rotation_euler", frame=f)
     SUN.data.color = (1.0, 0.95 - 0.33 * u, 0.86 - 0.56 * u); SUN.data.keyframe_insert("color", frame=f)
-    SUN.data.energy = 4.5 - 1.3 * u; SUN.data.keyframe_insert("energy", frame=f)
+    SUN.data.energy = 4.5 - 0.6 * u; SUN.data.keyframe_insert("energy", frame=f)
 
 # ================================================================== camera: ONE camera, PCHIP paths, level horizon
 sc = bpy.context.scene
@@ -276,19 +280,19 @@ K = [  # frame, position, aim, lens
     (545, (-2.6, -21.0, 2.0), (-6.0, -760.0, 3.0), 90),
     (575, (2.0, -19.0, 1.6), (-0.6, -12.8, 1.5), 32),         # back to their faces: the shout, the turn
     (612, (2.0, -16.0, 6.0), (-0.5, -200.0, 2.0), 26),
-    (648, (0.0, -90.0, 45.0), (0.0, -640.0, 2.0), 30),        # high above the coast: the front across the whole ocean
-    (700, (-40.0, -190.0, 32.0), (-20.0, -600.0, 0.0), 30),
+    (648, (0.0, -300.0, 55.0), (0.0, -650.0, 2.0), 30),       # high above the sea: the front across the whole ocean
+    (700, (-30.0, -420.0, 42.0), (-20.0, -600.0, 8.0), 26),
     (745, (-75.0, -232.0, 12.0), (0.0, -250.0, -22.0), 24),   # dive toward the cut-away
     (766, (-95.0, -248.0, -5.0), (0.0, -250.0, -30.0), 22),   # through the surface
     (790, (-150.0, -258.0, -22.0), (0.0, -248.0, -40.0), 20),
     (860, (-140.0, -236.0, -20.0), (0.0, -248.0, -36.0), 20),
-    (884, (-112.0, -242.0, -9.0), (-40.0, -330.0, 0.0), 22),
-    (900, (-105.0, -245.0, 5.0), (-60.0, -700.0, 6.0), 24),   # straight up and out: the wave coming
-    (960, (-60.0, -150.0, 18.0), (-20.0, -600.0, 8.0), 26),
-    (1025, (-20.0, -60.0, 22.0), (-5.0, -500.0, 12.0), 24),
+    (880, (-125.0, -244.0, -10.0), (-40.0, -262.0, 6.0), 22),  # tilt up toward the surface, the cut still in frame
+    (898, (-112.0, -248.0, 3.0), (-80.0, -390.0, 10.0), 24),  # straight up and out: the wave right there
+    (960, (-70.0, -205.0, 14.0), (-30.0, -360.0, 14.0), 24),  # as it got closer, it grew
+    (1025, (-20.0, -60.0, 22.0), (-5.0, -300.0, 16.0), 24),
     (1050, (-0.7, 22.0, 10.0), (-0.7, -60.0, 6.0), 24),       # backward over the beach (still looking at the sea), over their heads
-    (1062, (-0.7, 45.0, 3.6), (-0.7, 30.0, 2.4), 24),         # their faces as they run, the wall behind them
-    (1110, (-0.7, 49.5, 3.6), (-0.7, 20.0, 5.5), 24),
+    (1062, (-0.7, 46.0, 3.6), (-0.7, 30.0, 2.4), 20),         # their faces as they run, the wall behind them
+    (1110, (-0.7, 50.5, 3.6), (-0.7, 20.0, 5.5), 20),
     (1170, (2.0, 75.0, 6.0), (0.0, -20.0, 12.0), 32),         # pull back inland: the wall towers over the palms and the hotel
     (1205, (6.0, 82.0, 12.0), (10.0, -15.0, 20.0), 30),
     (1229, (-4.0, 78.0, 26.0), (0.0, -10.0, 20.0), 26),       # it hits the coast (the family has run off the bottom of frame)
@@ -301,14 +305,16 @@ K = [  # frame, position, aim, lens
     (1621, (-45.0, 300.0, 62.0), (35.0, 175.0, 4.0), 28),
     (1689, (-28.0, 258.0, 30.0), (45.0, 186.0, 8.0), 30),     # the rubble, the mosque standing
 ]
+
 D3 = Vector((math.sin(DIR), -math.cos(DIR), 0.0)); L3 = Vector((LAT.x, LAT.y, 0.0)); HC3 = Vector((HC.x, HC.y, G(HC.x, HC.y)))
 def hk(f, back, lat, up, aim_fwd, aim_lat, aim_up, lens):
     return (f, tuple(HC3 - D3 * back + L3 * lat + Vector((0, 0, up))), tuple(HC3 + D3 * aim_fwd + L3 * aim_lat + Vector((0, 0, aim_up))), lens)
-K += [hk(1745, 3.6, -0.8, 1.55, 0.0, -0.8, 1.35, 35),        # the family on the high ground, faces; the ruins behind them
-      hk(1830, 3.6, 0.9, 1.5, 0.0, 0.9, 1.3, 35),
-      hk(1920, 6.0, 0.2, 3.5, 12.0, 0.0, 0.0, 28),
-      hk(2000, 7.5, 1.0, 7.0, 40.0, 0.0, -2.0, 28),
-      hk(END, 9.0, 2.0, 9.0, 45.0, 0.0, -7.0, 28)]
+K += [hk(1725, 9.0, 1.5, 4.0, 0.0, 0.0, 1.0, 26),           # down to the family on the high ground (all four in frame)
+      hk(1770, 4.6, -0.5, 1.55, 0.0, -0.5, 1.3, 30),       # faces; the ruins and the mosque behind them
+      hk(1840, 4.6, 0.7, 1.5, 0.0, 0.7, 1.25, 30),
+      hk(1920, 6.0, 0.2, 2.8, 12.0, 0.0, 0.0, 26),
+      hk(2000, 7.0, 0.8, 5.0, 40.0, 0.0, -1.0, 26),
+      hk(END, 8.0, 1.6, 7.0, 45.0, 0.0, -4.0, 24)]
 ks = [(k[0], Vector(k[1]), Vector(k[2]), k[3]) for k in K]
 fx = [pchip([(k[0], k[1][i]) for k in ks]) for i in range(3)]
 ax = [pchip([(k[0], k[2][i]) for k in ks]) for i in range(3)]
