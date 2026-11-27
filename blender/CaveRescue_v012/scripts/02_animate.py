@@ -661,12 +661,12 @@ FD2, FC2 = 2008, 2117
 FRONT.location = (0, 0, 0)
 # v012: the second cutaway opens at 2008 (camera low in the sump, seeing only back-half rock) and CLOSES INSTANTLY at
 # 2117 while the camera is inside the passage near the mouth facing the back wall: no mountain ever rises into view.
-for fr, z in ((572, 0.0), (573, -300.0), (955, -300.0), (995, 0.0), (FD2, 0.0), (FD2 + 1, -300.0), (FC2 - 1, -300.0), (FC2, 0.0)):
+for fr, z in ((559, 0.0), (560, -300.0), (955, -300.0), (995, 0.0), (FD2, 0.0), (FD2 + 1, -300.0), (FC2 - 1, -300.0), (FC2, 0.0)):
     FRONT.location.z = z; FRONT.keyframe_insert("location", index=2, frame=fr)
 _amb = set(desc(O["Ambulance"]))
 fronts = [o for o in desc(FRONT) if o is not FRONT and o not in _amb and not o.name.startswith("PoolSurf")]
-show_ranges(fronts + [O["PoolSurf_Front"]], [(0, 573), (952, FD2 + 1), (FC2, 2437)])
-XS_R = [(645, 938), (FD2 + 2, 2100)]
+show_ranges(fronts + [O["PoolSurf_Front"]], [(0, 560), (952, FD2 + 1), (FC2, 2437)])
+XS_R = [(645, 938), (2034, 2100)]
 RT = O["FX_Route"]; show_ranges([RT, O["FX_Beacon"], O["FX_BeaconRing"]], XS_R)
 RT.data.bevel_factor_end = 0.0; RT.data.keyframe_insert("bevel_factor_end", frame=645)
 RT.data.bevel_factor_end = 1.0; RT.data.keyframe_insert("bevel_factor_end", frame=700)
@@ -744,7 +744,7 @@ SG = O["SU_Glow"].data
 SGo = O["SU_Glow"]
 for fr, x_ in ((1060, 291.0), (1160, 286.9), (1320, 285.0), (1885, 290.5), (2050, 288.6)):
     SGo.location = (x_, -0.2, floor_route(x_) + 0.9); SGo.keyframe_insert("location", frame=fr)
-for fr, e in ((0, 0.0), (1060, 0.0), (1080, 160.0), (1330, 160.0), (1345, 0.0), (1885, 0.0), (1905, 250.0), (2050, 250.0), (2060, 0.0)):
+for fr, e in ((0, 0.0), (1060, 0.0), (1080, 22.0), (1330, 22.0), (1345, 0.0), (1885, 0.0), (1905, 30.0), (2050, 30.0), (2060, 0.0)):
     SG.energy = e; SG.keyframe_insert("energy", frame=fr)
 SUN = O["Sun"].data
 for fr, e in ((0, 3.0), (2280, 3.0), (2436, 5.0)):
@@ -760,7 +760,7 @@ CK = [
     (1, (-3.0, -3.3, 1.55), (-6.6, 0.0, 1.2), 30), (120, (-1.2, -1.5, 1.6), (-4.8, -0.2, 1.3), 30),
     (230, (2.6, -1.35, 1.65), (-1.8, 0.1, 1.35), 30), (340, (5.6, -1.1, 1.6), (0.8, 0.1, 1.35), 30),
     (400, (7.1, -0.9, 1.55), (2.4, 0.2, 1.4), 30), (460, (8.6, -0.8, 1.5), (2.0, 0.0, 1.45), 28),
-    (520, (11.6, -0.9, 1.5), (6.4, 0.2, 1.3), 28), (566, (13.2, -1.1, 1.6), (11.6, 2.0, 1.3), 28),
+    (520, (11.6, -0.9, 1.5), (6.4, 0.2, 1.3), 28), (556, (13.2, -1.1, 1.6), (11.6, 2.0, 1.3), 28),
     (590, (13.0, -4.5, 2.6), (11.0, 0.5, 1.1), 28), (612, (13.5, -9.0, 3.8), (11.5, 0.5, 1.0), 28),
     (645, (40.0, -60.0, 15.0), (60.0, 0.0, 5.0), 30),
     (686, (150.0, -270.0, 10.0), (150.0, 0.0, 0.0), 30), (780, (190.0, -240.0, 6.0), (185.0, 0.0, -2.0), 32),
@@ -770,7 +770,7 @@ CK = [
     (1060, (301.6, -0.4, 2.2), (297.6, 1.0, 1.3), 28), (1080, (299.6, 0.1, 1.75), (296.0, 0.9, 0.7), 26),
     # v012 dive: the camera follows Diver 1 down (always 2-3 m behind him, his lamp + rim-lit back in frame)
     (1096, (297.6, 0.0, 1.0), (293.4, 0.6, 0.4), 24), (1112, (294.4, -0.1, 0.6), (290.2, 0.4, -0.5), 24),
-    (1124, (291.0, -0.25, 0.6), (287.8, 0.4, -1.2), 24), (1140, (289.4, -0.3, -0.55), (286.6, 0.35, -1.9), 24),
+    (1124, (291.0, -0.25, 0.75), (287.8, 0.4, -1.2), 24), (1138, (289.6, -0.3, 0.3), (286.6, 0.35, -1.9), 24),
     (1160, (288.5, -0.4, -1.35), (285.2, 0.3, -2.4), 24),
     (1200, (286.7, -0.45, -1.95), (279.0, 0.1, -3.4), 26),
     # the hover: Diver 1 in the foreground watches the lone diver's lamp go on and dim (the respectful pause)
@@ -809,8 +809,16 @@ _ext = [cp_(f) for f in list(range(1, 600, 5)) + list(range(2100, END + 1, 5))]
 for o in [o for o in O if o.name.startswith("JG_") and o.parent is None or (o.name.startswith("JG_") and o.parent and o.parent.name == "FRONT_CTL")]:
     if any((o.matrix_world.translation.to_2d() - q.to_2d()).length < 3.2 + 1.5 * o.scale.x and q.z < 14 for q in _ext):
         for c_ in desc(o): bpy.data.objects.remove(c_, do_unlink=True)
+D1HEAD = {}
+for f in list(range(1084, 1204)) + list(range(1288, 1346)):
+    if f % 2 == 1: fs(f); D1HEAD[f] = D1.o.matrix_world @ D1.o.pose.bones["head"].head
+def d1w(f):
+    for a_, b_ in ((1085, 1202), (1289, 1344)):
+        if a_ <= f <= b_: return min(ss(a_, a_ + 10, f), 1.0 - ss(b_ - 6, b_, f)) * 0.85
+    return 0.0
 for f in range(1, END + 1, 2):
     p = cp_(f); t_ = ct_(f); cam.location = p
+    if f in D1HEAD and d1w(f) > 0: t_ = t_.lerp(D1HEAD[f] + V(0, 0, 0.1), d1w(f))
     cam.rotation_mode = 'QUATERNION'; q = (t_ - p).to_track_quat('-Z', 'Y')
     if cam.rotation_quaternion.dot(q) < 0: q = -q
     cam.rotation_quaternion = q; cam.data.lens = cl_(f)

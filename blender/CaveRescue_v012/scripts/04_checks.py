@@ -25,7 +25,7 @@ def rays(nx=18, ny=32):
             p = (bl.lerp(br, u)).lerp(tl.lerp(tr, u), v)
             d = (M.to_3x3() @ p).normalized()
             yield sc.ray_cast(dg, M.translation, d, distance=3000)
-for f in (572, 573, 574, 954, 955, 994, 995, 996, 2007, 2008, 2009, 2010, 2115, 2116, 2117, 2118):
+for f in (558, 559, 560, 561, 954, 955, 994, 995, 996, 2007, 2008, 2009, 2010, 2115, 2116, 2117, 2118):
     fs(f); n = 0; hit_front = 0
     for h in rays():
         n += 1

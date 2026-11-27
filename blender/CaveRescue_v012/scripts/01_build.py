@@ -210,7 +210,7 @@ def water_surface():
     p.inputs["Base Color"].default_value = (0.25, 0.55, 0.50, 1); p.inputs["Roughness"].default_value = 0.08
     p.inputs["Transmission Weight"].default_value = 1.0; p.inputs["IOR"].default_value = 1.33
     p.inputs["Specular IOR Level"].default_value = 0.25
-    p.inputs["Emission Color"].default_value = (0.02, 0.45, 0.5, 1); p.inputs["Emission Strength"].default_value = 0.35   # v012: the pool reads teal, never black
+    p.inputs["Emission Color"].default_value = (0.02, 0.45, 0.5, 1); p.inputs["Emission Strength"].default_value = 0.12   # v012: the pool reads teal, never black
     tc = nt.nodes.new("ShaderNodeTexCoord"); nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1.8
     nz.inputs["Detail"].default_value = 3.0
     bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25; bp.inputs["Distance"].default_value = 0.02
@@ -1076,9 +1076,10 @@ def light(name, kind, energy, loc, rot=(0, 0, 0), size=1.0, color=(1, 1, 1)):
     return o
 SUN = light("Sun", 'SUN', 3.0, (0, 0, 50), rot=(math.radians(40), 0, math.radians(-60)), color=(1.0, 0.92, 0.78))
 # the chamber: warm torch-bounce fills (the boys' torches + the divers' lamps carry the key)
-light("CH_Fill1", 'AREA', 800, (300.0, -3.5, 6.0), rot=(math.radians(30), 0, math.radians(-20)), size=3.0, color=(1.0, 0.72, 0.45))
-light("CH_Fill2", 'AREA', 500, (308.0, -2.0, 5.5), rot=(math.radians(35), 0, math.radians(30)), size=3.0, color=(0.55, 0.75, 1.0))
-light("CH_Rim", 'AREA', 200, (306.0, 6.5, 5.0), rot=(math.radians(-50), 0, 0), size=2.0, color=(1.0, 0.6, 0.3))
+_l1 = light("CH_Fill1", 'AREA', 800, (300.0, -3.5, 6.0), rot=(math.radians(30), 0, math.radians(-20)), size=3.0, color=(1.0, 0.72, 0.45))
+_l2 = light("CH_Fill2", 'AREA', 500, (308.0, -2.0, 5.5), rot=(math.radians(35), 0, math.radians(30)), size=3.0, color=(0.55, 0.75, 1.0))
+_l3 = light("CH_Rim", 'AREA', 200, (306.0, 6.5, 5.0), rot=(math.radians(-50), 0, 0), size=2.0, color=(1.0, 0.6, 0.3))
+for _l in (_l1, _l2, _l3): _l.visible_glossy = False      # v012: no white light blobs in the pool
 # the passage near the mouth: daylight spill + a warm fill deeper in
 light("TN_Fill0", 'AREA', 500, (3.5, 0.0, 3.6), rot=(0, 0, 0), size=3.0, color=(1.0, 0.8, 0.6))
 light("TN_Fill1", 'AREA', 400, (12.0, -1.0, 3.3), rot=(0, 0, 0), size=2.5, color=(1.0, 0.75, 0.5))
