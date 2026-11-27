@@ -136,6 +136,9 @@ def hang(Hm, rig, body, cloth, s, f, yaw=0.0, fwd=0.05, drop=0.50, out_extra=0.0
     hit = min(hits, key=lambda h: h[3]) if hits else None
     surf = hit[0] if hit else p0 + side * 0.20 * sc_
     base = Vector((surf.x, surf.y, p0.z)) + side * (0.045 + out_extra) * max(1.0, sc_)
+    # never inside the hip width: the wrist stays at least 0.22 (x rig scale) out from the pelvis centre line
+    pel = Wh(rig, "spine05"); lat = (base - pel).dot(side)
+    if lat < 0.22 * sc_: base += side * (0.22 * sc_ - lat)
     d = (Ry @ Vector((sx * 0.06, -0.22, -1.0))).normalized(); n = -side
     hand_world(Hm, rig, s, f, base, d, n, sh + side * 0.25 * sc_ + front * -0.40 * sc_ + Vector((0, 0, -0.25 * sc_)))
     apply_pose(rig, s, "relaxed", f)
@@ -192,7 +195,7 @@ def chest_point(f):
 for f in (705, 740, 780, 820, 850):
     fs(f); sc_ = HR.scale.x; c = chest_point(f)
     for s, sx in (("L", 1), ("R", -1)):
-        w = c + Vector((sx * 0.13 * sc_, -0.30 * sc_, -0.06 * sc_ + 0.012 * math.sin(f / 11.0 + sx)))
+        w = c + Vector((sx * 0.18 * sc_, -0.30 * sc_, 0.05 * sc_ + 0.012 * math.sin(f / 11.0 + sx)))
         d = Vector((-sx * 0.35, -1.0, 0.10)).normalized(); n = Vector((sx * 0.25, -0.15, 1.0))
         hand_world(HH, HR, s, f, w, d, n, w + Vector((sx * 0.30 * sc_, 0.35 * sc_, -0.30 * sc_)))
         apply_pose(HR, s, "open_alarm" if f in (740, 820) else "relaxed", f)
@@ -383,8 +386,8 @@ def hands_c(f): fs(f); return (Wh(HR, "wrist.L") + Wh(HR, "wrist.R")) / 2
 def side_head(f, dx, dy, dz): fs(f); s_ = HR.scale.x; return headc(f) + Vector((dx, dy, dz)) * s_
 KEYS = [
     # 1-145: wide on both men, the rod, door edge and the logo plaque; then down to his eye level
-    (1,    lambda: P(0.20, -3.05, 1.50), lambda: P(0.05, 0.20, 1.12), 27),
-    (60,   lambda: P(0.12, -2.65, 1.40), lambda: P(0.02, 0.20, 1.10), 28),
+    (1,    lambda: P(0.50, -3.05, 1.50), lambda: P(0.36, 0.20, 1.15), 27),
+    (60,   lambda: P(0.42, -2.65, 1.40), lambda: P(0.33, 0.20, 1.12), 28),
     (120,  lambda: P(0.04, -1.75, 1.28), lambda: eyes(120).lerp(P(0.0, 0.2, 1.0), 0.35), 31),
     # 145-335: close on his head from his right-front; the x-ray reveals the brain and the swelling gland
     (175,  lambda: side_head(175, -0.42, -0.95, 0.02), lambda: headc(175), 36),
@@ -395,12 +398,12 @@ KEYS = [
     (385,  lambda: P(-0.30, -1.25, 1.05), lambda: P(0.0, 0.05, 0.86), 33),
     (440,  lambda: P(-0.22, -1.85, 0.95), lambda: P(0.0, 0.05, 0.78), 30),
     # 463-679: wide: he grows next to the rod, the door and the officer
-    (520,  lambda: P(-0.10, -2.75, 1.10), lambda: P(0.05, 0.15, 0.98), 26),
-    (640,  lambda: P(0.05, -2.95, 1.25), lambda: P(0.12, 0.15, 1.12), 26),
+    (520,  lambda: P(-0.30, -2.90, 1.00), lambda: P(0.38, 0.15, 0.98), 26),
+    (640,  lambda: P(0.80, -2.55, 1.30), lambda: P(0.42, 0.15, 1.12), 26),
     # 679-872: his hands growing, his face above them
     (700,  lambda: P(0.10, -1.55, 1.20), lambda: hands_c(700).lerp(eyes(700), 0.45), 32),
-    (780,  lambda: hands_c(780) + P(0.18, -0.85, 0.20), lambda: hands_c(780).lerp(eyes(780), 0.42), 38),
-    (850,  lambda: hands_c(850) + P(0.12, -0.80, 0.22), lambda: hands_c(850).lerp(eyes(850), 0.48), 38),
+    (780,  lambda: hands_c(780) + P(0.18, -0.85, 0.42), lambda: hands_c(780).lerp(eyes(780), 0.62), 40),
+    (850,  lambda: hands_c(850) + P(0.10, -0.82, 0.45), lambda: hands_c(850).lerp(eyes(850), 0.66), 40),
     # 872-1073: low wide orbit: he shoots up past the door, the officer looks up, seasons in the window
     (920,  lambda: P(-0.55, -2.50, 0.95), lambda: P(0.12, 0.10, 1.25), 25),
     (1000, lambda: P(0.10, -3.05, 0.90), lambda: P(0.25, 0.10, 1.40), 23),
@@ -413,8 +416,8 @@ KEYS = [
     (1270, lambda: eyes(1270) + P(-0.06, -0.68, -0.03), lambda: eyes(1270) + P(0, 0, -0.04), 44),
     # 1281-1415: round to his right ear, he cups it
     # 1281-1415: the officer talks to him; he turns his ear toward the voice, straining to hear (both faces in frame)
-    (1330, lambda: eyes(1330).lerp(oeyes(1330), 0.32) + P(0.12, -1.65, -0.10), lambda: eyes(1330).lerp(oeyes(1330), 0.32) + P(0, 0, -0.14), 28),
-    (1400, lambda: eyes(1400).lerp(oeyes(1400), 0.32) + P(0.05, -1.50, -0.10), lambda: eyes(1400).lerp(oeyes(1400), 0.30) + P(0, 0, -0.14), 29),
+    (1330, lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0.12, -1.95, -0.10), lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0, 0, -0.16), 27),
+    (1400, lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0.02, -1.80, -0.10), lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0, 0, -0.16), 28),
     # 1415-1496: x-ray head: the tumour is taken out (shrinks away)
     (1440, lambda: side_head(1440, -0.30, -0.50, 0.02), lambda: headc(1440) + P(0, 0.01, -0.03), 44),
     (1490, lambda: side_head(1490, -0.32, -0.66, 0.03), lambda: headc(1490), 40),
@@ -424,10 +427,10 @@ KEYS = [
     (1760, lambda: P(0.30, -3.45, 1.35), lambda: P(0.25, 0.15, 1.32), 23),
     (1829, lambda: P(0.10, -3.20, 1.40), lambda: P(0.0, 0.20, 1.30), 24),
     # 1829-2083: down to the photo of his short young self, then up beside the giant he became; settle
-    (1890, lambda: P(-0.92, -1.05, 1.45), lambda: P(-0.62, 0.42, 1.48), 30),
-    (1960, lambda: P(-0.80, -1.60, 1.62), lambda: P(-0.50, 0.40, 1.62), 30),
-    (2030, lambda: P(-0.50, -2.45, 1.80), lambda: P(-0.36, 0.30, 1.62), 30),
-    (END,  lambda: P(-0.44, -2.38, 1.84), lambda: P(-0.34, 0.30, 1.64), 30),
+    (1895, lambda: P(-0.85, -1.15, 1.48), lambda: P(-0.66, 0.42, 1.45), 30),
+    (1960, lambda: P(-0.60, -2.10, 1.65), lambda: P(-0.42, 0.40, 1.55), 27),
+    (2030, lambda: P(-0.45, -2.75, 1.75), lambda: P(-0.38, 0.30, 1.55), 26),
+    (END,  lambda: P(-0.40, -2.62, 1.80), lambda: P(-0.38, 0.30, 1.58), 27),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))
