@@ -212,8 +212,8 @@ def logo_board(name, w, h, loc, rot, board_mat, logo_path, depth=0.02, emit=0.0)
     pl.data.materials.append(tx_m)
     return b, pl
 
-M_COBBLE = noise_mat("M_Cobble", (0.06, 0.05, 0.07), (0.30, 0.24, 0.22), scale=9.0, rough=0.55, bump=0.6, vor=True)
-M_PAVE = noise_mat("M_Pave", (0.30, 0.26, 0.24), (0.42, 0.37, 0.33), scale=25.0, rough=0.7, bump=0.2)
+M_COBBLE = noise_mat("M_Cobble", (0.03, 0.03, 0.05), (0.14, 0.12, 0.14), scale=9.0, rough=0.55, bump=0.6, vor=True)
+M_PAVE = noise_mat("M_Pave", (0.12, 0.11, 0.13), (0.2, 0.18, 0.2), scale=25.0, rough=0.7, bump=0.2)
 M_KERB = noise_mat("M_Kerb", (0.35, 0.33, 0.32), (0.5, 0.48, 0.46), scale=30.0, rough=0.6)
 M_BRASS = mat("M_Brass", (0.95, 0.62, 0.20), rough=0.25, metal=1.0)
 M_STEEL = noise_mat("M_Steel", (0.70, 0.72, 0.76), (0.92, 0.93, 0.95), scale=300.0, rough=0.30, metal=1.0, bump=0.05)
@@ -230,9 +230,10 @@ kerb = box("Kerb", (40, 0.25, 0.17), (0, 3.15, 0.085), M_KERB, bevel=0.01); to_c
 # hotel facade (CC-BY scan), scaled to ~16 m wide behind the pavement, with warm lit windows behind it
 fac = imp(SK + "facade.dl", "HotelFacade", target_dim=16.0, axis=0)
 fac.location = (0, 7.3, -0.4); to_col(fac, C_STREET); soften(fac, rough_min=0.5)
+for m in fac.data.materials: tint(m, (0.16, 0.15, 0.22))      # daylight scan -> night
 for dx in (-15.6, 15.6):
     f2 = fac.copy(); f2.location = (dx, 7.3, -0.4); C_STREET.objects.link(f2)
-glow_wall = box("HotelInterior", (16, 0.1, 9), (0, 8.6, 4.0), mat("M_HotelInside", (0.10, 0.05, 0.03), emit=((1.0, 0.5, 0.18), 0.25)), bevel=0)
+glow_wall = box("HotelInterior", (16, 0.1, 9), (0, 8.6, 4.0), mat("M_HotelInside", (0.02, 0.01, 0.01), emit=((1.0, 0.45, 0.15), 0.6)), bevel=0)
 to_col(glow_wall, C_STREET)
 # hotel sign (DA KRAS FILMS) mounted over the scan's own lettering; a wall lantern and a planter cover its small plaques
 hs, hl_ = logo_board("HotelSign", 2.1, 0.55, (2.45, 3.90, 3.07), (0, 0, 0), mat("M_HotelSign", (0.03, 0.10, 0.06), rough=0.4, coat=0.5),
@@ -244,6 +245,7 @@ for nm, sz, loc, m_ in (("Planter", (0.9, 0.45, 0.75), (3.67, 3.72, 0.5), mat("M
 car = imp(SK + "car.dl", "Car", target_dim=3.4, axis=1, keep=lambda o: "roof" not in o.name.lower())
 car.rotation_euler = (0, 0, math.pi / 2); car.location = (0.3, 2.15, 0.0); to_col(car, C_STREET); soften(car, rough_min=0.3)
 for m in car.data.materials:
+    tint(m, (0.5, 0.5, 0.6))
     if m and m.use_nodes:
         p = [n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED']
         if p and not p[0].inputs["Base Color"].is_linked:
@@ -264,10 +266,10 @@ lamp = imp(SK + "lamp.dl", "StreetLamp", target_dim=3.6, axis=2)
 lamp.location = (-3.2, 3.6, 0.0); to_col(lamp, C_STREET); soften(lamp)
 for i, x in enumerate((-3.2, 4.4, -10.5, 11.5)):
     if i: l2 = lamp.copy(); l2.location = (x, 3.6, 0); C_STREET.objects.link(l2)
-    L = bpy.data.lights.new("GasLamp%d" % i, 'POINT'); L.energy = 260; L.color = (1.0, 0.62, 0.30); L.shadow_soft_size = 0.15
+    L = bpy.data.lights.new("GasLamp%d" % i, 'POINT'); L.energy = 400; L.color = (1.0, 0.55, 0.22); L.shadow_soft_size = 0.15
     lo = bpy.data.objects.new("GasLamp%d" % i, L); lo.location = (x, 3.6, 3.3); C_STREET.objects.link(lo)
-for nm, loc, en, colr, size in (("StreetKey", (2.4, -2.6, 3.2), 520, (1.0, 0.78, 0.55), 1.2),
-                                ("StreetFill", (-3.5, -2.0, 2.4), 160, (0.45, 0.55, 1.0), 2.0),
+for nm, loc, en, colr, size in (("StreetKey", (2.4, -2.6, 3.2), 420, (1.0, 0.70, 0.42), 1.0),
+                                ("StreetFill", (-3.5, -2.0, 2.4), 120, (0.30, 0.42, 1.0), 2.0),
                                 ("StreetRim", (0.0, 4.5, 3.5), 420, (1.0, 0.55, 0.25), 1.0)):
     L = bpy.data.lights.new(nm, 'AREA'); L.energy = en; L.color = colr; L.size = size
     lo = bpy.data.objects.new(nm, L); lo.location = loc; C_STREET.objects.link(lo)
@@ -490,6 +492,13 @@ LAYERS["caselin2"] = slab("X_CaseLining2", -0.0435, -0.0428, M_CASE_IN, drag=0.0
 for nm, xs in (("X_CaseEndL", -0.0745), ("X_CaseEndR", 0.0745)):
     e = box(nm, (0.003, 0.07, 0.028), MX + Vector((xs, 0.035, -0.032)), M_STEEL, bevel=0.001); to_col(e, C_MACRO)
 e = box("X_CaseBack", (0.151, 0.003, 0.028), MX + Vector((0, 0.0715, -0.032)), M_STEEL, bevel=0.001); to_col(e, C_MACRO)
+for k, x in enumerate((-0.034, 0.034)):
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.016, minor_radius=0.0012, location=MX + Vector((x, 0.03, -0.0405)))
+    t = bpy.context.active_object; t.name = "X_Specs%d" % k; t.data.materials.append(M_BRASS); to_col(t, C_MACRO)
+    bpy.ops.mesh.primitive_circle_add(vertices=32, radius=0.0155, fill_type='NGON', location=MX + Vector((x, 0.03, -0.0405)))
+    l_ = bpy.context.active_object; l_.name = "X_SpecLens%d" % k; l_.data.materials.append(mat("M_SpecLens", (0.6, 0.8, 0.9), rough=0.05, coat=1.0)); to_col(l_, C_MACRO)
+bpy.ops.mesh.primitive_torus_add(major_radius=0.006, minor_radius=0.001, location=MX + Vector((0, 0.03, -0.0402)))
+br_ = bpy.context.active_object; br_.name = "X_SpecBridge"; br_.data.materials.append(M_BRASS); to_col(br_, C_MACRO)
 LAYERS["shirt"] = slab("X_Shirt", -0.0478, -0.0465, M_SHIRT)
 LAYERS["skin"] = slab("X_Skin", -0.0505, -0.0478, M_SKIN)
 LAYERS["fat"] = slab("X_Fat", -0.058, -0.0505, M_FAT)

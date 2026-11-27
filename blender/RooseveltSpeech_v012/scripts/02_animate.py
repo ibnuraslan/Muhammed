@@ -157,12 +157,15 @@ for f, sm, br, jaw, sq in ((1, 0.6, 0.3, 0.05, 0.1), (110, 0.6, 0.3, 0.08, 0.1),
 WAVE = []
 for f in range(1, 129, 6):
     ph = math.sin(2 * math.pi * f / 40.0)
-    A_H.hand("R", f, (-0.20 + 0.05 * ph, -0.10, 0.34), (-0.15 + 0.25 * ph, -0.15, 1.0), (0.0, -1.0, 0.0), (-0.45, 0.25, -0.30), 0.0,
+    A_H.hand("R", f, (-0.20 + 0.09 * ph, -0.10, 0.34), (-0.15 + 0.45 * ph, -0.15, 1.0), (0.0, -1.0, 0.0), (-0.45, 0.25, -0.30), 0.0,
              pose="open_alarm" if f == 1 else None, ref=1)
 apply_pose(HERO, "R", "open_alarm", 128)
 A_H.hand("R", 134, (-0.16, -0.22, 0.12), (-0.1, -0.4, 0.6), (0.2, -0.8, 0.0), (-0.45, 0.30, -0.30), 0.0, ref=134)
 A_H.hand("R", 142, (-0.06, -0.30, -0.28), (0.3, -0.5, -0.6), (0.4, 0.4, 0.2), (-0.45, 0.30, -0.30), 0.0, pose="relaxed", ref=142)
-for f in (165, 200, 264, 330, 388):
+A_H.hang("R", 165, 0.0, fwd=0.06, drop=0.50, ref=165)
+for f in (205, 240, 285):
+    A_H.hand("R", f, (0.04, -0.27, -0.22), (0.6, -0.2, 0.25), (0.0, 1.0, 0.0), (-0.40, 0.25, -0.35), 0.0, pose="relaxed", ref=f)
+for f in (330, 388):
     A_H.hang("R", f, 0.0, fwd=0.06, drop=0.50, ref=f)
 for f in (1, 60, 128, 140, 165, 200, 264, 330, 388):
     A_H.hang("L", f, 0.0, fwd=0.05 + (0.04 if 130 < f < 200 else 0.0), drop=0.50, ref=f)
@@ -190,7 +193,7 @@ while f < END:
     f += rnd.choice((12, 13, 14, 16))
 blinks(HERO, [1090, 1190, 1262])
 # right arm: speech raised beside his head toward the audience (elbow bent ~95 deg, fingers up, palm toward the audience)
-SPEECH_POSE = [(1028, (-0.16, -0.20, 0.30)), (1055, (-0.14, -0.24, 0.36)), (1080, (-0.17, -0.20, 0.28)), (1105, (-0.13, -0.24, 0.37)), (1139, (-0.17, -0.20, 0.30)), (1170, (-0.15, -0.22, 0.36)), (1200, (-0.15, -0.21, 0.31)), (1240, (-0.14, -0.23, 0.37)), (END, (-0.16, -0.20, 0.33))]
+SPEECH_POSE = [(1028, (-0.16, -0.20, 0.30)), (1055, (-0.14, -0.24, 0.36)), (1080, (-0.17, -0.20, 0.28)), (1105, (-0.13, -0.24, 0.37)), (1139, (-0.17, -0.20, 0.30)), (1170, (-0.12, -0.30, 0.04)), (1200, (-0.11, -0.31, 0.07)), (1240, (-0.12, -0.30, 0.03)), (END, (-0.11, -0.31, 0.06))]
 for f, off in SPEECH_POSE:
     A_H.hand("R", f, off, (0.05, -0.12, 1.0), (0.0, -1.0, 0.0), (-0.45, 0.10, -0.30), 0.0, pose="hold_flat_object", ref=1028)
 # left: hangs, then the fist rises (1139-1165) and pumps at 1215
@@ -345,7 +348,7 @@ for f in range(F_SHOT, F_HIT + 6):
     BUL.location = nose - BDIR * BL; BUL.rotation_quaternion = qd(BDIR) @ Quaternion((0, 0, 1), spin)
     BUL.keyframe_insert("location", frame=f); BUL.keyframe_insert("rotation_quaternion", frame=f)
 # macro: nose depth below the coat top (m) on the VO beats; monotone so it only ever slows
-ZN = pchip([(SW1, -0.0040), (615, -0.0085), (736, -0.0125), (790, -0.0168), (800, -0.0186), (816, -0.0218), (832, -0.0400), (846, -0.0436), (860, -0.0470),
+ZN = pchip([(SW1, -0.0060), (500, -0.0095), (615, -0.0135), (736, -0.0168), (770, -0.0182), (790, -0.0190), (800, -0.0186), (816, -0.0218), (832, -0.0400), (846, -0.0436), (860, -0.0470),
             (878, -0.0508), (905, -0.0585), (950, -0.0670), (990, -0.0703), (1010, -0.0706), (SW2, -0.0706)])
 QM = Quaternion((1, 0, 0), math.pi)
 for f in range(SW1, SW2 + 1):
@@ -401,8 +404,7 @@ vis(SPEECH, 1, False); vis(SPEECH, SW2, True)
 for ch in SPEECH.children: vis(ch, 1, False); vis(ch, SW2, True)
 
 # he takes his hat off indoors: the fedora is hidden in the hall (switch inside the flash)
-for c in HERO.children:
-    if "fedora" in c.name: vis(c, 1, True); vis(c, SW2, False)
+
 # ================================================================== clock hands spin (the 90 minutes), flags already wave
 for nm, turns in (("ClockMinute", 6.0), ("ClockHour", 0.5)):
     h = O[nm]; h.rotation_mode = 'XYZ'
