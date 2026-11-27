@@ -301,6 +301,23 @@ walk(P["C3"], [Vector((-6.3, 10.6, PAVE_Z)), Vector((-4.6, 10.9, 0)), Vector((-1
 stand(P["C1"], 1424, END, Vector((3.7, 13.2, 0)), -100, seed=50, feet=True)
 stand(P["C3"], 1428, END, Vector((-1.2, 11.2, 0)), 95, seed=51, feet=True)
 stand(P["C2"], 1340, END, Vector((12.0, 5.3, PAVE_Z)), 30, seed=52, feet=False, arms=lambda f, s: "chest" if s == "R" and f < 1400 else "relaxed")
+# ---- faces: both-eye blinks for everyone, light smiles while the crowd greets the car, eyes closed after the shots
+sc.frame_set(1)
+rngf = random.Random(5)
+for nm, p in P.items():
+    fr = []; f = rngf.randint(20, 90)
+    while f < END - 20:
+        fr.append(f); f += rngf.randint(110, 200)
+    if nm in ("Archduke", "Duchess"): fr = [x for x in fr if x < 1290]
+    blinks(p.o, fr)
+for nm, keys in (("Duchess", [(1, 0.3), (90, 0.0), (480, 0.0), (520, 0.55), (700, 0.5), (735, 0.0)]),
+                 ("Archduke", [(1, 0.2), (90, 0.0), (520, 0.0), (560, 0.35), (700, 0.3), (735, 0.0)]),
+                 ("Q1", [(1, 0.2), (480, 0.6), (760, 0.5), (800, 0.0)]), ("Q3", [(1, 0.2), (480, 0.5), (760, 0.4), (800, 0.0)]),
+                 ("Q5", [(1, 0.3), (480, 0.5), (760, 0.5), (800, 0.0)]), ("C1", [(1, 0.2), (1280, 0.2), (1292, 0.0)])):
+    for f, sm in keys: key_face(P[nm].o, f, smile=sm, brow=0.3 if sm > 0.3 else 0.0)
+for nm, f0 in (("Archduke", 1300), ("Duchess", 1330)):
+    eyes_closed(P[nm].o, f0, END + 40)
+key_face(P["Gunman"].o, 1, brow=-0.6, squint=0.4); key_face(P["Bomber"].o, 1, brow=-0.5, squint=0.3)
 log("ACTING keyed")
 
 # ================================================================== PROPS IN HANDS

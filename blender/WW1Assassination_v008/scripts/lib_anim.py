@@ -130,6 +130,59 @@ def breathe(P, f0, f1, base_pos, yaw, step=12, amp=1.2, seed=0, head_keys=None, 
         hd = head_keys(f) if head_keys else (0.0, 0.0)
         P.key_body(f, base_pos, yaw=yaw, flex=flex, spine=(amp * b, 0.0, 0.0), head=hd)
 
-def blink_eyes(rig, frames):
-    """quick blinks via the eyelid bones (MPFB orbicularis): keyed closed for 4 frames around each frame"""
-    pass
+# ---- faces (from the client-approved BellyFat v018 rebuild): bone nudges solved numerically per rig; blinks use BOTH eyes
+def upd(): bpy.context.view_layer.update()
+def Wt(rig, bone): return rig.matrix_world @ rig.pose.bones[bone].tail
+# ================================================================== face rig helpers (directions solved numerically per rig)
+_NUDGE = {}
+def nudge_q(rig, bone, want, deg):
+    key = (rig.name, bone, tuple(round(x, 2) for x in want))
+    if key not in _NUDGE:
+        pb = rig.pose.bones[bone]; q0 = pb.rotation_quaternion.copy(); upd()
+        base = Wt(rig, bone); best = None
+        for ax in ((1, 0, 0), (0, 0, 1), (0, 1, 0)):
+            for sg in (1, -1):
+                pb.rotation_quaternion = Quaternion(ax, math.radians(10 * sg)); upd()
+                d = (Wt(rig, bone) - base).dot(Vector(want).normalized())
+                if best is None or d > best[0]: best = (d, ax, sg)
+        pb.rotation_quaternion = q0; upd()
+        _NUDGE[key] = best
+    d, ax, sg = _NUDGE[key]
+    return Quaternion(ax, math.radians(deg * sg))
+
+def face_dirs(rig):
+    """world directions of the face at rest-orientation of the root (rig faces -Y at rest)"""
+    return Vector((0, -1, 0)), Vector((0, 0, 1))
+
+def key_face(rig, f, smile=0.0, jaw=0.0, brow=0.0, squint=0.0, pucker=0.0):
+    """expressions as bone nudges (rest-relative). smile 0..1, jaw 0..1 open, brow -1(frown)..1(raised), squint 0..1"""
+    up = Vector((0, 0, 1))
+    for s, sx in (("L", 1), ("R", -1)):
+        out = Vector((sx, 0, 0))
+        for b, amt in (("risorius03." + s, 14), ("levator05." + s, 10), ("oris04." + s, 8)):
+            if b in rig.pose.bones:
+                q = nudge_q(rig, b, up + out * 0.7, amt) if smile >= 0 else nudge_q(rig, b, -up + out * 0.2, amt)
+                pb = rig.pose.bones[b]; pb.rotation_quaternion = Quaternion().slerp(q, abs(smile)); pb.keyframe_insert("rotation_quaternion", frame=f)
+        for b in ("oculi01." + s, "oculi02." + s):
+            if b in rig.pose.bones:
+                q = nudge_q(rig, b, up, 10) if brow >= 0 else nudge_q(rig, b, -up - out * 0.5, 10)
+                pb = rig.pose.bones[b]; pb.rotation_quaternion = Quaternion().slerp(q, abs(brow)); pb.keyframe_insert("rotation_quaternion", frame=f)
+        b = "orbicularis04." + s     # lower lid up for squint
+        if b in rig.pose.bones:
+            q = nudge_q(rig, b, up, 12); pb = rig.pose.bones[b]; pb.rotation_quaternion = Quaternion().slerp(q, squint); pb.keyframe_insert("rotation_quaternion", frame=f)
+    q = nudge_q(rig, "jaw", -up, 14); pb = rig.pose.bones["jaw"]; pb.rotation_quaternion = Quaternion().slerp(q, jaw); pb.keyframe_insert("rotation_quaternion", frame=f)
+
+def blinks(rig, frames, close_deg=26):
+    for s in "LR":
+        b = "orbicularis03." + s; pb = rig.pose.bones[b]
+        q = nudge_q(rig, b, Vector((0, 0, -1)), close_deg)
+        pb.rotation_quaternion = Quaternion(); pb.keyframe_insert("rotation_quaternion", frame=1)
+        for bf in frames:
+            for df, u in ((0, 0), (3, 1), (6, 1), (11, 0)):
+                pb.rotation_quaternion = Quaternion().slerp(q, u); pb.keyframe_insert("rotation_quaternion", frame=bf + df)
+
+def eyes_closed(rig, f0, f1, ramp=8):
+    for s in "LR":
+        b = "orbicularis03." + s; pb = rig.pose.bones[b]; q = nudge_q(rig, b, Vector((0, 0, -1)), 26)
+        for f, u in ((f0, 0), (f0 + ramp, 1), (f1 - ramp, 1), (f1, 0)):
+            pb.rotation_quaternion = Quaternion().slerp(q, u); pb.keyframe_insert("rotation_quaternion", frame=f)
