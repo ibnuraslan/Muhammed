@@ -1,0 +1,2002 @@
+[
+{
+"video": "amy",
+"inst": 0,
+"category": "disclaimer_end_cards",
+"time_s": 1.75,
+"on_screen_s": 3.0,
+"file": "disclaimer_end_cards/amy_00-01_000.jpg"
+},
+{
+"video": "amy",
+"inst": 1,
+"category": "date_time_stamps",
+"time_s": 4.75,
+"on_screen_s": 3.5,
+"file": "date_time_stamps/amy_00-04_001.jpg"
+},
+{
+"video": "amy",
+"inst": 2,
+"category": "title_chapter_cards",
+"time_s": 45.75,
+"on_screen_s": 4.5,
+"file": "title_chapter_cards/amy_00-45_002.jpg"
+},
+{
+"video": "amy",
+"inst": 3,
+"category": "family_tree_boards",
+"time_s": 57.75,
+"on_screen_s": 16.0,
+"file": "family_tree_boards/amy_00-57_003.jpg"
+},
+{
+"video": "amy",
+"inst": 4,
+"category": "line_art_illustrations",
+"time_s": 72.25,
+"on_screen_s": 13.5,
+"file": "line_art_illustrations/amy_01-12_004.jpg"
+},
+{
+"video": "amy",
+"inst": 5,
+"category": "line_art_illustrations",
+"time_s": 89.25,
+"on_screen_s": 14.5,
+"file": "line_art_illustrations/amy_01-29_005.jpg"
+},
+{
+"video": "amy",
+"inst": 6,
+"category": "line_art_illustrations",
+"time_s": 94.25,
+"on_screen_s": 2.0,
+"file": "line_art_illustrations/amy_01-34_006.jpg"
+},
+{
+"video": "amy",
+"inst": 7,
+"category": "line_art_illustrations",
+"time_s": 100.25,
+"on_screen_s": 10.5,
+"file": "line_art_illustrations/amy_01-40_007.jpg"
+},
+{
+"video": "amy",
+"inst": 8,
+"category": "line_art_illustrations",
+"time_s": 119.25,
+"on_screen_s": 13.0,
+"file": "line_art_illustrations/amy_01-59_008.jpg"
+},
+{
+"video": "amy",
+"inst": 9,
+"category": "line_art_illustrations",
+"time_s": 121.75,
+"on_screen_s": 9.5,
+"file": "line_art_illustrations/amy_02-01_009.jpg"
+},
+{
+"video": "amy",
+"inst": 10,
+"category": "date_time_stamps",
+"time_s": 130.75,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/amy_02-10_010.jpg"
+},
+{
+"video": "amy",
+"inst": 11,
+"category": "quote_cards",
+"time_s": 146.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_02-26_011.jpg"
+},
+{
+"video": "amy",
+"inst": 12,
+"category": "maps",
+"time_s": 175.25,
+"on_screen_s": 9.0,
+"file": "maps/amy_02-55_012.jpg"
+},
+{
+"video": "amy",
+"inst": 13,
+"category": "sponsor_segment",
+"time_s": 236.75,
+"on_screen_s": 31.0,
+"file": "sponsor_segment/amy_03-56_013.jpg"
+},
+{
+"video": "amy",
+"inst": 14,
+"category": "sponsor_segment",
+"time_s": 249.75,
+"on_screen_s": 5.0,
+"file": "sponsor_segment/amy_04-09_014.jpg"
+},
+{
+"video": "amy",
+"inst": 15,
+"category": "sponsor_segment",
+"time_s": 257.25,
+"on_screen_s": 21.0,
+"file": "sponsor_segment/amy_04-17_015.jpg"
+},
+{
+"video": "amy",
+"inst": 16,
+"category": "sponsor_segment",
+"time_s": 277.75,
+"on_screen_s": 6.5,
+"file": "sponsor_segment/amy_04-37_016.jpg"
+},
+{
+"video": "amy",
+"inst": 17,
+"category": "sponsor_segment",
+"time_s": 290.75,
+"on_screen_s": 10.0,
+"file": "sponsor_segment/amy_04-50_017.jpg"
+},
+{
+"video": "amy",
+"inst": 18,
+"category": "sponsor_segment",
+"time_s": 293.25,
+"on_screen_s": 1.5,
+"file": "sponsor_segment/amy_04-53_018.jpg"
+},
+{
+"video": "amy",
+"inst": 19,
+"category": "sponsor_segment",
+"time_s": 294.75,
+"on_screen_s": 1.0,
+"file": "sponsor_segment/amy_04-54_019.jpg"
+},
+{
+"video": "amy",
+"inst": 20,
+"category": "quote_cards",
+"time_s": 338.75,
+"on_screen_s": 3.5,
+"file": "quote_cards/amy_05-38_020.jpg"
+},
+{
+"video": "amy",
+"inst": 21,
+"category": "date_time_stamps",
+"time_s": 384.25,
+"on_screen_s": 11.5,
+"file": "date_time_stamps/amy_06-24_021.jpg"
+},
+{
+"video": "amy",
+"inst": 22,
+"category": "date_time_stamps",
+"time_s": 400.75,
+"on_screen_s": 4.0,
+"file": "date_time_stamps/amy_06-40_022.jpg"
+},
+{
+"video": "amy",
+"inst": 23,
+"category": "date_time_stamps",
+"time_s": 403.25,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/amy_06-43_023.jpg"
+},
+{
+"video": "amy",
+"inst": 24,
+"category": "date_time_stamps",
+"time_s": 418.25,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/amy_06-58_024.jpg"
+},
+{
+"video": "amy",
+"inst": 25,
+"category": "date_time_stamps",
+"time_s": 449.25,
+"on_screen_s": 3.5,
+"file": "date_time_stamps/amy_07-29_025.jpg"
+},
+{
+"video": "amy",
+"inst": 26,
+"category": "title_chapter_cards",
+"time_s": 526.75,
+"on_screen_s": 4.0,
+"file": "title_chapter_cards/amy_08-46_026.jpg"
+},
+{
+"video": "amy",
+"inst": 27,
+"category": "quote_cards",
+"time_s": 629.25,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_10-29_027.jpg"
+},
+{
+"video": "amy",
+"inst": 29,
+"category": "date_time_stamps",
+"time_s": 644.25,
+"on_screen_s": 4.0,
+"file": "date_time_stamps/amy_10-44_029.jpg"
+},
+{
+"video": "amy",
+"inst": 30,
+"category": "section_tags",
+"time_s": 739.25,
+"on_screen_s": 4.0,
+"file": "section_tags/amy_12-19_030.jpg"
+},
+{
+"video": "amy",
+"inst": 31,
+"category": "quote_cards",
+"time_s": 832.25,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_13-52_031.jpg"
+},
+{
+"video": "amy",
+"inst": 32,
+"category": "quote_cards",
+"time_s": 876.75,
+"on_screen_s": 3.5,
+"file": "quote_cards/amy_14-36_032.jpg"
+},
+{
+"video": "amy",
+"inst": 33,
+"category": "quote_cards",
+"time_s": 879.25,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_14-39_033.jpg"
+},
+{
+"video": "amy",
+"inst": 34,
+"category": "quote_cards",
+"time_s": 897.75,
+"on_screen_s": 1.0,
+"file": "quote_cards/amy_14-57_034.jpg"
+},
+{
+"video": "amy",
+"inst": 36,
+"category": "section_tags",
+"time_s": 955.25,
+"on_screen_s": 4.0,
+"file": "section_tags/amy_15-55_036.jpg"
+},
+{
+"video": "amy",
+"inst": 37,
+"category": "arrows_highlights",
+"time_s": 989.75,
+"on_screen_s": 5.0,
+"file": "arrows_highlights/amy_16-29_037.jpg"
+},
+{
+"video": "amy",
+"inst": 38,
+"category": "arrows_highlights",
+"time_s": 991.25,
+"on_screen_s": 3.0,
+"file": "arrows_highlights/amy_16-31_038.jpg"
+},
+{
+"video": "amy",
+"inst": 39,
+"category": "quote_cards",
+"time_s": 1037.75,
+"on_screen_s": 3.5,
+"file": "quote_cards/amy_17-17_039.jpg"
+},
+{
+"video": "amy",
+"inst": 40,
+"category": "quote_cards",
+"time_s": 1042.25,
+"on_screen_s": 6.0,
+"file": "quote_cards/amy_17-22_040.jpg"
+},
+{
+"video": "amy",
+"inst": 41,
+"category": "quote_cards",
+"time_s": 1081.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_18-01_041.jpg"
+},
+{
+"video": "amy",
+"inst": 42,
+"category": "quote_cards",
+"time_s": 1123.25,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_18-43_042.jpg"
+},
+{
+"video": "amy",
+"inst": 43,
+"category": "quote_cards",
+"time_s": 1131.75,
+"on_screen_s": 5.0,
+"file": "quote_cards/amy_18-51_043.jpg"
+},
+{
+"video": "amy",
+"inst": 44,
+"category": "name_labels_whos_who",
+"time_s": 1146.75,
+"on_screen_s": 4.0,
+"file": "name_labels_whos_who/amy_19-06_044.jpg"
+},
+{
+"video": "amy",
+"inst": 45,
+"category": "quote_cards",
+"time_s": 1150.25,
+"on_screen_s": 1.0,
+"file": "quote_cards/amy_19-10_045.jpg"
+},
+{
+"video": "amy",
+"inst": 46,
+"category": "quote_cards",
+"time_s": 1154.75,
+"on_screen_s": 1.0,
+"file": "quote_cards/amy_19-14_046.jpg"
+},
+{
+"video": "amy",
+"inst": 47,
+"category": "section_tags",
+"time_s": 1171.75,
+"on_screen_s": 3.5,
+"file": "section_tags/amy_19-31_047.jpg"
+},
+{
+"video": "amy",
+"inst": 48,
+"category": "quote_cards",
+"time_s": 1211.25,
+"on_screen_s": 4.0,
+"file": "quote_cards/amy_20-11_048.jpg"
+},
+{
+"video": "amy",
+"inst": 49,
+"category": "quote_cards",
+"time_s": 1222.25,
+"on_screen_s": 3.5,
+"file": "quote_cards/amy_20-22_049.jpg"
+},
+{
+"video": "amy",
+"inst": 50,
+"category": "place_object_labels",
+"time_s": 1294.75,
+"on_screen_s": 6.0,
+"file": "place_object_labels/amy_21-34_050.jpg"
+},
+{
+"video": "amy",
+"inst": 52,
+"category": "place_object_labels",
+"time_s": 1305.75,
+"on_screen_s": 6.5,
+"file": "place_object_labels/amy_21-45_052.jpg"
+},
+{
+"video": "amy",
+"inst": 53,
+"category": "section_tags",
+"time_s": 1310.75,
+"on_screen_s": 4.0,
+"file": "section_tags/amy_21-50_053.jpg"
+},
+{
+"video": "amy",
+"inst": 54,
+"category": "quote_cards",
+"time_s": 1401.75,
+"on_screen_s": 8.0,
+"file": "quote_cards/amy_23-21_054.jpg"
+},
+{
+"video": "amy",
+"inst": 55,
+"category": "quote_cards",
+"time_s": 1416.25,
+"on_screen_s": 3.5,
+"file": "quote_cards/amy_23-36_055.jpg"
+},
+{
+"video": "amy",
+"inst": 56,
+"category": "date_time_stamps",
+"time_s": 1440.25,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/amy_24-00_056.jpg"
+},
+{
+"video": "amy",
+"inst": 57,
+"category": "section_tags",
+"time_s": 1449.25,
+"on_screen_s": 3.5,
+"file": "section_tags/amy_24-09_057.jpg"
+},
+{
+"video": "amy",
+"inst": 58,
+"category": "name_labels_whos_who",
+"time_s": 1494.75,
+"on_screen_s": 5.0,
+"file": "name_labels_whos_who/amy_24-54_058.jpg"
+},
+{
+"video": "amy",
+"inst": 59,
+"category": "name_labels_whos_who",
+"time_s": 1500.25,
+"on_screen_s": 4.0,
+"file": "name_labels_whos_who/amy_25-00_059.jpg"
+},
+{
+"video": "amy",
+"inst": 60,
+"category": "section_tags",
+"time_s": 1570.75,
+"on_screen_s": 4.0,
+"file": "section_tags/amy_26-10_060.jpg"
+},
+{
+"video": "amy",
+"inst": 61,
+"category": "quote_cards",
+"time_s": 1633.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_27-13_061.jpg"
+},
+{
+"video": "amy",
+"inst": 62,
+"category": "quote_cards",
+"time_s": 1636.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_27-16_062.jpg"
+},
+{
+"video": "amy",
+"inst": 63,
+"category": "quote_cards",
+"time_s": 1641.25,
+"on_screen_s": 5.0,
+"file": "quote_cards/amy_27-21_063.jpg"
+},
+{
+"video": "amy",
+"inst": 64,
+"category": "quote_cards",
+"time_s": 1649.25,
+"on_screen_s": 2.5,
+"file": "quote_cards/amy_27-29_064.jpg"
+},
+{
+"video": "amy",
+"inst": 65,
+"category": "quote_cards",
+"time_s": 1656.75,
+"on_screen_s": 2.5,
+"file": "quote_cards/amy_27-36_065.jpg"
+},
+{
+"video": "amy",
+"inst": 66,
+"category": "section_tags",
+"time_s": 1704.75,
+"on_screen_s": 1.0,
+"file": "section_tags/amy_28-24_066.jpg"
+},
+{
+"video": "amy",
+"inst": 68,
+"category": "quote_cards",
+"time_s": 1711.25,
+"on_screen_s": 1.0,
+"file": "quote_cards/amy_28-31_068.jpg"
+},
+{
+"video": "amy",
+"inst": 71,
+"category": "quote_cards",
+"time_s": 1730.25,
+"on_screen_s": 5.5,
+"file": "quote_cards/amy_28-50_071.jpg"
+},
+{
+"video": "amy",
+"inst": 72,
+"category": "date_time_stamps",
+"time_s": 1753.75,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/amy_29-13_072.jpg"
+},
+{
+"video": "amy",
+"inst": 77,
+"category": "quote_cards",
+"time_s": 1760.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_29-20_077.jpg"
+},
+{
+"video": "amy",
+"inst": 80,
+"category": "title_chapter_cards",
+"time_s": 1824.75,
+"on_screen_s": 4.0,
+"file": "title_chapter_cards/amy_30-24_080.jpg"
+},
+{
+"video": "amy",
+"inst": 81,
+"category": "section_tags",
+"time_s": 1829.75,
+"on_screen_s": 4.5,
+"file": "section_tags/amy_30-29_081.jpg"
+},
+{
+"video": "amy",
+"inst": 82,
+"category": "section_tags",
+"time_s": 1907.75,
+"on_screen_s": 4.0,
+"file": "section_tags/amy_31-47_082.jpg"
+},
+{
+"video": "amy",
+"inst": 83,
+"category": "quote_cards",
+"time_s": 1934.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_32-14_083.jpg"
+},
+{
+"video": "amy",
+"inst": 84,
+"category": "quote_cards",
+"time_s": 1939.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_32-19_084.jpg"
+},
+{
+"video": "amy",
+"inst": 85,
+"category": "quote_cards",
+"time_s": 1976.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_32-56_085.jpg"
+},
+{
+"video": "amy",
+"inst": 86,
+"category": "quote_cards",
+"time_s": 1981.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_33-01_086.jpg"
+},
+{
+"video": "amy",
+"inst": 87,
+"category": "quote_cards",
+"time_s": 1983.75,
+"on_screen_s": 1.5,
+"file": "quote_cards/amy_33-03_087.jpg"
+},
+{
+"video": "amy",
+"inst": 88,
+"category": "quote_cards",
+"time_s": 2078.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_34-38_088.jpg"
+},
+{
+"video": "amy",
+"inst": 89,
+"category": "section_tags",
+"time_s": 2083.25,
+"on_screen_s": 4.0,
+"file": "section_tags/amy_34-43_089.jpg"
+},
+{
+"video": "amy",
+"inst": 90,
+"category": "quote_cards",
+"time_s": 2126.25,
+"on_screen_s": 6.5,
+"file": "quote_cards/amy_35-26_090.jpg"
+},
+{
+"video": "amy",
+"inst": 91,
+"category": "quote_cards",
+"time_s": 2133.25,
+"on_screen_s": 2.0,
+"file": "quote_cards/amy_35-33_091.jpg"
+},
+{
+"video": "amy",
+"inst": 92,
+"category": "place_object_labels",
+"time_s": 2147.25,
+"on_screen_s": 6.5,
+"file": "place_object_labels/amy_35-47_092.jpg"
+},
+{
+"video": "amy",
+"inst": 93,
+"category": "quote_cards",
+"time_s": 2165.25,
+"on_screen_s": 3.5,
+"file": "quote_cards/amy_36-05_093.jpg"
+},
+{
+"video": "amy",
+"inst": 94,
+"category": "quote_cards",
+"time_s": 2203.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_36-43_094.jpg"
+},
+{
+"video": "amy",
+"inst": 97,
+"category": "place_object_labels",
+"time_s": 2283.25,
+"on_screen_s": 10.5,
+"file": "place_object_labels/amy_38-03_097.jpg"
+},
+{
+"video": "amy",
+"inst": 99,
+"category": "section_tags",
+"time_s": 2321.75,
+"on_screen_s": 3.5,
+"file": "section_tags/amy_38-41_099.jpg"
+},
+{
+"video": "amy",
+"inst": 101,
+"category": "quote_cards",
+"time_s": 2346.25,
+"on_screen_s": 3.0,
+"file": "quote_cards/amy_39-06_101.jpg"
+},
+{
+"video": "amy",
+"inst": 103,
+"category": "title_chapter_cards",
+"time_s": 2406.25,
+"on_screen_s": 4.5,
+"file": "title_chapter_cards/amy_40-06_103.jpg"
+},
+{
+"video": "amy",
+"inst": 104,
+"category": "date_time_stamps",
+"time_s": 2589.75,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/amy_43-09_104.jpg"
+},
+{
+"video": "amy",
+"inst": 105,
+"category": "date_time_stamps",
+"time_s": 2618.25,
+"on_screen_s": 4.5,
+"file": "date_time_stamps/amy_43-38_105.jpg"
+},
+{
+"video": "amy",
+"inst": 106,
+"category": "disclaimer_end_cards",
+"time_s": 2750.25,
+"on_screen_s": 5.5,
+"file": "disclaimer_end_cards/amy_45-50_106.jpg"
+},
+{
+"video": "amy",
+"inst": 107,
+"category": "disclaimer_end_cards",
+"time_s": 2756.25,
+"on_screen_s": 4.5,
+"file": "disclaimer_end_cards/amy_45-56_107.jpg"
+},
+{
+"video": "caylee",
+"inst": 0,
+"category": "date_time_stamps",
+"time_s": 1.75,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/caylee_00-01_000.jpg"
+},
+{
+"video": "caylee",
+"inst": 1,
+"category": "place_object_labels",
+"time_s": 29.25,
+"on_screen_s": 4.0,
+"file": "place_object_labels/caylee_00-29_001.jpg"
+},
+{
+"video": "caylee",
+"inst": 2,
+"category": "title_chapter_cards",
+"time_s": 45.75,
+"on_screen_s": 6.5,
+"file": "title_chapter_cards/caylee_00-45_002.jpg"
+},
+{
+"video": "caylee",
+"inst": 3,
+"category": "title_chapter_cards",
+"time_s": 50.25,
+"on_screen_s": 4.5,
+"file": "title_chapter_cards/caylee_00-50_003.jpg"
+},
+{
+"video": "caylee",
+"inst": 4,
+"category": "maps",
+"time_s": 55.75,
+"on_screen_s": 1.5,
+"file": "maps/caylee_00-55_004.jpg"
+},
+{
+"video": "caylee",
+"inst": 5,
+"category": "place_object_labels",
+"time_s": 64.75,
+"on_screen_s": 19.0,
+"file": "place_object_labels/caylee_01-04_005.jpg"
+},
+{
+"video": "caylee",
+"inst": 6,
+"category": "name_labels_whos_who",
+"time_s": 76.25,
+"on_screen_s": 1.0,
+"file": "name_labels_whos_who/caylee_01-16_006.jpg"
+},
+{
+"video": "caylee",
+"inst": 7,
+"category": "family_tree_boards",
+"time_s": 79.25,
+"on_screen_s": 3.5,
+"file": "family_tree_boards/caylee_01-19_007.jpg"
+},
+{
+"video": "caylee",
+"inst": 8,
+"category": "family_tree_boards",
+"time_s": 82.25,
+"on_screen_s": 2.0,
+"file": "family_tree_boards/caylee_01-22_008.jpg"
+},
+{
+"video": "caylee",
+"inst": 9,
+"category": "name_labels_whos_who",
+"time_s": 84.25,
+"on_screen_s": 8.5,
+"file": "name_labels_whos_who/caylee_01-24_009.jpg"
+},
+{
+"video": "caylee",
+"inst": 10,
+"category": "line_art_illustrations",
+"time_s": 104.25,
+"on_screen_s": 23.0,
+"file": "line_art_illustrations/caylee_01-44_010.jpg"
+},
+{
+"video": "caylee",
+"inst": 11,
+"category": "line_art_illustrations",
+"time_s": 124.25,
+"on_screen_s": 9.0,
+"file": "line_art_illustrations/caylee_02-04_011.jpg"
+},
+{
+"video": "caylee",
+"inst": 12,
+"category": "line_art_illustrations",
+"time_s": 132.25,
+"on_screen_s": 26.5,
+"file": "line_art_illustrations/caylee_02-12_012.jpg"
+},
+{
+"video": "caylee",
+"inst": 13,
+"category": "date_time_stamps",
+"time_s": 165.75,
+"on_screen_s": 2.0,
+"file": "date_time_stamps/caylee_02-45_013.jpg"
+},
+{
+"video": "caylee",
+"inst": 14,
+"category": "date_time_stamps",
+"time_s": 177.75,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/caylee_02-57_014.jpg"
+},
+{
+"video": "caylee",
+"inst": 15,
+"category": "line_art_illustrations",
+"time_s": 208.25,
+"on_screen_s": 9.0,
+"file": "line_art_illustrations/caylee_03-28_015.jpg"
+},
+{
+"video": "caylee",
+"inst": 16,
+"category": "documents_records_timelines",
+"time_s": 218.75,
+"on_screen_s": 12.5,
+"file": "documents_records_timelines/caylee_03-38_016.jpg"
+},
+{
+"video": "caylee",
+"inst": 17,
+"category": "quote_cards",
+"time_s": 229.25,
+"on_screen_s": 10.5,
+"file": "quote_cards/caylee_03-49_017.jpg"
+},
+{
+"video": "caylee",
+"inst": 18,
+"category": "sponsor_segment",
+"time_s": 237.75,
+"on_screen_s": 4.5,
+"file": "sponsor_segment/caylee_03-57_018.jpg"
+},
+{
+"video": "caylee",
+"inst": 19,
+"category": "sponsor_segment",
+"time_s": 240.75,
+"on_screen_s": 19.0,
+"file": "sponsor_segment/caylee_04-00_019.jpg"
+},
+{
+"video": "caylee",
+"inst": 20,
+"category": "sponsor_segment",
+"time_s": 258.75,
+"on_screen_s": 6.5,
+"file": "sponsor_segment/caylee_04-18_020.jpg"
+},
+{
+"video": "caylee",
+"inst": 21,
+"category": "sponsor_segment",
+"time_s": 268.75,
+"on_screen_s": 9.5,
+"file": "sponsor_segment/caylee_04-28_021.jpg"
+},
+{
+"video": "caylee",
+"inst": 22,
+"category": "sponsor_segment",
+"time_s": 275.75,
+"on_screen_s": 2.5,
+"file": "sponsor_segment/caylee_04-35_022.jpg"
+},
+{
+"video": "caylee",
+"inst": 23,
+"category": "date_time_stamps",
+"time_s": 278.25,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/caylee_04-38_023.jpg"
+},
+{
+"video": "caylee",
+"inst": 24,
+"category": "quote_cards",
+"time_s": 301.75,
+"on_screen_s": 2.5,
+"file": "quote_cards/caylee_05-01_024.jpg"
+},
+{
+"video": "caylee",
+"inst": 25,
+"category": "quote_cards",
+"time_s": 310.75,
+"on_screen_s": 4.5,
+"file": "quote_cards/caylee_05-10_025.jpg"
+},
+{
+"video": "caylee",
+"inst": 26,
+"category": "date_time_stamps",
+"time_s": 314.25,
+"on_screen_s": 5.5,
+"file": "date_time_stamps/caylee_05-14_026.jpg"
+},
+{
+"video": "caylee",
+"inst": 27,
+"category": "date_time_stamps",
+"time_s": 344.75,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/caylee_05-44_027.jpg"
+},
+{
+"video": "caylee",
+"inst": 28,
+"category": "date_time_stamps",
+"time_s": 415.75,
+"on_screen_s": 7.5,
+"file": "date_time_stamps/caylee_06-55_028.jpg"
+},
+{
+"video": "caylee",
+"inst": 29,
+"category": "quote_cards",
+"time_s": 440.25,
+"on_screen_s": 2.0,
+"file": "quote_cards/caylee_07-20_029.jpg"
+},
+{
+"video": "caylee",
+"inst": 30,
+"category": "quote_cards",
+"time_s": 480.25,
+"on_screen_s": 4.5,
+"file": "quote_cards/caylee_08-00_030.jpg"
+},
+{
+"video": "caylee",
+"inst": 31,
+"category": "date_time_stamps",
+"time_s": 513.25,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/caylee_08-33_031.jpg"
+},
+{
+"video": "caylee",
+"inst": 32,
+"category": "quote_cards",
+"time_s": 517.25,
+"on_screen_s": 6.0,
+"file": "quote_cards/caylee_08-37_032.jpg"
+},
+{
+"video": "caylee",
+"inst": 33,
+"category": "title_chapter_cards",
+"time_s": 587.25,
+"on_screen_s": 4.5,
+"file": "title_chapter_cards/caylee_09-47_033.jpg"
+},
+{
+"video": "caylee",
+"inst": 34,
+"category": "quote_cards",
+"time_s": 684.25,
+"on_screen_s": 3.5,
+"file": "quote_cards/caylee_11-24_034.jpg"
+},
+{
+"video": "caylee",
+"inst": 35,
+"category": "quote_cards",
+"time_s": 691.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/caylee_11-31_035.jpg"
+},
+{
+"video": "caylee",
+"inst": 36,
+"category": "place_object_labels",
+"time_s": 706.75,
+"on_screen_s": 3.5,
+"file": "place_object_labels/caylee_11-46_036.jpg"
+},
+{
+"video": "caylee",
+"inst": 37,
+"category": "section_tags",
+"time_s": 708.75,
+"on_screen_s": 4.0,
+"file": "section_tags/caylee_11-48_037.jpg"
+},
+{
+"video": "caylee",
+"inst": 39,
+"category": "quote_cards",
+"time_s": 720.75,
+"on_screen_s": 7.0,
+"file": "quote_cards/caylee_12-00_039.jpg"
+},
+{
+"video": "caylee",
+"inst": 40,
+"category": "quote_cards",
+"time_s": 757.75,
+"on_screen_s": 4.5,
+"file": "quote_cards/caylee_12-37_040.jpg"
+},
+{
+"video": "caylee",
+"inst": 41,
+"category": "quote_cards",
+"time_s": 764.75,
+"on_screen_s": 2.0,
+"file": "quote_cards/caylee_12-44_041.jpg"
+},
+{
+"video": "caylee",
+"inst": 43,
+"category": "quote_cards",
+"time_s": 775.25,
+"on_screen_s": 5.5,
+"file": "quote_cards/caylee_12-55_043.jpg"
+},
+{
+"video": "caylee",
+"inst": 45,
+"category": "quote_cards",
+"time_s": 780.75,
+"on_screen_s": 4.0,
+"file": "quote_cards/caylee_13-00_045.jpg"
+},
+{
+"video": "caylee",
+"inst": 46,
+"category": "quote_cards",
+"time_s": 798.75,
+"on_screen_s": 4.5,
+"file": "quote_cards/caylee_13-18_046.jpg"
+},
+{
+"video": "caylee",
+"inst": 47,
+"category": "date_time_stamps",
+"time_s": 861.25,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/caylee_14-21_047.jpg"
+},
+{
+"video": "caylee",
+"inst": 48,
+"category": "place_object_labels",
+"time_s": 884.25,
+"on_screen_s": 12.0,
+"file": "place_object_labels/caylee_14-44_048.jpg"
+},
+{
+"video": "caylee",
+"inst": 50,
+"category": "quote_cards",
+"time_s": 975.25,
+"on_screen_s": 3.0,
+"file": "quote_cards/caylee_16-15_050.jpg"
+},
+{
+"video": "caylee",
+"inst": 51,
+"category": "title_chapter_cards",
+"time_s": 1006.25,
+"on_screen_s": 4.5,
+"file": "title_chapter_cards/caylee_16-46_051.jpg"
+},
+{
+"video": "caylee",
+"inst": 52,
+"category": "date_time_stamps",
+"time_s": 1010.75,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/caylee_16-50_052.jpg"
+},
+{
+"video": "caylee",
+"inst": 53,
+"category": "quote_cards",
+"time_s": 1055.25,
+"on_screen_s": 3.0,
+"file": "quote_cards/caylee_17-35_053.jpg"
+},
+{
+"video": "caylee",
+"inst": 54,
+"category": "date_time_stamps",
+"time_s": 1071.75,
+"on_screen_s": 4.0,
+"file": "date_time_stamps/caylee_17-51_054.jpg"
+},
+{
+"video": "caylee",
+"inst": 56,
+"category": "date_time_stamps",
+"time_s": 1137.75,
+"on_screen_s": 2.0,
+"file": "date_time_stamps/caylee_18-57_056.jpg"
+},
+{
+"video": "caylee",
+"inst": 57,
+"category": "section_tags",
+"time_s": 1154.75,
+"on_screen_s": 4.0,
+"file": "section_tags/caylee_19-14_057.jpg"
+},
+{
+"video": "caylee",
+"inst": 58,
+"category": "date_time_stamps",
+"time_s": 1216.25,
+"on_screen_s": 2.0,
+"file": "date_time_stamps/caylee_20-16_058.jpg"
+},
+{
+"video": "caylee",
+"inst": 59,
+"category": "quote_cards",
+"time_s": 1225.75,
+"on_screen_s": 2.5,
+"file": "quote_cards/caylee_20-25_059.jpg"
+},
+{
+"video": "caylee",
+"inst": 60,
+"category": "section_tags",
+"time_s": 1228.75,
+"on_screen_s": 4.0,
+"file": "section_tags/caylee_20-28_060.jpg"
+},
+{
+"video": "caylee",
+"inst": 61,
+"category": "quote_cards",
+"time_s": 1344.25,
+"on_screen_s": 1.0,
+"file": "quote_cards/caylee_22-24_061.jpg"
+},
+{
+"video": "caylee",
+"inst": 62,
+"category": "quote_cards",
+"time_s": 1347.75,
+"on_screen_s": 4.0,
+"file": "quote_cards/caylee_22-27_062.jpg"
+},
+{
+"video": "caylee",
+"inst": 63,
+"category": "section_tags",
+"time_s": 1367.75,
+"on_screen_s": 4.5,
+"file": "section_tags/caylee_22-47_063.jpg"
+},
+{
+"video": "caylee",
+"inst": 64,
+"category": "quote_cards",
+"time_s": 1453.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/caylee_24-13_064.jpg"
+},
+{
+"video": "caylee",
+"inst": 65,
+"category": "date_time_stamps",
+"time_s": 1678.75,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/caylee_27-58_065.jpg"
+},
+{
+"video": "caylee",
+"inst": 66,
+"category": "quote_cards",
+"time_s": 1683.25,
+"on_screen_s": 2.0,
+"file": "quote_cards/caylee_28-03_066.jpg"
+},
+{
+"video": "caylee",
+"inst": 67,
+"category": "quote_cards",
+"time_s": 1688.75,
+"on_screen_s": 4.5,
+"file": "quote_cards/caylee_28-08_067.jpg"
+},
+{
+"video": "caylee",
+"inst": 68,
+"category": "quote_cards",
+"time_s": 1739.75,
+"on_screen_s": 4.0,
+"file": "quote_cards/caylee_28-59_068.jpg"
+},
+{
+"video": "caylee",
+"inst": 69,
+"category": "date_time_stamps",
+"time_s": 1744.25,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/caylee_29-04_069.jpg"
+},
+{
+"video": "caylee",
+"inst": 70,
+"category": "section_tags",
+"time_s": 1781.25,
+"on_screen_s": 4.5,
+"file": "section_tags/caylee_29-41_070.jpg"
+},
+{
+"video": "caylee",
+"inst": 71,
+"category": "date_time_stamps",
+"time_s": 1789.25,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/caylee_29-49_071.jpg"
+},
+{
+"video": "caylee",
+"inst": 72,
+"category": "quote_cards",
+"time_s": 1843.75,
+"on_screen_s": 5.5,
+"file": "quote_cards/caylee_30-43_072.jpg"
+},
+{
+"video": "caylee",
+"inst": 73,
+"category": "quote_cards",
+"time_s": 1856.75,
+"on_screen_s": 3.5,
+"file": "quote_cards/caylee_30-56_073.jpg"
+},
+{
+"video": "caylee",
+"inst": 74,
+"category": "quote_cards",
+"time_s": 2030.25,
+"on_screen_s": 2.5,
+"file": "quote_cards/caylee_33-50_074.jpg"
+},
+{
+"video": "caylee",
+"inst": 75,
+"category": "quote_cards",
+"time_s": 2082.75,
+"on_screen_s": 4.5,
+"file": "quote_cards/caylee_34-42_075.jpg"
+},
+{
+"video": "caylee",
+"inst": 76,
+"category": "quote_cards",
+"time_s": 2126.75,
+"on_screen_s": 10.5,
+"file": "quote_cards/caylee_35-26_076.jpg"
+},
+{
+"video": "caylee",
+"inst": 77,
+"category": "quote_cards",
+"time_s": 2139.75,
+"on_screen_s": 5.5,
+"file": "quote_cards/caylee_35-39_077.jpg"
+},
+{
+"video": "caylee",
+"inst": 78,
+"category": "quote_cards",
+"time_s": 2146.25,
+"on_screen_s": 3.5,
+"file": "quote_cards/caylee_35-46_078.jpg"
+},
+{
+"video": "caylee",
+"inst": 79,
+"category": "quote_cards",
+"time_s": 2152.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/caylee_35-52_079.jpg"
+},
+{
+"video": "caylee",
+"inst": 80,
+"category": "quote_cards",
+"time_s": 2157.75,
+"on_screen_s": 3.0,
+"file": "quote_cards/caylee_35-57_080.jpg"
+},
+{
+"video": "caylee",
+"inst": 81,
+"category": "date_time_stamps",
+"time_s": 2170.25,
+"on_screen_s": 2.0,
+"file": "date_time_stamps/caylee_36-10_081.jpg"
+},
+{
+"video": "caylee",
+"inst": 82,
+"category": "quote_cards",
+"time_s": 2179.25,
+"on_screen_s": 5.0,
+"file": "quote_cards/caylee_36-19_082.jpg"
+},
+{
+"video": "caylee",
+"inst": 83,
+"category": "date_time_stamps",
+"time_s": 2193.75,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/caylee_36-33_083.jpg"
+},
+{
+"video": "caylee",
+"inst": 84,
+"category": "quote_cards",
+"time_s": 2198.75,
+"on_screen_s": 2.5,
+"file": "quote_cards/caylee_36-38_084.jpg"
+},
+{
+"video": "caylee",
+"inst": 85,
+"category": "title_chapter_cards",
+"time_s": 2206.25,
+"on_screen_s": 4.5,
+"file": "title_chapter_cards/caylee_36-46_085.jpg"
+},
+{
+"video": "caylee",
+"inst": 86,
+"category": "quote_cards",
+"time_s": 2363.25,
+"on_screen_s": 3.5,
+"file": "quote_cards/caylee_39-23_086.jpg"
+},
+{
+"video": "caylee",
+"inst": 87,
+"category": "quote_cards",
+"time_s": 2395.25,
+"on_screen_s": 2.5,
+"file": "quote_cards/caylee_39-55_087.jpg"
+},
+{
+"video": "caylee",
+"inst": 88,
+"category": "disclaimer_end_cards",
+"time_s": 2511.25,
+"on_screen_s": 7.5,
+"file": "disclaimer_end_cards/caylee_41-51_088.jpg"
+},
+{
+"video": "caylee",
+"inst": 89,
+"category": "disclaimer_end_cards",
+"time_s": 2515.75,
+"on_screen_s": 2.5,
+"file": "disclaimer_end_cards/caylee_41-55_089.jpg"
+},
+{
+"video": "noida",
+"inst": 0,
+"category": "disclaimer_end_cards",
+"time_s": 1.75,
+"on_screen_s": 2.5,
+"file": "disclaimer_end_cards/noida_00-01_000.jpg"
+},
+{
+"video": "noida",
+"inst": 1,
+"category": "date_time_stamps",
+"time_s": 7.25,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/noida_00-07_001.jpg"
+},
+{
+"video": "noida",
+"inst": 2,
+"category": "title_chapter_cards",
+"time_s": 37.75,
+"on_screen_s": 5.0,
+"file": "title_chapter_cards/noida_00-37_002.jpg"
+},
+{
+"video": "noida",
+"inst": 3,
+"category": "title_chapter_cards",
+"time_s": 42.75,
+"on_screen_s": 3.5,
+"file": "title_chapter_cards/noida_00-42_003.jpg"
+},
+{
+"video": "noida",
+"inst": 4,
+"category": "name_labels_whos_who",
+"time_s": 46.25,
+"on_screen_s": 3.5,
+"file": "name_labels_whos_who/noida_00-46_004.jpg"
+},
+{
+"video": "noida",
+"inst": 6,
+"category": "family_tree_boards",
+"time_s": 51.25,
+"on_screen_s": 12.5,
+"file": "family_tree_boards/noida_00-51_006.jpg"
+},
+{
+"video": "noida",
+"inst": 7,
+"category": "maps",
+"time_s": 67.25,
+"on_screen_s": 4.5,
+"file": "maps/noida_01-07_007.jpg"
+},
+{
+"video": "noida",
+"inst": 8,
+"category": "maps",
+"time_s": 75.25,
+"on_screen_s": 8.5,
+"file": "maps/noida_01-15_008.jpg"
+},
+{
+"video": "noida",
+"inst": 9,
+"category": "line_art_illustrations",
+"time_s": 81.25,
+"on_screen_s": 7.0,
+"file": "line_art_illustrations/noida_01-21_009.jpg"
+},
+{
+"video": "noida",
+"inst": 10,
+"category": "line_art_illustrations",
+"time_s": 92.75,
+"on_screen_s": 19.5,
+"file": "line_art_illustrations/noida_01-32_010.jpg"
+},
+{
+"video": "noida",
+"inst": 11,
+"category": "section_tags",
+"time_s": 106.75,
+"on_screen_s": 2.5,
+"file": "section_tags/noida_01-46_011.jpg"
+},
+{
+"video": "noida",
+"inst": 12,
+"category": "date_time_stamps",
+"time_s": 131.75,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/noida_02-11_012.jpg"
+},
+{
+"video": "noida",
+"inst": 13,
+"category": "date_time_stamps",
+"time_s": 144.25,
+"on_screen_s": 5.0,
+"file": "date_time_stamps/noida_02-24_013.jpg"
+},
+{
+"video": "noida",
+"inst": 14,
+"category": "date_time_stamps",
+"time_s": 184.75,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/noida_03-04_014.jpg"
+},
+{
+"video": "noida",
+"inst": 15,
+"category": "place_object_labels",
+"time_s": 194.75,
+"on_screen_s": 21.5,
+"file": "place_object_labels/noida_03-14_015.jpg"
+},
+{
+"video": "noida",
+"inst": 16,
+"category": "place_object_labels",
+"time_s": 217.25,
+"on_screen_s": 16.0,
+"file": "place_object_labels/noida_03-37_016.jpg"
+},
+{
+"video": "noida",
+"inst": 17,
+"category": "section_tags",
+"time_s": 279.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_04-39_017.jpg"
+},
+{
+"video": "noida",
+"inst": 18,
+"category": "quote_cards",
+"time_s": 306.75,
+"on_screen_s": 5.5,
+"file": "quote_cards/noida_05-06_018.jpg"
+},
+{
+"video": "noida",
+"inst": 19,
+"category": "quote_cards",
+"time_s": 366.25,
+"on_screen_s": 3.0,
+"file": "quote_cards/noida_06-06_019.jpg"
+},
+{
+"video": "noida",
+"inst": 20,
+"category": "section_tags",
+"time_s": 437.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_07-17_020.jpg"
+},
+{
+"video": "noida",
+"inst": 21,
+"category": "date_time_stamps",
+"time_s": 490.25,
+"on_screen_s": 7.5,
+"file": "date_time_stamps/noida_08-10_021.jpg"
+},
+{
+"video": "noida",
+"inst": 22,
+"category": "date_time_stamps",
+"time_s": 499.75,
+"on_screen_s": 3.5,
+"file": "date_time_stamps/noida_08-19_022.jpg"
+},
+{
+"video": "noida",
+"inst": 23,
+"category": "section_tags",
+"time_s": 518.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_08-38_023.jpg"
+},
+{
+"video": "noida",
+"inst": 24,
+"category": "quote_cards",
+"time_s": 721.25,
+"on_screen_s": 4.5,
+"file": "quote_cards/noida_12-01_024.jpg"
+},
+{
+"video": "noida",
+"inst": 25,
+"category": "title_chapter_cards",
+"time_s": 736.25,
+"on_screen_s": 3.5,
+"file": "title_chapter_cards/noida_12-16_025.jpg"
+},
+{
+"video": "noida",
+"inst": 26,
+"category": "section_tags",
+"time_s": 738.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_12-18_026.jpg"
+},
+{
+"video": "noida",
+"inst": 27,
+"category": "name_labels_whos_who",
+"time_s": 823.75,
+"on_screen_s": 3.5,
+"file": "name_labels_whos_who/noida_13-43_027.jpg"
+},
+{
+"video": "noida",
+"inst": 29,
+"category": "documents_records_timelines",
+"time_s": 849.25,
+"on_screen_s": 25.0,
+"file": "documents_records_timelines/noida_14-09_029.jpg"
+},
+{
+"video": "noida",
+"inst": 30,
+"category": "quote_cards",
+"time_s": 864.25,
+"on_screen_s": 9.5,
+"file": "quote_cards/noida_14-24_030.jpg"
+},
+{
+"video": "noida",
+"inst": 31,
+"category": "documents_records_timelines",
+"time_s": 901.75,
+"on_screen_s": 83.0,
+"file": "documents_records_timelines/noida_15-01_031.jpg"
+},
+{
+"video": "noida",
+"inst": 32,
+"category": "section_tags",
+"time_s": 951.25,
+"on_screen_s": 4.0,
+"file": "section_tags/noida_15-51_032.jpg"
+},
+{
+"video": "noida",
+"inst": 33,
+"category": "section_tags",
+"time_s": 1068.25,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_17-48_033.jpg"
+},
+{
+"video": "noida",
+"inst": 34,
+"category": "place_object_labels",
+"time_s": 1104.75,
+"on_screen_s": 20.5,
+"file": "place_object_labels/noida_18-24_034.jpg"
+},
+{
+"video": "noida",
+"inst": 35,
+"category": "quote_cards",
+"time_s": 1136.75,
+"on_screen_s": 4.0,
+"file": "quote_cards/noida_18-56_035.jpg"
+},
+{
+"video": "noida",
+"inst": 36,
+"category": "arrows_highlights",
+"time_s": 1147.25,
+"on_screen_s": 3.5,
+"file": "arrows_highlights/noida_19-07_036.jpg"
+},
+{
+"video": "noida",
+"inst": 37,
+"category": "section_tags",
+"time_s": 1224.25,
+"on_screen_s": 3.0,
+"file": "section_tags/noida_20-24_037.jpg"
+},
+{
+"video": "noida",
+"inst": 38,
+"category": "place_object_labels",
+"time_s": 1295.25,
+"on_screen_s": 4.0,
+"file": "place_object_labels/noida_21-35_038.jpg"
+},
+{
+"video": "noida",
+"inst": 39,
+"category": "date_time_stamps",
+"time_s": 1297.75,
+"on_screen_s": 3.0,
+"file": "date_time_stamps/noida_21-37_039.jpg"
+},
+{
+"video": "noida",
+"inst": 40,
+"category": "date_time_stamps",
+"time_s": 1311.25,
+"on_screen_s": 2.0,
+"file": "date_time_stamps/noida_21-51_040.jpg"
+},
+{
+"video": "noida",
+"inst": 41,
+"category": "documents_records_timelines",
+"time_s": 1344.75,
+"on_screen_s": 16.5,
+"file": "documents_records_timelines/noida_22-24_041.jpg"
+},
+{
+"video": "noida",
+"inst": 42,
+"category": "documents_records_timelines",
+"time_s": 1364.25,
+"on_screen_s": 6.5,
+"file": "documents_records_timelines/noida_22-44_042.jpg"
+},
+{
+"video": "noida",
+"inst": 44,
+"category": "date_time_stamps",
+"time_s": 1383.75,
+"on_screen_s": 4.0,
+"file": "date_time_stamps/noida_23-03_044.jpg"
+},
+{
+"video": "noida",
+"inst": 45,
+"category": "quote_cards",
+"time_s": 1390.25,
+"on_screen_s": 4.5,
+"file": "quote_cards/noida_23-10_045.jpg"
+},
+{
+"video": "noida",
+"inst": 46,
+"category": "date_time_stamps",
+"time_s": 1396.25,
+"on_screen_s": 3.5,
+"file": "date_time_stamps/noida_23-16_046.jpg"
+},
+{
+"video": "noida",
+"inst": 47,
+"category": "section_tags",
+"time_s": 1418.75,
+"on_screen_s": 3.0,
+"file": "section_tags/noida_23-38_047.jpg"
+},
+{
+"video": "noida",
+"inst": 48,
+"category": "date_time_stamps",
+"time_s": 1424.25,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/noida_23-44_048.jpg"
+},
+{
+"video": "noida",
+"inst": 49,
+"category": "date_time_stamps",
+"time_s": 1426.25,
+"on_screen_s": 2.5,
+"file": "date_time_stamps/noida_23-46_049.jpg"
+},
+{
+"video": "noida",
+"inst": 51,
+"category": "date_time_stamps",
+"time_s": 1442.25,
+"on_screen_s": 5.0,
+"file": "date_time_stamps/noida_24-02_051.jpg"
+},
+{
+"video": "noida",
+"inst": 52,
+"category": "section_tags",
+"time_s": 1489.25,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_24-49_052.jpg"
+},
+{
+"video": "noida",
+"inst": 53,
+"category": "section_tags",
+"time_s": 1540.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_25-40_053.jpg"
+},
+{
+"video": "noida",
+"inst": 54,
+"category": "section_tags",
+"time_s": 1613.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_26-53_054.jpg"
+},
+{
+"video": "noida",
+"inst": 55,
+"category": "date_time_stamps",
+"time_s": 1651.75,
+"on_screen_s": 5.0,
+"file": "date_time_stamps/noida_27-31_055.jpg"
+},
+{
+"video": "noida",
+"inst": 56,
+"category": "date_time_stamps",
+"time_s": 1657.25,
+"on_screen_s": 5.0,
+"file": "date_time_stamps/noida_27-37_056.jpg"
+},
+{
+"video": "noida",
+"inst": 57,
+"category": "title_chapter_cards",
+"time_s": 1686.75,
+"on_screen_s": 4.0,
+"file": "title_chapter_cards/noida_28-06_057.jpg"
+},
+{
+"video": "noida",
+"inst": 58,
+"category": "section_tags",
+"time_s": 1691.25,
+"on_screen_s": 3.0,
+"file": "section_tags/noida_28-11_058.jpg"
+},
+{
+"video": "noida",
+"inst": 59,
+"category": "place_object_labels",
+"time_s": 1699.75,
+"on_screen_s": 9.5,
+"file": "place_object_labels/noida_28-19_059.jpg"
+},
+{
+"video": "noida",
+"inst": 60,
+"category": "place_object_labels",
+"time_s": 1709.25,
+"on_screen_s": 9.5,
+"file": "place_object_labels/noida_28-29_060.jpg"
+},
+{
+"video": "noida",
+"inst": 61,
+"category": "quote_cards",
+"time_s": 1720.75,
+"on_screen_s": 2.5,
+"file": "quote_cards/noida_28-40_061.jpg"
+},
+{
+"video": "noida",
+"inst": 62,
+"category": "date_time_stamps",
+"time_s": 1932.25,
+"on_screen_s": 4.0,
+"file": "date_time_stamps/noida_32-12_062.jpg"
+},
+{
+"video": "noida",
+"inst": 63,
+"category": "date_time_stamps",
+"time_s": 1941.25,
+"on_screen_s": 6.0,
+"file": "date_time_stamps/noida_32-21_063.jpg"
+},
+{
+"video": "noida",
+"inst": 64,
+"category": "section_tags",
+"time_s": 2066.25,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_34-26_064.jpg"
+},
+{
+"video": "noida",
+"inst": 65,
+"category": "quote_cards",
+"time_s": 2137.25,
+"on_screen_s": 1.5,
+"file": "quote_cards/noida_35-37_065.jpg"
+},
+{
+"video": "noida",
+"inst": 66,
+"category": "section_tags",
+"time_s": 2328.25,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_38-48_066.jpg"
+},
+{
+"video": "noida",
+"inst": 67,
+"category": "place_object_labels",
+"time_s": 2352.75,
+"on_screen_s": 4.0,
+"file": "place_object_labels/noida_39-12_067.jpg"
+},
+{
+"video": "noida",
+"inst": 69,
+"category": "section_tags",
+"time_s": 2418.25,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_40-18_069.jpg"
+},
+{
+"video": "noida",
+"inst": 70,
+"category": "section_tags",
+"time_s": 2653.75,
+"on_screen_s": 3.5,
+"file": "section_tags/noida_44-13_070.jpg"
+},
+{
+"video": "noida",
+"inst": 71,
+"category": "section_tags",
+"time_s": 2769.25,
+"on_screen_s": 2.5,
+"file": "section_tags/noida_46-09_071.jpg"
+},
+{
+"video": "noida",
+"inst": 72,
+"category": "date_time_stamps",
+"time_s": 2957.75,
+"on_screen_s": 1.5,
+"file": "date_time_stamps/noida_49-17_072.jpg"
+},
+{
+"video": "noida",
+"inst": 73,
+"category": "date_time_stamps",
+"time_s": 2963.25,
+"on_screen_s": 2.0,
+"file": "date_time_stamps/noida_49-23_073.jpg"
+},
+{
+"video": "noida",
+"inst": 74,
+"category": "quote_cards",
+"time_s": 2984.25,
+"on_screen_s": 1.5,
+"file": "quote_cards/noida_49-44_074.jpg"
+},
+{
+"video": "noida",
+"inst": 75,
+"category": "title_chapter_cards",
+"time_s": 2990.25,
+"on_screen_s": 4.0,
+"file": "title_chapter_cards/noida_49-50_075.jpg"
+},
+{
+"video": "noida",
+"inst": 77,
+"category": "documents_records_timelines",
+"time_s": 3292.25,
+"on_screen_s": 12.0,
+"file": "documents_records_timelines/noida_54-52_077.jpg"
+},
+{
+"video": "noida",
+"inst": 80,
+"category": "disclaimer_end_cards",
+"time_s": 3328.25,
+"on_screen_s": 9.5,
+"file": "disclaimer_end_cards/noida_55-28_080.jpg"
+},
+{
+"video": "noida",
+"inst": 81,
+"category": "disclaimer_end_cards",
+"time_s": 3336.75,
+"on_screen_s": 5.5,
+"file": "disclaimer_end_cards/noida_55-36_081.jpg"
+}
+]
