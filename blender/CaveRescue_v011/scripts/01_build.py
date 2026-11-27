@@ -557,7 +557,7 @@ for nm, hair, c1, c2, age, hgt in BOYS:
     hair_tint(r, (0.18, 0.15, 0.13))
     CHARS[nm] = (r, finish_char(r))
 r, b = human("Coach", 1.0, 0.42, ASIAN, "short02/short02.mhclo", "young_asian_male/young_asian_male.mhmat", "eyebrow002/eyebrow002.mhclo",
-             height=0.55, weight=0.45, muscle=0.6, clothes=["male_casualsuit04/male_casualsuit04.mhclo", "shoes01/shoes01.mhclo"])
+             height=0.55, weight=0.45, muscle=0.6, clothes=["male_casualsuit06/male_casualsuit06.mhclo", "shoes01/shoes01.mhclo"])
 cl = [c for c in r.children if c.type == 'MESH' and "casualsuit" in c.name][0]
 suit_split(cl, r, fabric("M_CoachShirt", (0.0, 0.42, 0.40), scale=700))      # deep teal shirt over dark jeans
 hair_tint(r, (0.18, 0.15, 0.13)); CHARS["Coach"] = (r, finish_char(r))
@@ -871,11 +871,11 @@ GUIDE = bpy.data.objects.new("GuideLine", cu); C_PROP.objects.link(GUIDE); cu.ma
 M_SILT = bpy.data.materials.new("M_Silt"); M_SILT.use_nodes = True; nt = M_SILT.node_tree
 for n in list(nt.nodes):
     if n.type != 'OUTPUT_MATERIAL': nt.nodes.remove(n)
-pv = nt.nodes.new("ShaderNodeVolumePrincipled"); pv.inputs["Color"].default_value = (0.75, 0.55, 0.32, 1); pv.inputs["Density"].default_value = 0.5
+pv = nt.nodes.new("ShaderNodeVolumePrincipled"); pv.inputs["Color"].default_value = (0.75, 0.55, 0.32, 1); pv.inputs["Density"].default_value = 0.25
 nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 2.5; tcx = nt.nodes.new("ShaderNodeTexCoord")
 nt.links.new(tcx.outputs["Object"], nz.inputs["Vector"])
 mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.45; mr.inputs["From Max"].default_value = 0.7
-mr.inputs["To Max"].default_value = 0.5; nt.links.new(nz.outputs["Fac"], mr.inputs["Value"]); nt.links.new(mr.outputs["Result"], pv.inputs["Density"])
+mr.inputs["To Max"].default_value = 0.25; nt.links.new(nz.outputs["Fac"], mr.inputs["Value"]); nt.links.new(mr.outputs["Result"], pv.inputs["Density"])
 nt.links.new(pv.outputs[0], [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'][0].inputs["Volume"])
 SILT = []
 for i, x in enumerate((278.0, 281.0, 275.0)):

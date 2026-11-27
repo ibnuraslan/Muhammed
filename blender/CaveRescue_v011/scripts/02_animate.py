@@ -373,7 +373,7 @@ for f in range(890, 1170, 3):
         pitch = -math.degrees(math.atan2(v.z, max(1e-4, v.to_2d().length))) * 0.8
         swim(D1, f, p, yw, f * 0.22, pitch=pitch)
 # Diver 2: squeezing through the restriction (1065-1165), ahead of Diver 1
-D2_P = path_pts([(1060, (283.6, -0.05, -2.85)), (1165, (279.0, 0.05, -3.55))])
+D2_P = path_pts([(1060, (283.6, -0.05, -2.65)), (1165, (279.0, 0.05, -3.35))])
 for f in range(1060, 1170, 3):
     p = D2_P(f)
     def pull(A, d, f_, _p=p):        # hand over hand along the guide line under him
@@ -384,7 +384,7 @@ for f in range(1060, 1170, 3):
     swim(D2, f, p, -90, f * 0.18, pitch=-6, hand_fn=pull)
 for f in (1060, 1165): apply_pose(D2.o, "L", "wrap_grip", f, 0.5); apply_pose(D2.o, "R", "wrap_grip", f, 0.5)
 # Diver 3: the lone diver swims away into the dark passage; his lamp fades (1150-1320). Never shown up close.
-D3_P = path_pts([(1150, (277.8, 0.0, -3.7)), (1320, (272.0, 0.05, -4.6))])
+D3_P = path_pts([(1150, (278.2, 0.0, -3.5)), (1320, (273.5, 0.05, -4.3))])
 for f in range(1150, 1324, 3):
     swim(D3, f, D3_P(f), -90, f * 0.2, pitch=-8)
 for n_ in ("Diver1_Beam", "Diver2_Beam"): O[n_].data.energy = 150.0
@@ -397,7 +397,8 @@ for fr, e in ((1150, 30.0), (1215, 28.0), (1300, 0.0)):
     em.default_value = e; em.keyframe_insert("default_value", frame=fr)
 
 # ---- B9-B11 (1463-1884): Diver 1 and Diver 2 kneel on the shelf beside Boy1 (fins off)
-def half_kneel(A, f, x, y, yaw, torso=(10, 0, 0), head=(0, 10, 0), hands=None, dz=0.0):
+def half_kneel(A, f, x, y, yaw, torso=(10, 0, 0), head=(0, 10, 0), hands=None, dz=0.0, both=None):
+    both = (A is D2) if both is None else both
     """right knee up (foot planted ahead), left knee down with the toes tucked"""
     gz_ = ground_z(x, y)
     hipz = A.hip["L"].z
@@ -408,8 +409,12 @@ def half_kneel(A, f, x, y, yaw, torso=(10, 0, 0), head=(0, 10, 0), hands=None, d
     kn = V(A.hip["L"].x * 1.1, A.hip["L"].y - 0.04, fl + 0.05)
     A.foot("L", f, kn + V(0, A.Ls * 0.97, 0.09), Rx(78), knee_local=kn + V(0.05, -0.4, 0.0))
     # up (right) leg: foot flat ahead, shin vertical
-    A.foot("R", f, V(A.hip["R"].x * 1.3, A.hip["R"].y - A.Lt * 0.92, fl + 0.075), None,
-           knee_local=V(A.hip["R"].x * 1.3, A.hip["R"].y - A.Lt - 0.5, fl + A.Ls + 0.3))
+    if both:
+        kr = V(A.hip["R"].x * 1.1, A.hip["R"].y - 0.04, fl + 0.05)
+        A.foot("R", f, kr + V(0, A.Ls * 0.97, 0.09), Rx(78), knee_local=kr + V(-0.05, -0.4, 0.0))
+    else:
+        A.foot("R", f, V(A.hip["R"].x * 1.3, A.hip["R"].y - A.Lt * 0.92, fl + 0.075), None,
+               knee_local=V(A.hip["R"].x * 1.3, A.hip["R"].y - A.Lt - 0.5, fl + A.Ls + 0.3))
     if hands: hands(A, f)
 B1x, B1y, B1yaw = SIT["Boy1"]
 fs(1600); upd()
@@ -518,8 +523,8 @@ SK = O["Sked"]; SK.rotation_mode = 'QUATERNION'
 def sked_M(f):
     """the sked's world matrix: underwater tow (head end first, -X) then the carry out of the mouth"""
     if f < 2100:
-        x = lerp(288.6, 286.0, ss(1882, 2050, f)) ; z = -2.3 + 0.03 * math.sin(f * 0.05)
-        return T(V(x, 0.15, z)) @ Matrix.Rotation(math.radians(180), 4, 'Z') @ Matrix.Rotation(math.radians(3 * math.sin(f * 0.04)), 4, 'X')
+        x = lerp(288.9, 287.3, ss(1882, 2050, f)) ; z = -2.3 + 0.03 * math.sin(f * 0.05)
+        return T(V(x, 0.25, z)) @ Matrix.Rotation(math.radians(180), 4, 'Z') @ Matrix.Rotation(math.radians(3 * math.sin(f * 0.04)), 4, 'X')
     x = lerp(1.4, -3.6, ss(2112, 2320, f)); y = lerp(-0.2, -0.9, ss(2112, 2320, f))
     z = ground_z(x, y) + 0.74 + 0.012 * math.sin(f * 0.21)
     return T(V(x, y, z)) @ Matrix.Rotation(math.radians(180 - 8 * ss(2112, 2320, f)), 4, 'Z')
@@ -549,7 +554,7 @@ for f in range(1882, 2054, 3):
         if d != "L": return False
         lp = loop_world(f_, 1)
         A.hand("L", f_, lp + V(0, 0, 0.03), V(0, 0, -1), V(-1, 0, 0), elbow_local=lp + V(0.1, 0.35, 0.35), world=True); return True
-    swim(D1, f, head_end + V(-0.35, 0.58, 0.66), -90, f * 0.2, pitch=-4, hand_fn=tow_hand, look=-30)
+    swim(D1, f, head_end + V(-0.30, 0.12, 0.64), -90, f * 0.2, pitch=-4, hand_fn=tow_hand, look=-30)
 apply_pose(D1.o, "L", "wrap_grip", 1882, 0.8)
 # B13: Diver 1 carries the front (walking -X ahead of the sked), Diver 2 the back; hands on the end loops
 def carry(A, f0, f1, front):
@@ -625,10 +630,10 @@ for fr, z in ((572, 0.0), (573, -300.0), (955, -300.0), (995, 0.0), (2013, 0.0),
 _amb = set(desc(O["Ambulance"]))
 fronts = [o for o in desc(FRONT) if o is not FRONT and o not in _amb and not o.name.startswith("PoolSurf")]
 show_ranges(fronts + [O["PoolSurf_Front"]], [(0, 573), (952, 2014), (2075, 2437)])
-XS_R = [(596, 938), (2016, 2108)]
+XS_R = [(645, 938), (2016, 2108)]
 RT = O["FX_Route"]; show_ranges([RT, O["FX_Beacon"], O["FX_BeaconRing"]], XS_R)
-RT.data.bevel_factor_end = 0.0; RT.data.keyframe_insert("bevel_factor_end", frame=600)
-RT.data.bevel_factor_end = 1.0; RT.data.keyframe_insert("bevel_factor_end", frame=690)
+RT.data.bevel_factor_end = 0.0; RT.data.keyframe_insert("bevel_factor_end", frame=645)
+RT.data.bevel_factor_end = 1.0; RT.data.keyframe_insert("bevel_factor_end", frame=700)
 RT["flood"] = 0.0; RT.keyframe_insert('["flood"]', frame=720); RT["flood"] = 1.0; RT.keyframe_insert('["flood"]', frame=830)
 for o in (O["FX_Beacon"], O["FX_BeaconRing"]):
     for f in range(596, 965, 30):
@@ -700,7 +705,7 @@ bubbles("b1", lambda f: (fs(f), upd(), FFM.matrix_world.translation + V(0, 0, 0.
 # lights: the sump glow only while we are underwater; the sun brightens at the end
 SG = O["SU_Glow"].data
 SGo = O["SU_Glow"]
-for fr, x_ in ((1060, 290.0), (1160, 283.2), (1320, 282.5), (1885, 290.0), (2050, 287.5)):
+for fr, x_ in ((1060, 291.0), (1160, 286.9), (1320, 285.0), (1885, 290.5), (2050, 288.6)):
     SGo.location = (x_, -0.2, floor_route(x_) + 0.9); SGo.keyframe_insert("location", frame=fr)
 for fr, e in ((0, 0.0), (1060, 0.0), (1080, 160.0), (1330, 160.0), (1345, 0.0), (1885, 0.0), (1905, 250.0), (2050, 250.0), (2060, 0.0)):
     SG.energy = e; SG.keyframe_insert("energy", frame=fr)
@@ -726,25 +731,25 @@ CK = [
     (956, (302.8, -2.0, 3.2), (305.5, 3.0, 2.2), 24), (968, (303.4, 0.45, 3.0), (306.0, 3.4, 2.0), 24),
     (998, (303.3, 0.6, 2.95), (305.9, 3.3, 2.0), 25), (1032, (301.8, -0.7, 2.3), (298.0, 1.2, 1.5), 28),
     (1060, (301.6, -0.4, 2.2), (297.6, 1.0, 1.3), 28), (1080, (299.6, 0.1, 1.65), (296.8, 0.7, 0.3), 24),
-    (1096, (297.8, 0.25, 0.7), (292.0, 0.3, 0.0), 22), (1114, (293.4, 0.15, 0.65), (287.0, 0.0, -1.5), 22),
-    (1136, (289.6, -0.45, -0.7), (280.0, 0.1, -3.4), 24),
+    (1096, (297.8, 0.25, 0.7), (292.0, 0.3, 0.0), 22), (1114, (293.4, 0.15, 0.65), (287.0, 0.0, -1.5), 22), (1124, (290.4, 0.0, 0.48), (286.0, 0.0, -2.0), 22),
+    (1136, (288.9, -0.4, -1.0), (280.0, 0.1, -3.4), 24),
     (1160, (285.4, -0.5, -2.35), (278.0, 0.0, -3.7), 26), (1240, (284.0, -0.3, -2.6), (268.0, 0.0, -4.7), 30),
-    (1318, (283.4, -0.3, -2.75), (262.0, 0.0, -5.3), 32), (1334, (287.0, -0.2, -1.4), (292.0, 0.3, 0.4), 24),
-    (1350, (291.2, 0.1, 0.55), (300.0, 1.0, 1.2), 24),
+    (1318, (283.4, -0.3, -2.75), (262.0, 0.0, -5.3), 32), (1334, (287.0, -0.2, -1.4), (292.0, 0.3, 0.4), 24), (1341, (289.3, 0.0, -0.3), (293.0, 0.3, 0.6), 24),
+    (1347, (290.4, 0.1, 0.48), (300.0, 1.0, 1.2), 24),
     (1368, (299.2, 0.6, 1.4), (304.5, 2.2, 2.3), 26), (1400, (302.6, 0.95, 2.45), (304.6, 2.25, 2.5), 35),
     (1460, (302.9, 0.75, 2.5), (304.6, 2.25, 2.45), 38), (1520, (302.5, -1.5, 3.2), (305.3, 2.3, 1.9), 26),
     (1590, (302.4, 0.2, 2.8), (304.6, 2.0, 2.2), 30), (1640, (302.6, 1.75, 2.35), (304.5, 1.85, 2.3), 40),
     (1700, (302.55, 1.7, 2.4), (304.5, 1.95, 2.35), 42), (1760, (302.4, 1.4, 2.7), (304.35, 2.3, 2.45), 45),
     (1830, (302.5, 1.45, 2.68), (304.35, 2.3, 2.47), 48), (1874, (302.6, 1.5, 2.65), (304.35, 2.3, 2.45), 46),
     (1890, (300.5, 0.8, 1.9), (297.0, 0.5, 0.9), 26),
-    (1906, (297.5, 0.3, 0.7), (292.0, 0.2, -0.6), 22), (1925, (291.3, 0.0, 0.55), (288.0, 0.2, -1.6), 22),
-    (1948, (288.6, -0.85, -1.75), (287.6, 0.3, -2.2), 22),
-    (2010, (286.6, -1.0, -1.8), (285.8, 0.3, -2.25), 22),
+    (1906, (297.5, 0.3, 0.7), (292.0, 0.2, -0.6), 22), (1922, (291.6, 0.0, 0.6), (288.0, 0.2, -1.6), 22),
+    (1930, (290.4, -0.1, 0.48), (288.2, 0.2, -1.8), 22), (1950, (289.3, -0.7, -1.55), (288.3, 0.3, -2.15), 22), (1990, (288.4, -0.75, -1.6), (287.6, 0.3, -2.15), 22),
+    (2010, (288.3, -0.6, -1.6), (287.4, 0.3, -2.15), 22),
     (2034, (276.0, -45.0, 8.0), (266.0, 0.0, -2.0), 28),
     (2080, (190.0, -240.0, 8.0), (160.0, 0.0, 0.0), 30), (2108, (60.0, -200.0, 35.0), (40.0, 0.0, 5.0), 30),
-    (2140, (-28.0, -40.0, 12.0), (-2.0, 0.0, 3.0), 28), (2178, (-9.0, -0.6, 1.9), (-1.0, -0.5, 1.4), 28),
-    (2249, (-8.6, -0.6, 1.85), (-2.0, -0.5, 1.35), 28), (2280, (-12.5, -5.0, 2.0), (-8.0, -6.0, 1.5), 28),
-    (2305, (-11.5, -12.1, 1.9), (-8.3, -6.4, 1.5), 30), (2395, (-11.2, -12.4, 2.2), (-8.3, -6.4, 1.6), 30), (2436, (-12.5, -14.0, 7.0), (-7.5, -5.5, 2.0), 30)]
+    (2140, (-28.0, -40.0, 12.0), (-2.0, 0.0, 3.0), 28), (2178, (-10.8, -0.5, 2.0), (-1.5, -0.5, 1.4), 30),
+    (2249, (-10.4, -0.5, 1.95), (-2.0, -0.5, 1.35), 30), (2280, (-16.5, -6.0, 2.4), (-8.3, -6.4, 1.5), 30),
+    (2305, (-12.5, -12.8, 2.0), (-8.3, -6.4, 1.5), 30), (2395, (-11.2, -12.4, 2.2), (-8.3, -6.4, 1.6), 30), (2436, (-12.5, -14.0, 7.0), (-7.5, -5.5, 2.0), 30)]
 cp_ = catmull([(k[0], Vector(k[1])) for k in CK]); ct_ = catmull([(k[0], Vector(k[2])) for k in CK]); cl_ = catmull([(k[0], float(k[3])) for k in CK])
 _ext = [cp_(f) for f in list(range(1, 600, 5)) + list(range(2100, END + 1, 5))]
 for o in [o for o in O if o.name.startswith("JG_") and o.parent is None or (o.name.startswith("JG_") and o.parent and o.parent.name == "FRONT_CTL")]:
