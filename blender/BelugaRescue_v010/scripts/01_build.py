@@ -248,7 +248,7 @@ else:
 outn = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'][0]
 srf = outn.inputs["Surface"].links[0].from_socket
 geo = nt.nodes.new("ShaderNodeNewGeometry")
-pk = nt.nodes.new("ShaderNodeBsdfPrincipled"); pk.inputs["Base Color"].default_value = (0.55, 0.08, 0.12, 1); pk.inputs["Roughness"].default_value = 0.3
+pk = nt.nodes.new("ShaderNodeBsdfPrincipled"); pk.inputs["Base Color"].default_value = (0.42, 0.20, 0.22, 1); pk.inputs["Roughness"].default_value = 0.5   # v010: soft grey-pink mouth (v009 red read as a wound)
 mxs = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(geo.outputs["Backfacing"], mxs.inputs["Fac"])
 nt.links.new(srf, mxs.inputs[1]); nt.links.new(pk.outputs["BSDF"], mxs.inputs[2]); nt.links.new(mxs.outputs["Shader"], outn.inputs["Surface"])
 for n in nt.nodes:

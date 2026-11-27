@@ -140,7 +140,7 @@ PLANT_R = (285, 318)                     # right foot planted until the cramp pu
 
 # v010: a kick cycle in every float (knees bend, the foot goes back and up, legs in opposition)
 KICK_A = P1([(1, 0.0), (140, 0.0), (165, 0.6), (262, 0.5), (280, 0.0), (488, 0.0), (520, 1.0), (683, 0.9), (760, 0.7),
-             (1100, 0.6), (1166, 0.5), (1490, 0.45), (1520, 0.8), (1580, 0.8), (END, 0.6)])
+             (1100, 0.7), (1166, 0.8), (1490, 0.8), (1520, 0.9), (1580, 0.8), (END, 0.7)])
 KICK_T = P1([(1, 60), (280, 70), (488, 30), (683, 34), (800, 46), (1100, 50), (1490, 54), (1520, 38), (END, 44)])
 KPH = {0: 0.0}
 for f_ in range(1, END + 2): KPH[f_] = KPH[f_ - 1] + 2 * math.pi / KICK_T(f_)
@@ -149,7 +149,7 @@ def kick_off(s, f):
     if s == "R" and 1112 <= f <= 1515: a = 0.0                     # the right foot is in the whale's mouth
     if a <= 0: return Vector((0, 0, 0)), 0.0
     b = 0.5 + 0.5 * math.sin(KPH[int(f)] + (0.0 if s == "L" else math.pi))
-    return Vector((0.0, a * (0.06 + 0.15 * b), a * (0.05 + 0.13 * b))), a * 25 * (1 - b)
+    return Vector((0.0, a * (0.07 + 0.24 * b), a * (0.06 + 0.21 * b))), a * 30 * (1 - b)
 hip = {s: CT.BN["upperleg01." + s].head_local.copy() for s in "LR"}
 plant_pos = {}
 def legs_key(f, Bm, R3):
@@ -190,7 +190,7 @@ def arm_mode(m, s, f):
         if o.length > 0.40: o = o * (0.40 / o.length)
         return o, Vector((0.30, 0.45, -0.15))
     if m == "scull":
-        o = Vector((0.20 + 0.07 * math.sin(ph), -0.20 + 0.05 * math.cos(ph), -0.10 + 0.05 * math.sin(ph))); lim = 0.31
+        o = Vector((0.20 + 0.09 * math.sin(ph), -0.20 + 0.07 * math.cos(ph), -0.10 + 0.07 * math.sin(ph))); lim = 0.32
         pole = Vector((0.45, 0.30, -0.10))
     elif m == "claw":
         ph = APH[int(f)] + (0.0 if s == "L" else math.pi); u = 0.5 + 0.5 * math.sin(ph)
@@ -200,7 +200,7 @@ def arm_mode(m, s, f):
         o = Vector((0.23 + 0.02 * math.sin(ph), -0.06 + 0.03 * math.cos(ph), 0.10 + 0.04 * math.sin(ph))); lim = 0.30
         pole = Vector((0.40, 0.25, -0.20))
     else:   # surface
-        o = Vector((0.19 + 0.05 * math.sin(ph), -0.24 + 0.05 * math.cos(ph), -0.20 + 0.03 * math.sin(ph))); lim = 0.30
+        o = Vector((0.20 + 0.07 * math.sin(ph), -0.22 + 0.07 * math.cos(ph), -0.30 + 0.04 * math.sin(ph))); lim = 0.33
         pole = Vector((0.45, 0.30, -0.05))
     if o.length > lim: o = o * (lim / o.length)
     return o, pole
@@ -233,6 +233,10 @@ for f in KF:
     pos, rot = POS(f), ROT(f)
     # small life: a breathing/shiver on the cramp, a bob while floating
     if 330 <= f <= 480: pos = pos + Vector((0.010 * math.sin(f * 1.9), 0, 0.008 * math.sin(f * 2.3)))
+    if f >= 1196:                                   # v010: sway + bob (the lift and the ending never hold still)
+        k_ = min(1.0, (f - 1196) / 30.0) * (0.6 if f < 1515 else 1.0)
+        pos = pos + Vector((0.025 * math.sin(f * 0.045), 0.015 * math.sin(f * 0.031), 0.022 * math.sin(f * 0.07))) * k_
+        rot = rot + Vector((5.0 * math.sin(f * 0.023), 3.0 * math.sin(f * 0.037), 3.0 * math.sin(f * 0.029))) * k_
     key_body(f, pos, rot)
     sp = SPINE(f); key_spine(f, flex=sp.x + 1.2 * math.sin(2 * math.pi * f / 150), twist=sp.y, side=sp.z)
     hd = HEAD(f); key_head(f, hd.x, hd.y, hd.z)
@@ -290,7 +294,7 @@ for f, sm, br, jaw, sq in ((1, 0.1, 0.2, 0.0, 0.0), (179, 0.0, 0.1, 0.0, 0.0), (
                            (470, -0.5, -0.9, 0.15, 0.7), (500, -0.2, 0.5, 0.05, 0.1), (572, -0.3, 0.9, 0.25, 0.0), (683, -0.3, 0.9, 0.35, 0.0),
                            (980, -0.3, 0.8, 0.30, 0.0), (1166, -0.2, 0.6, 0.15, 0.2), (1387, -0.1, 0.2, 0.10, 0.5), (1480, 0.0, 0.1, 0.05, 0.6),
                            (1522, -0.1, 0.6, 0.35, 0.0), (1538, -0.2, 1.0, 1.00, 0.0), (1592, -0.2, 1.0, 1.00, 0.0), (1614, -0.1, 0.8, 0.60, 0.0), (1640, 0.3, 0.5, 0.30, 0.1),
-                           (1670, 0.9, 0.3, 0.05, 0.2), (END, 0.9, 0.3, 0.05, 0.2)):
+                           (1670, 0.9, 0.3, 0.05, 0.2), (1700, 0.7, 0.4, 0.35, 0.1), (1715, 0.9, 0.3, 0.08, 0.2), (END, 1.0, 0.3, 0.05, 0.2)):
     key_face(DR, f, smile=sm, brow=br, jaw=jaw, squint=sq)
 # the gasp: the jaw drops wider than key_face's range (26 deg) while the head is thrown back
 _qj = nudge_q(DR, "jaw", Vector((0, 0, -1)), 26); _pj = DR.pose.bones["jaw"]
@@ -677,6 +681,10 @@ set_interp(sc.compositing_node_group, 'CONSTANT')
 # a small catchlight + soft fill riding with the camera (eyes never read as black holes)
 cl = bpy.data.lights.new("Catch", 'AREA'); cl.energy = 6.0; cl.size = 0.35; cl.color = (1, 0.96, 0.92)
 clo = bpy.data.objects.new("Catchlight", cl); bpy.data.collections["SET"].objects.link(clo); clo.parent = CAM; clo.location = (0.25, 0.25, 0.0)
+fd = bpy.data.lights.new("CamFill", 'AREA'); fd.size = 2.0; fd.color = (0.85, 0.95, 1.0)
+fo = bpy.data.objects.new("CamFill", fd); bpy.data.collections["SET"].objects.link(fo); fo.parent = CAM; fo.location = (0.0, -0.6, 0.3)
+for f, e_ in ((1, 0.0), (1100, 0.0), (1130, 220.0), (1480, 220.0), (1505, 0.0), (END, 0.0)):
+    fd.energy = e_; fd.keyframe_insert("energy", frame=f)
 for f in list(range(1, END + 1, 6)) + [END]:
     fs(f); d_ = (CAM.matrix_world.translation - face_c(f)).length
     cl.energy = max(2.0, min(30.0, 6.0 * (d_ / 1.0) ** 2)); cl.keyframe_insert("energy", frame=f)
