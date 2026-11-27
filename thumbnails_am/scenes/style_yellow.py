@@ -203,4 +203,5 @@ G.add_grade(sc, bloom=0.25, vignette=float(E("VIG", "0.85")), look="cinematic",
             cine={"exposure": float(E("EXPO", "-0.2")), "contrast": 1.15, "sat": 1.1, "knee": 0.6, "span": 1.4})
 out = E("OUT", os.path.join(T.OUTDIR, f"style_yellow_{ACC}.png"))
 sc.render.filepath = out; os.makedirs(os.path.dirname(out), exist_ok=True)
-bpy.ops.render.render(write_still=True); print("RENDERED", out)
+if not E("NORENDER"):
+    bpy.ops.render.render(write_still=True); print("RENDERED", out)
