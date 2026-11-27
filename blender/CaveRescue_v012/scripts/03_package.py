@@ -4,19 +4,22 @@ needed) and packed; orphans purged; compressed save."""
 import bpy, sys, os, tempfile
 OUT = sys.argv[sys.argv.index("--") + 1]
 TMP = tempfile.mkdtemp(prefix="pkgimg_")
-VEG = ("tree", "pachira", "fern", "boulder")
+VEG = ("tree", "pachira", "fern", "boulder", "short0", "ponytail", "eyebrow", "eyelash", "image_")   # v012: hair cards + ambulance maps at 512 too
 sc = bpy.context.scene
 sc.render.image_settings.quality = 88
 for i, im in enumerate(list(bpy.data.images)):
     if im.source != 'FILE' or "DaKras" in im.name: continue
     n = im.name.lower()
-    if n.endswith((".hdr", ".exr")): continue
+    if n.endswith(".hdr"): continue                       # v012: EXR roughness maps are converted too (were 2k, unshrunk)
     _ = im.pixels[0] if len(im.pixels) else None          # force load (packed images report size 0 until loaded)
     if im.size[0] == 0: print("SKIP", im.name); continue
     lim = 512 if any(k in n for k in VEG) else 1024
     if max(im.size) > lim:
         s = lim / max(im.size); im.scale(max(1, int(im.size[0] * s)), max(1, int(im.size[1] * s)))
     alpha = any(k in n for k in ("leaves", "leaf", "alpha", "opacity", "fern", "lash", "brow", "short", "pony"))
+    if any(k in n for k in ("nor_gl", "_nor", "rough", "disp", "normal", "spec", "_ao")): alpha = False   # data maps: no alpha needed
+    if n.endswith(".exr"):
+        im.colorspace_settings.name = "Non-Color"
     fn = os.path.join(TMP, "%03d.%s" % (i, "png" if alpha else "jpg"))
     im.filepath_raw = fn; im.file_format = 'PNG' if alpha else 'JPEG'
     im.save()
