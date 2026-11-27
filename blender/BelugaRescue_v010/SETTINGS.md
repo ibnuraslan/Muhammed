@@ -27,7 +27,8 @@ DA KRAS FILMS appears on the exhibit plate above the viewing window (reads f760â
 | 20 | the dive | 112.2 |
 | 400 | the cramp | 99.0 |
 | 900 | the window vignette | 74.1 |
-| 1250 | the foot in the mouth | 105.2 |
+| 1250 | the foot in the mouth | 114.8 (re-measured after the lift fill light) |
+| 1400 | the lift, side view | 107.0 |
 | 1700 | the surface | 52.0 |
 
-All five are at or under 120 s per frame on 4 CPU cores. Expect it to be much faster on farm GPUs.
+All six are at or under 120 s per frame on 4 CPU cores. f20, f400, f900 and f1700 were measured on the package before the last review fixes (mouth colour, kick size, sway, a camera fill light keyed on only for f1100â€“1505); those fixes do not touch the render settings, and f1250 and f1400 were re-measured on the final file. Expect it to be much faster on farm GPUs.

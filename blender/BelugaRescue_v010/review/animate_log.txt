@@ -7,7 +7,7 @@ calf grip finger gap mm min/max 15.1 15.6
 quat flips fixed 0
 spectators keyed
 grip gap mm 150 grip local (0.0, -1.849, 0.162)
-whale tilt from vertical in the grip deg min/max 38.9 55.5
+whale tilt from vertical in the grip deg min/max 38.3 56.7
 beluga keyed
 fx points 557
 camera crosses the surface at [1512]

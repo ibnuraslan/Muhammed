@@ -464,12 +464,6 @@
     "camera inside geometry"
    ]
   ],
-  "1225": [
-   [
-    "INSIDE",
-    "camera inside geometry"
-   ]
-  ],
   "1231": [
    [
     "INSIDE",
@@ -566,6 +560,12 @@
     "camera inside geometry"
    ]
   ],
+  "1429": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
   "1435": [
    [
     "INSIDE",
@@ -614,13 +614,13 @@
     "camera inside geometry"
    ]
   ],
-  "1483": [
+  "1489": [
    [
     "INSIDE",
     "camera inside geometry"
    ]
   ],
-  "1489": [
+  "1495": [
    [
     "INSIDE",
     "camera inside geometry"
