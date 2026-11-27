@@ -1,6 +1,6 @@
 # DrunkTrain_v008: the from-scratch rebuild (batch 1, film 16)
 
-**Status: ON HOLD.** I did two fix rounds, the most the brief allows. In its review of the final preview, a fresh reviewer graded it **FAIL** (see "Open faults" below). Watch `review/preview.mp4` before deciding anything. The .blend is **not pushed**, because the brief only allows that on PASS.
+**Status: CLIENT-APPROVED as is.** The client approved this exact build on Nov 26, 2026 (relayed by the director and confirmed by the user). A fresh reviewer had graded the final preview FAIL; those notes are kept below for the record. The delivered `.blend` is the exact file `review/preview.mp4` was rendered from (md5 `5f04c2e56dba8f4d60a475024c96744c`).
 
 One drunk man, one rail worker, one cargo train, one continuous camera. It is built to the client's VO (the DrunkTrain v007 recording), frames **1–1735** at 60 fps, so no retime is needed. The beat frames are in `beats.json`.
 
@@ -43,10 +43,11 @@ DA KRAS FILMS is printed in white on his red tee. It reads in full in f1–90, *
 5. **25.3–26.6 s:** a slow walk toward the camera with hanging arms, which reads as a near-hold. *Minor.*
 6. Others: the arrowhead touches the bundle surface at 23.3–23.9 s; the neck on the rail looks pressed (intended contact).
 
-## Render check (technical only, not approval)
+## Render check: PASS
 I opened the exact packed `DrunkTrain_v008_60fps.blend` (74 MB) with `blender --factory-startup -b`:
+- No errors and no warnings in the console when it opens.
 - 0 linked libraries, 0 unpacked images, the VO sound packed, 0 drivers and 0 text blocks.
 - Camera `CAM_Film`, 1080×1920 at 100 %, 60 fps, frames 1–1735, PNG to `//render/DrunkTrain_v008_####.png`, and the `VO` strip.
 - Full-resolution test frames at 64 adaptive samples on a 4-core CPU: f300 123 s, f900 171 s, f1650 189 s. None is black, empty or pink.
 
-The package is not delivered because the review is not PASS.
+Render frames **1–1735** at 60 fps and join them with `DrunkTrain_v008_VO.mp3` from frame 1. The render sheet is `SETTINGS.md`. The credits are in `CREDITS.md`, including the CC-BY models that must be credited.

@@ -1,8 +1,8 @@
-# DrunkTrain_v008: farm render sheet (package ON HOLD, not delivered)
+# DrunkTrain_v008: farm render sheet (client-approved build)
 
 | Item | Value |
 |---|---|
-| File | `DrunkTrain_v008_60fps.blend`, 74 MB, compressed, everything packed. It is not in git until the review passes. |
+| File | `DrunkTrain_v008_60fps.blend`, 74 MB, compressed, everything packed (VO included). Stored as a plain git file (no LFS). |
 | Engine | Cycles. 64 max samples, adaptive threshold 0.05, OIDN denoising. Bounces 6/3/3/6, transparent 16, caustics off, persistent data on, simplify texture limit 2048. |
 | Resolution | 1080 × 1920 at 100 %, 60 fps |
 | Frame range | **1–1735** (28.9 s). Built to the v007 VO, so no retime. |
