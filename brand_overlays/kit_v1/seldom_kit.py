@@ -911,6 +911,82 @@ def lineart(t, source=None, accent_box=None, dur=7.0):
 
 
 # ---------------------------------------------------------------- compositing and CLI
+# YouTube end-screen safe layout at 1920x1080: two video slots and the subscribe circle (YouTube draws these itself;
+# the card only leaves the space and frames it). Slots are 16:9.
+OUTRO_SLOTS = ((150, 470, 660, 371), (1110, 470, 660, 371))
+OUTRO_SUB = (960, 655, 112)                       # subscribe circle: centre x, centre y, radius
+
+
+@template("outro", 10.0)
+def outro(t, thanks="THANKS FOR WATCHING", subscribe="SUBSCRIBE", tuned="STAY TUNED FOR MORE", logo=None,
+          guides=True, dur=10.0):
+    """Outro end card (8–10 s). The shot sinks to near-black over a faint grid; the official Seldom logo (logo art,
+    never 3D text) rises out of a soft bloom at the top; "THANKS FOR WATCHING" tracks in between hairlines. Below, the
+    space for YouTube's end-screen elements: two 16:9 video slots framed only by corner ticks, and the subscribe circle
+    between them, drawn as a yellow ring that pulses, with "SUBSCRIBE" and an arrow. "STAY TUNED FOR MORE" types on at
+    the bottom. guides=False drops the slot frames and ring (if YouTube's own elements should sit on a clean field)."""
+    fr = Frame(); L = layer()
+    bgp = in_out(seg(t, 0.0, 0.9)) * (1 - in_out(seg(t, dur - 0.5, dur)))
+    fr.bg = dict(blur=14 * bgp, dim=0.93 * bgp)
+    L.alpha_composite(with_alpha(grid_floor(26), 0.8 * fade(t, 0.2, 1.2)))
+    d = ImageDraw.Draw(L)
+    # logo
+    lg = Image.open(logo or os.path.join(HERE, "assets", "seldom_logo.png")).convert("RGBA")
+    lw = 560; lh = int(lg.height * lw / lg.width)
+    lp = out_cubic(seg(t, 0.4, 1.5)); sc_ = 0.94 + 0.06 * lp
+    g = lg.resize((int(lw * sc_), int(lh * sc_)), Image.LANCZOS)
+    blur = 14 * (1 - out_cubic(seg(t, 0.4, 1.3)))
+    if blur > 0.3:
+        g = g.filter(ImageFilter.GaussianBlur(blur))
+    gx, gy = int(W / 2 - g.width / 2), int(150 - g.height / 2 + 18 * (1 - lp))
+    bloom = Image.new("RGBA", (W, H), (0, 0, 0, 0)); bloom.alpha_composite(g, (gx, gy))
+    bloom = bloom.filter(ImageFilter.GaussianBlur(45)); bloom = with_alpha(bloom, 0.45 * lp)
+    L.alpha_composite(bloom); L.alpha_composite(with_alpha(g, lp), (gx, gy))
+    # thanks
+    ty = 330; tp = fade(t, 1.2, 2.0); tr = 10 + 8 * (1 - out_cubic(seg(t, 1.2, 2.2)))
+    draw_text(L, (W / 2, ty), thanks, font("label", 44), WHITE + (int(250 * tp),), tracking=tr, anchor="ms")
+    hp = in_out(seg(t, 1.0, 2.0))
+    for yy in (ty - 62, ty + 34):
+        line(L, (W / 2, yy), (W / 2 - 330, yy), hp, WHITE + (90,), 1); line(L, (W / 2, yy), (W / 2 + 330, yy), hp, WHITE + (90,), 1)
+    d.rectangle([W / 2 - 3, ty + 31, W / 2 + 3, ty + 37], fill=YEL + (int(255 * hp),))
+    if guides:
+        # video slots: faint plate + corner ticks, drawing in one after the other
+        for k, (x, y, w, h) in enumerate(OUTRO_SLOTS):
+            p = out_cubic(seg(t, 1.8 + 0.25 * k, 2.6 + 0.25 * k))
+            if p <= 0:
+                continue
+            d.rectangle([x, y, x + w, y + h], fill=INK + (int(150 * p),), outline=WHITE + (int(40 * p),), width=1)
+            c = 34 * p
+            for (cx, cy, sx, sy) in ((x, y, 1, 1), (x + w, y, -1, 1), (x, y + h, 1, -1), (x + w, y + h, -1, -1)):
+                d.line([(cx, cy), (cx + sx * c, cy)], fill=WHITE + (int(220 * p),), width=3)
+                d.line([(cx, cy), (cx, cy + sy * c)], fill=WHITE + (int(220 * p),), width=3)
+            draw_text(L, (x, y - 16), ("WATCH NEXT", "MORE FROM SELDOM")[k], font("plex", 18), GREY + (int(230 * p),), tracking=4)
+        # subscribe ring: draws round, then pulses
+        cx, cy, r = OUTRO_SUB; rp = in_out(seg(t, 2.3, 3.2))
+        if rp > 0:
+            pts = [(cx + r * math.cos(math.radians(-90 + 360 * u / 180)), cy + r * math.sin(math.radians(-90 + 360 * u / 180))) for u in range(181)]
+            poly_draw(L, pts, rp, YEL + (240,), 4)
+            if t > 3.2:
+                pr = ((t - 3.2) / 1.6) % 1.0; rr = r + 6 + 34 * out_cubic(pr)
+                d.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], outline=YEL + (int(150 * (1 - pr)),), width=2)
+        sp = fade(t, 2.9, 3.6)
+        draw_text(L, (cx, cy + r + 84), subscribe, font("label_bold", 34), YEL + (int(255 * sp),), tracking=8, anchor="ms")
+        ay = cy + r + 40 - 5 * math.sin(max(0, t - 3.6) * 3.2) * sp
+        d.polygon([(cx - 9, ay), (cx + 9, ay), (cx, ay - 11)], fill=YEL + (int(255 * sp),))
+    else:
+        cx, cy, r = OUTRO_SUB; sp = fade(t, 2.9, 3.6)
+        draw_text(L, (cx, cy + r + 84), subscribe, font("label_bold", 34), YEL + (int(255 * sp),), tracking=8, anchor="ms")
+    # stay tuned: types on at the bottom
+    n = int(len(tuned) * seg(t, 3.6, 3.6 + len(tuned) / 18.0)); ft = font("plex", 24)
+    draw_text(L, (W / 2, 975), tuned[:n], ft, WHITE + (220,), tracking=8, anchor="ms")
+    if 3.6 <= t and (n < len(tuned) or int(t * 2.2) % 2 == 0):
+        x_end = W / 2 + text_w(tuned, ft, 8) / 2 - text_w(tuned[n:], ft, 8) + 8
+        d.rectangle([x_end, 955, x_end + 12, 979], fill=YEL + (230,))
+    a = 1 - in_out(seg(t, dur - 0.5, dur))
+    fr.rgba = grain(with_alpha(glow(L, 10, 0.25), a), t, 0.06)
+    return fr
+
+
 def composite(bg, fr):
     """Apply the frame's background treatment to an RGB shot and lay the overlay on top."""
     out = bg.convert("RGB")

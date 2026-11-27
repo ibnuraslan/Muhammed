@@ -46,6 +46,8 @@ DEMOS = [
                dict(photo=P("person_d.jpg"), name="SPEEDY", role="LOOKOUT", pos=(0.5, 0.69))],
         links=[(0, 1, 1.4, "PARTNER"), (1, 2, 2.9, "CREW"), (2, 3, 4.4, "BROTHER")])),
     ("13_map", "map", dict()),
+    ("15_outro", "outro", dict()),
+    ("15b_outro_clean", "outro", dict(guides=False)),
     ("14_lineart", "lineart", dict(source=P("lineart_src.png"), accent_box=(820, 560, 1120, 760))),
 ]
 
@@ -69,7 +71,7 @@ if __name__ == "__main__":
         mp4 = os.path.join(OUT, f"{key}.mp4")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(K.FPS), "-i", os.path.join(d, "f_%04d.jpg"),
                         "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p", "-movflags", "+faststart", mp4], check=True)
-        st = int(n * {"title": 0.62, "phrase": 0.9, "lineart": 0.7, "document": 0.75, "linkboard": 0.8, "disclaimer": 0.78, "timeline": 0.8, "map": 0.75}.get(name, 0.6))
+        st = int(n * {"title": 0.62, "phrase": 0.9, "lineart": 0.7, "document": 0.75, "linkboard": 0.8, "disclaimer": 0.78, "outro": 0.6, "timeline": 0.8, "map": 0.75}.get(name, 0.6))
         Image.open(os.path.join(d, f"f_{st + 1:04d}.jpg")).save(os.path.join(OUT, f"{key}_still.jpg"), quality=90)
         if name == "phrase":
             json.dump(dict(typing_sfx_cues_s=K.phrase_cues(params["text"])), open(os.path.join(OUT, "03_phrase_typing_cues.json"), "w"), indent=1)
