@@ -126,3 +126,52 @@ def thief(loc, heading_deg, pose=SNEAK, jitter=0.0, seed=0, mat=None, name="thie
     mwc = cap.matrix_world.copy(); cap.parent = arm; cap.parent_type = 'BONE'; cap.parent_bone = "head_07"
     bpy.context.view_layer.update(); cap.matrix_world = mwc
     return pivot, arm, ms, hand
+
+
+def add_clothes(body, mats, name="thief"):
+    """Pale-clay clothing shells on the posed body, deformed by the same armature: a work jacket (torso + sleeves,
+    hem at the hips, collar), trousers and gloves. Each is a copy of the body restricted to its bones' vertex groups,
+    pushed out along the normals and given thickness, so the clothes read as their own silhouettes and folds.
+    mats: dict(jacket=, trousers=, gloves=)."""
+    import bmesh as _bm
+    gi = {g.name: g.index for g in body.vertex_groups}
+    def pick(prefixes, extra=None):
+        ids = [i for n, i in gi.items() if n.startswith(prefixes)]
+        keep = []
+        for v in body.data.vertices:
+            w = sum(g.weight for g in v.groups if g.group in ids)
+            if w > 0.45 or (extra and extra(v)):
+                keep.append(v.index)
+        return set(keep)
+    hip = gi.get("hip_02")
+    zs = [v.co.z for v in body.data.vertices]
+    zmin, zmax = min(zs), max(zs); H = zmax - zmin
+    def hipw(v):
+        return sum(g.weight for g in v.groups if g.group == hip)
+    specs = [
+        ("jacket", ("spine_", "shoulder_", "upperarm", "lowerarm", "neck_"), lambda v: hipw(v) > 0.3 and v.co.z > zmin + 0.47 * H, 1.6, 0.5),
+        ("trousers", ("upperleg", "lowerleg"), lambda v: hipw(v) > 0.3 and v.co.z <= zmin + 0.53 * H, 0.7, 0.3),
+        ("gloves", ("hand_", "thumb", "index", "middle", "ring", "pinky"), None, 0.35, 0.2),
+    ]
+    out = []
+    for key, pre, extra, push, thick in specs:
+        keep = pick(pre, extra)
+        if key == "jacket":       # no collar higher than the neck base
+            neck_ids = [i for n, i in gi.items() if n.startswith(("neck_", "head"))]
+            keep = {i for i in keep if sum(g.weight for g in body.data.vertices[i].groups if g.group in neck_ids) < 0.5}
+        o = body.copy(); o.data = body.data.copy(); o.name = f"{name}_{key}"
+        bpy.context.scene.collection.objects.link(o)
+        bm = _bm.new(); bm.from_mesh(o.data); bm.verts.ensure_lookup_table()
+        _bm.ops.delete(bm, geom=[v for v in bm.verts if v.index not in keep], context='VERTS'); bm.to_mesh(o.data); bm.free()
+        o.data.materials.clear(); o.data.materials.append(mats[key])
+        d = o.modifiers.new("push", "DISPLACE"); d.direction = 'NORMAL'; d.strength = push; d.mid_level = 0.0
+        so = o.modifiers.new("thick", "SOLIDIFY"); so.thickness = thick; so.offset = -1
+        sm = o.modifiers.new("smooth", "CORRECTIVE_SMOOTH") if False else None
+        # order: push + thickness in rest pose, then the armature deforms it with the body
+        while o.modifiers.find("push") > 0:
+            bpy.ops.object.modifier_move_up({"object": o}, modifier="push") if False else o.modifiers.move(o.modifiers.find("push"), 0)
+        o.modifiers.move(o.modifiers.find("thick"), 1)
+        for pl in o.data.polygons:
+            pl.use_smooth = True
+        out.append(o)
+    return out

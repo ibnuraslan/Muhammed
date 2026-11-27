@@ -55,7 +55,7 @@ SH.cyl("jamb", (0, 1.15, DZ), (0, 2.05, DZ), R, mat=steel, verts=96, caps=False)
 CW, RH = 0.18, 0.15
 door_t = S._door_mesh(CW, RH, "bd", (steel, steel, dark)); cav_t = S._cavity_mesh(CW, RH, 0.4, "cv", dark)
 for c in range(14):
-    for r in range(16):
+    for r in range(int(E('VROWS', '11'))):
         M = Matrix.Translation((-1.25 + c * CW, 3.6, 0.2 + (r + 0.5) * RH))
         cv = cav_t.copy(); col.objects.link(cv); cv.matrix_world = M
         d = door_t.copy(); col.objects.link(d)
@@ -126,9 +126,12 @@ for i in range(40):
 
 # ---------------------------------------------------------------- three faceless thieves, crouching away with bags
 figs = []
+CLOTH = dict(jacket=mat("jacket", (0.8, 0.79, 0.75), 0.8), trousers=mat("trousers", (0.74, 0.73, 0.7), 0.8), gloves=mat("gloves", (0.6, 0.59, 0.57), 0.6))
 ACC_M = mat("accent", (0.75, 0.02, 0.02), 0.45, coat=0.4) if ACC == "red" else mat("accent", (0.92, 0.92, 0.9), 0.4, coat=0.4)
 for i, (x, y, hd) in enumerate(((0.0, -0.9, -150), (-0.9, -1.8, -160), (0.8, -2.2, -145))):
     pv, arm_, ms_, hand_ = crew.thief(Vector((x, y, 0)), hd, jitter=5, seed=i + 7, mat=clay, name=f"thief{i}")
+    for cl in crew.add_clothes(ms_[0], CLOTH, name=f"thief{i}"):
+        cl.parent = ms_[0].parent; cl.matrix_parent_inverse = ms_[0].matrix_parent_inverse.copy()
     for o in bpy.data.objects:
         if o.name.startswith(f"thief{i}_beanie"):
             o.data.materials.clear(); o.data.materials.append(clay)
@@ -143,9 +146,9 @@ for i, (x, y, hd) in enumerate(((0.0, -0.9, -150), (-0.9, -1.8, -160), (0.8, -2.
     mw_ = hd_.matrix_world.copy(); hd_.parent = arm_; hd_.parent_type = 'BONE'; hd_.parent_bone = "head_07"
     bpy.context.view_layer.update(); hd_.matrix_world = mw_
     figs.append(pv)
-    bag = PR.holdall(f"bag{i}", (0.3, 0.3, 0.28), full=0.9, open_=False)
+    bag = PR.holdall(f"bag{i}", (0.3, 0.3, 0.28), full=1.0, open_=False); bag.scale = (1.35, 1.35, 1.35)
     side = Matrix.Rotation(math.radians(hd), 3, 'Z') @ Vector((-0.16, 0, 0))
-    bag.location = Vector((hand_.x, hand_.y, max(0.0, hand_.z - 0.32))) + side
+    bag.location = Vector((hand_.x, hand_.y, max(0.0, hand_.z - 0.45))) + side * 1.5
     bag.rotation_euler.z = math.radians(hd + 90)
     bm = ACC_M if i == 0 else clay
     for o in [bag] + list(bag.children_recursive):
@@ -190,7 +193,7 @@ ao_.location = ACC_AT + Vector((-0.6, -1.2, 2.6)); ao_.rotation_euler = (ACC_AT 
 
 # ---------------------------------------------------------------- camera: high 3/4 overhead wide
 EL = math.radians(float(E("CAM_EL", "42"))); DIST = float(E("DIST", "9.5")); AZ = math.radians(float(E("CAM_AZ", "-118")))
-tgt = Vector((0.0, -0.6, 0.6))
+tgt = Vector((0.0, -0.6, float(E('TGZ', '1.5'))))
 cam = tgt + Vector((math.cos(AZ) * math.cos(EL), math.sin(AZ) * math.cos(EL), math.sin(EL))) * DIST
 C.camera(cam, tgt, lens=float(E("LENS", "35")))
 
