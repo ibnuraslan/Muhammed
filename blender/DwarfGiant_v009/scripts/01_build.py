@@ -234,15 +234,15 @@ nt.links.new(mixr.outputs["Result"], p.inputs["Base Color"])
 box("RM_RodSlide", (0.24, 0.10, 0.03), (0.0, WALL_Y - 0.05, 2.21), M_BRASS, bevel=0.005)
 # ---- DA KRAS FILMS plaque (enamel, brass frame) at x=-0.78, z=2.02
 PM, _ = img_mat("M_Plaque", os.path.join(PKG, "assets/tex/plaque_logo.png"), rough=0.25, coat=0.6)
-box("RM_PlaqueFrame", (0.56, 0.02, 0.25), (-0.78, WALL_Y - 0.010, 2.02), M_BRASS, bevel=0.004)
-bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.78, WALL_Y - 0.0215, 2.02), rotation=(math.radians(90), 0, 0))
-PL = bpy.context.active_object; PL.name = "RM_PlaqueLogo"; PL.scale = (0.528, 0.22, 1); bpy.ops.object.transform_apply(scale=True)
+box("RM_PlaqueFrame", (0.74, 0.02, 0.32), (-0.82, WALL_Y - 0.010, 2.12), M_BRASS, bevel=0.004)
+bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.82, WALL_Y - 0.0215, 2.12), rotation=(math.radians(90), 0, 0))
+PL = bpy.context.active_object; PL.name = "RM_PlaqueLogo"; PL.scale = (0.70, 0.29, 1); bpy.ops.object.transform_apply(scale=True)
 PL.data.materials.append(PM)
 # ---- framed photo (texture rendered from this film in stage B2) at x=-0.78, z=1.40, 0.36 x 0.48
-FRM = box("RM_PhotoFrame", (0.40, 0.025, 0.52), (-0.78, WALL_Y - 0.0125, 1.40), M_DESK, bevel=0.006)
+FRM = box("RM_PhotoFrame", (0.52, 0.025, 0.68), (-0.84, WALL_Y - 0.0125, 1.48), M_DESK, bevel=0.006)
 PHM = mat("M_Photo", (0.5, 0.42, 0.32), rough=0.3, coat=0.5)
-bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.78, WALL_Y - 0.0255, 1.40), rotation=(math.radians(90), 0, 0))
-PH = bpy.context.active_object; PH.name = "RM_Photo"; PH.scale = (0.34, 0.46, 1); bpy.ops.object.transform_apply(scale=True)
+bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.84, WALL_Y - 0.0255, 1.48), rotation=(math.radians(90), 0, 0))
+PH = bpy.context.active_object; PH.name = "RM_Photo"; PH.scale = (0.46, 0.62, 1); bpy.ops.object.transform_apply(scale=True)
 PH.data.materials.append(PHM)
 # ---- red-white-red flag hanging high on the back wall (x 0.45..1.15)
 for k, (mm, z0) in enumerate(((M_RED, 2.62), (M_WHITE, 2.42), (M_RED, 2.22))):
@@ -260,14 +260,6 @@ cyl("RM_LampBase", 0.07, 0.02, (2.30, -0.62, 0.79), M_BRASS); cyl("RM_LampStem",
 bpy.ops.mesh.primitive_cylinder_add(radius=0.10, depth=0.30, location=(2.24, -0.66, 1.10), rotation=(0, math.radians(90), math.radians(20)))
 ls_ = bpy.context.active_object; ls_.name = "RM_LampShade"; ls_.data.materials.append(M_LAMPSHADE)
 for i in range(len(ls_.data.vertices)): pass
-# ---- a ceiling pendant (brass, warm emissive bulb)
-bpy.ops.mesh.primitive_cone_add(vertices=48, radius1=0.26, radius2=0.06, depth=0.20, location=(0.2, -1.2, CEIL_Z - 0.75))
-PEND = bpy.context.active_object; PEND.name = "RM_Pendant"; PEND.data.materials.append(M_BRASS)
-sdm = PEND.modifiers.new("so", 'SOLIDIFY'); sdm.thickness = 0.004; bpy.ops.object.shade_smooth()
-cyl("RM_PendantCord", 0.005, 0.65, (0.2, -1.2, CEIL_Z - 0.33), M_TRIM)
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.06, location=(0.2, -1.2, CEIL_Z - 0.86))
-bb_ = bpy.context.active_object; bb_.name = "RM_Bulb"; bb_.data.materials.append(mat("M_Bulb", (1, 0.8, 0.5), emit=((1.0, 0.75, 0.4), 12.0)))
-
 # ================================================================== the brain (CC-BY model, re-materialled), tumour and vertebrae
 with bpy.data.libraries.load(BRAIN_SRC, link=False) as (src, dst):
     dst.objects = list(src.objects)

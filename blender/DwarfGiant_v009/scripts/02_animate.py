@@ -43,7 +43,7 @@ for rig in (HR, OR_):
 HH, HO = Human(CH), Human(CO)
 
 # ---- the hero's height (m) over the film -> rig scale (about the floor point under his feet)
-HEIGHT = pchip([(1, 1.37), (519, 1.37), (600, 1.50), (680, 1.62), (872, 1.67), (930, 1.80), (1000, 1.95), (1073, 2.07),
+HEIGHT = pchip([(1, 1.37), (519, 1.37), (600, 1.56), (680, 1.72), (872, 1.76), (930, 1.86), (1000, 1.98), (1073, 2.07),
                 (1415, 2.10), (1496, 2.12), (1560, 2.17), (1629, 2.22), (1700, 2.29), (1790, 2.34), (END, 2.34)])
 def hscale(f): return HEIGHT(f) / REST_H
 for f in list(range(1, END + 1, 3)) + [END]:
@@ -138,7 +138,7 @@ def hang(Hm, rig, body, cloth, s, f, yaw=0.0, fwd=0.05, drop=0.50, out_extra=0.0
     base = Vector((surf.x, surf.y, p0.z)) + side * (0.045 + out_extra) * max(1.0, sc_)
     # never inside the hip width: the wrist stays at least 0.22 (x rig scale) out from the pelvis centre line
     pel = Wh(rig, "spine05"); lat = (base - pel).dot(side)
-    if lat < 0.22 * sc_: base += side * (0.22 * sc_ - lat)
+    if lat < 0.20 * sc_: base += side * (0.20 * sc_ - lat)
     d = (Ry @ Vector((sx * 0.06, -0.22, -1.0))).normalized(); n = -side
     hand_world(Hm, rig, s, f, base, d, n, sh + side * 0.25 * sc_ + front * -0.40 * sc_ + Vector((0, 0, -0.25 * sc_)))
     apply_pose(rig, s, "relaxed", f)
@@ -161,10 +161,10 @@ for f in list(range(1, END + 1, 20)) + [END]:
 # head: yaw + = toward his left (the officer), pitch - = up
 HEADK = [(1, 18, -12), (40, 22, -16), (100, 20, -10), (130, 8, 4), (145, 0, 6), (240, -4, 4), (335, 0, 12), (420, 0, 22),
          (463, 0, 18), (540, 0, 25), (620, 6, -4), (679, 2, 18), (700, 0, 34), (860, 4, 30), (900, 10, 4), (960, -12, -6),
-         (1020, 14, 6), (1073, 8, 12), (1150, 2, 22), (1196, 0, 14), (1240, -4, 12), (1281, 6, 10), (1315, -16, 14), (1400, -14, 14),
+         (1020, 14, 6), (1073, 8, 12), (1150, 2, 22), (1196, 0, 14), (1240, -4, 12), (1281, 6, 10), (1315, -30, 8), (1360, -26, 10), (1400, -32, 8),
          (1415, 4, 14), (1496, 12, 18), (1560, 20, 24), (1629, 24, 26), (1760, 22, 24), (1829, 14, 18), (1900, -22, 14),
          (1975, -18, 12), (2030, -4, 10), (END, 0, 10)]
-ROLLK = [(1, 0), (1281, 0), (1315, -8), (1400, -7), (1430, 0), (END, 0)]
+ROLLK = [(1, 0), (1281, 0), (1315, -14), (1400, -13), (1430, 0), (END, 0)]
 hy = pchip([(f, y) for f, y, p in HEADK]); hp = pchip([(f, p) for f, y, p in HEADK]); hr = pchip(ROLLK)
 for f in list(range(1, END + 1, 5)) + [END]:
     key_head(CH, f, hy(f) + 1.2 * math.sin(f / 37.0), hp(f) + 0.8 * math.sin(f / 23.0), hr(f))
@@ -192,13 +192,14 @@ for i, f in enumerate(HANG_F):
 # hands up: palms up, ~30 cm in front of the chest, at lower-chest height, looking at them
 def chest_point(f):
     fs(f); return (Wh(HR, "spine01") + Wh(HR, "spine02")) / 2
-for f in (705, 740, 780, 820, 850):
+for f in (705, 730, 755, 780, 805, 830, 850, 862):
     fs(f); sc_ = HR.scale.x; c = chest_point(f)
     for s, sx in (("L", 1), ("R", -1)):
-        w = c + Vector((sx * 0.18 * sc_, -0.30 * sc_, 0.05 * sc_ + 0.012 * math.sin(f / 11.0 + sx)))
-        d = Vector((-sx * 0.35, -1.0, 0.10)).normalized(); n = Vector((sx * 0.25, -0.15, 1.0))
+        k_ = (f - 705) / 30.0
+        w = c + Vector((sx * (0.18 + 0.025 * math.sin(k_ * 2.1)) * sc_, -(0.30 + (0.08 if f == 862 else 0.0)) * sc_, (0.05 + 0.03 * math.sin(k_ * 1.7 + sx)) * sc_))
+        d = Vector((-sx * 0.35, -1.0, 0.10)).normalized(); n = Vector((sx * (0.25 + 0.5 * math.sin(k_ * 1.9)), -0.15, 1.0))
         hand_world(HH, HR, s, f, w, d, n, w + Vector((sx * 0.30 * sc_, 0.35 * sc_, -0.30 * sc_)))
-        apply_pose(HR, s, "open_alarm" if f in (740, 820) else "relaxed", f)
+        apply_pose(HR, s, "open_alarm" if f in (730, 780, 830) else "relaxed", f)
 # bigger hands (acromegaly): wrist bone scale 1 -> 1.22 while he looks at them
 for s in "LR":
     pb = HR.pose.bones["wrist." + s]
@@ -271,7 +272,7 @@ for f, sm, br, jaw, sq in ((1, 0.0, -0.3, 0.0, 0.1), (60, -0.2, -0.7, 0.0, 0.2),
                            (END, 0.5, 0.3, 0.0, 0.1)):
     key_face(OR_, f, smile=sm, brow=br, jaw=jaw, squint=sq)
 for i, f in enumerate(range(1290, 1405, 8)):     # the officer speaks to him (jaw moves), he can't hear well
-    key_face(OR_, f, smile=-0.05, brow=0.35, jaw=(0.30 if i % 2 == 0 else 0.06) + 0.05 * math.sin(i), squint=0.0)
+    key_face(OR_, f, smile=-0.05, brow=0.35, jaw=(0.55 if i % 2 == 0 else 0.10) + 0.05 * math.sin(i), squint=0.0)
 key_face(OR_, 1412, smile=0.0, brow=0.2, jaw=0.0, squint=0.0)
 blinks(OR_, [80, 230, 410, 620, 800, 1010, 1180, 1390, 1580, 1740, 1920, 2050])
 saccades(CO, 1, END, every=44, amp=(1.0, 1.6), seed=11)
@@ -293,7 +294,7 @@ def vis(obj, f, show):
 for o in (BRAIN, TUM):
     vis(o, 1, False); vis(o, 176, True); vis(o, 470, False); vis(o, 1406, True); vis(o, 1502, False)
 for o in VERTS:
-    vis(o, 1, False); vis(o, 1080, True); vis(o, 1202, False)
+    vis(o, 1, False); vis(o, 1086, True); vis(o, 1180, False)
 # tumour: a small pituitary that swells into a lumpy glowing tumour; removed (shrinks, dims to pink) at 1428-1478
 for f, r_ in ((1, 0.35), (200, 0.35), (320, 1.0), (1430, 1.0), (1475, 0.30), (END, 0.30)):
     TUM.scale = (TUM.scale.x if f == 1 else TUM.scale.x,) * 3
@@ -409,25 +410,25 @@ KEYS = [
     (1000, lambda: P(0.10, -3.05, 0.90), lambda: P(0.25, 0.10, 1.40), 23),
     (1060, lambda: P(0.55, -2.95, 1.05), lambda: P(0.20, 0.10, 1.45), 23),
     # 1073-1196: front medium, x-ray of the curving spine as he stoops
-    (1110, lambda: P(0.18, -1.95, 1.45), lambda: P(0.0, 0.05, 1.32), 28),
-    (1175, lambda: P(0.08, -1.80, 1.55), lambda: P(0.0, 0.05, 1.40), 29),
+    (1110, lambda: P(1.10, -1.55, 1.45), lambda: P(0.0, 0.05, 1.32), 27),
+    (1175, lambda: P(1.00, -1.45, 1.55), lambda: P(0.0, 0.05, 1.40), 28),
     # 1196-1281: close on his face, the focus drifts off (his vision blurs)
     (1215, lambda: eyes(1215) + P(0.05, -0.75, -0.02), lambda: eyes(1215) + P(0, 0, -0.03), 42),
     (1270, lambda: eyes(1270) + P(-0.06, -0.68, -0.03), lambda: eyes(1270) + P(0, 0, -0.04), 44),
     # 1281-1415: round to his right ear, he cups it
     # 1281-1415: the officer talks to him; he turns his ear toward the voice, straining to hear (both faces in frame)
-    (1330, lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0.12, -1.95, -0.10), lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0, 0, -0.16), 27),
-    (1400, lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0.02, -1.80, -0.10), lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0, 0, -0.16), 28),
+    (1330, lambda: eyes(1330).lerp(oeyes(1330), 0.45) + P(0.05, -2.25, -0.10), lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0, 0, -0.16), 27),
+    (1400, lambda: eyes(1400).lerp(oeyes(1400), 0.45) + P(-0.05, -2.10, -0.10), lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0, 0, -0.16), 28),
     # 1415-1496: x-ray head: the tumour is taken out (shrinks away)
     (1440, lambda: side_head(1440, -0.55, -0.14, 0.02), lambda: headc(1440) + P(0, 0.0, -0.02), 44),
     (1490, lambda: side_head(1490, -0.60, -0.32, 0.03), lambda: headc(1490), 40),
     # 1496-1829: pull back to the wide: still growing, past the door top; officer beside him; dusk
     (1560, lambda: P(-0.40, -2.40, 1.80), lambda: P(-0.15, 0.15, 1.72), 25),
-    (1640, lambda: P(-0.20, -3.25, 1.45), lambda: P(-0.05, 0.15, 1.35), 23),
-    (1760, lambda: P(0.30, -3.45, 1.35), lambda: P(0.25, 0.15, 1.32), 23),
-    (1829, lambda: P(0.10, -3.20, 1.40), lambda: P(0.0, 0.20, 1.30), 24),
+    (1640, lambda: P(-0.90, -3.00, 1.30), lambda: P(0.05, 0.15, 1.35), 23),
+    (1740, lambda: P(1.10, -2.75, 1.10), lambda: P(0.40, 0.15, 1.45), 23),
+    (1829, lambda: P(0.35, -2.45, 1.55), lambda: P(0.15, 0.20, 1.60), 25),
     # 1829-2083: down to the photo of his short young self, then up beside the giant he became; settle
-    (1900, lambda: P(-0.47, -2.00, 1.78), lambda: P(-0.40, 0.40, 1.70), 30),
+    (1900, lambda: P(-0.47, -2.05, 1.80), lambda: P(-0.42, 0.40, 1.72), 29),
     (1960, lambda: P(-0.44, -1.88, 1.82), lambda: P(-0.40, 0.40, 1.72), 31),
     (2030, lambda: P(-0.42, -1.80, 1.84), lambda: P(-0.40, 0.40, 1.74), 32),
     (END,  lambda: P(-0.41, -1.76, 1.85), lambda: P(-0.40, 0.40, 1.75), 32.5),
