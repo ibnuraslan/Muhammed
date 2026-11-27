@@ -17,6 +17,13 @@ sc.render.image_settings.color_mode = 'RGB'
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1080, 1920, 100
 sc.render.fps, sc.render.fps_base = 60, 1.0
 sc.frame_start, sc.frame_end = 1, 3481
+# render budget (<= 120 s/frame on a 4-core CPU, measured): adaptive 14 samples + OIDN, short light paths, no caustics
+c = sc.cycles
+c.samples, c.use_adaptive_sampling, c.adaptive_threshold = 14, True, 0.1
+c.use_denoising, c.denoiser = True, 'OPENIMAGEDENOISE'
+c.max_bounces, c.diffuse_bounces, c.glossy_bounces, c.transmission_bounces, c.transparent_max_bounces = 3, 1, 1, 4, 8
+c.caustics_reflective = c.caustics_refractive = False
+sc.render.use_persistent_data = True
 # de-duplicate images loaded once per character (same file), then shrink: the hero's skin/tee/hair 2048, the rest 1024
 first = {}
 for im in list(bpy.data.images):
