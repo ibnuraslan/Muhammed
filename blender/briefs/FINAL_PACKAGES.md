@@ -116,3 +116,4 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 18 | NukedWell | claude/rebuild18-nuked-well: blender/NukedWell_v009/NukedWell_v009_60fps.blend (client-approved, Render check PASS) | 1–1541 |
 | 17 | ToddlerWell | claude/rebuild17-toddler-well: blender/ToddlerWell_v010/ToddlerWell_v010_60fps.blend (client-approved, Render check PASS) | 1–1728 |
 | 19 | SpeakWithoutSight | claude/rebuild19-speak-without-sight: blender/SpeakWithoutSight_v007/SpeakWithoutSight_v007_60fps.blend (client-approved, Render check PASS) | 1–1645 |
+| 20 | HeadsetBullet | claude/rebuild20-headset-bullet: blender/HeadsetBullet_v009/HeadsetBullet_v009_60fps.blend (client-approved, Render check PASS) | 1–1203 |
