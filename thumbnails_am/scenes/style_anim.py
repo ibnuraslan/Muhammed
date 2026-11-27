@@ -17,6 +17,8 @@ E = os.environ.get
 sc = bpy.context.scene
 N = int(E("FRAMES", "120")); FPS = 24
 sc.frame_start, sc.frame_end = 1, N; sc.render.fps = FPS
+if E("NATIVE"):
+    sc.render.resolution_x, sc.render.resolution_y = 1920, 1080
 X, Y, Z = Vector((1, 0, 0)), Vector((0, 1, 0)), Vector((0, 0, 1))
 UPPER = [b for b in crew.SNEAK if b[0].startswith(("spine", "neck", "head"))]
 
