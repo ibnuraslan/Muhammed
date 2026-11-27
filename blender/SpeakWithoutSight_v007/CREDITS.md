@@ -4,7 +4,7 @@ No attribution is required: every third-party asset in this film is CC0. They ar
 
 | Asset | Author | Licence | Source |
 |---|---|---|---|
-| The girl and her teacher: base meshes, rigs, skins, eyes, brows, lashes, teeth, `ponytail01` and `afro01` hair, the `female_elegantsuit01` blouse and skirt (recoloured), `shoes01`, `shoes02` | MakeHuman team (MakeHuman system assets) | CC0 | static.makehumancommunity.org, built with the MPFB2 Blender extension |
+| The girl and her teacher: base meshes, rigs, skins, eyes, brows, lashes, teeth, `ponytail01` and `afro01` hair, the `male_casualsuit03` long-sleeve shirt and long trousers (recoloured), `shoes01`, `shoes02` | MakeHuman team (MakeHuman system assets) | CC0 | static.makehumancommunity.org, built with the MPFB2 Blender extension |
 | Vintage Grandfather Clock 01 | Yann Kervran, James Ray Cock | CC0 | polyhaven.com/a/vintage_grandfather_clock_01 |
 | Vintage Oil Lamp | Monsta3D | CC0 | polyhaven.com/a/vintage_oil_lamp |
 | Side Table 01 | James Ray Cock | CC0 | polyhaven.com/a/side_table_01 |
