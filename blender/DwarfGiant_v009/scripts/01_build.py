@@ -234,14 +234,14 @@ nt.links.new(mixr.outputs["Result"], p.inputs["Base Color"])
 box("RM_RodSlide", (0.24, 0.10, 0.03), (0.0, WALL_Y - 0.05, 2.21), M_BRASS, bevel=0.005)
 # ---- DA KRAS FILMS plaque (enamel, brass frame) at x=-0.78, z=2.02
 PM, _ = img_mat("M_Plaque", os.path.join(PKG, "assets/tex/plaque_logo.png"), rough=0.25, coat=0.6)
-box("RM_PlaqueFrame", (0.74, 0.02, 0.32), (-0.82, WALL_Y - 0.010, 2.12), M_BRASS, bevel=0.004)
-bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.82, WALL_Y - 0.0215, 2.12), rotation=(math.radians(90), 0, 0))
-PL = bpy.context.active_object; PL.name = "RM_PlaqueLogo"; PL.scale = (0.70, 0.29, 1); bpy.ops.object.transform_apply(scale=True)
+box("RM_PlaqueFrame", (0.66, 0.02, 0.29), (-0.64, WALL_Y - 0.010, 2.40), M_BRASS, bevel=0.004)
+bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.64, WALL_Y - 0.0215, 2.40), rotation=(math.radians(90), 0, 0))
+PL = bpy.context.active_object; PL.name = "RM_PlaqueLogo"; PL.scale = (0.625, 0.26, 1); bpy.ops.object.transform_apply(scale=True)
 PL.data.materials.append(PM)
 # ---- framed photo (texture rendered from this film in stage B2) at x=-0.78, z=1.40, 0.36 x 0.48
-FRM = box("RM_PhotoFrame", (0.52, 0.025, 0.68), (-0.84, WALL_Y - 0.0125, 1.48), M_DESK, bevel=0.006)
+FRM = box("RM_PhotoFrame", (0.52, 0.025, 0.68), (-0.68, WALL_Y - 0.0125, 1.48), M_DESK, bevel=0.006)
 PHM = mat("M_Photo", (0.5, 0.42, 0.32), rough=0.3, coat=0.5)
-bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.84, WALL_Y - 0.0255, 1.48), rotation=(math.radians(90), 0, 0))
+bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.68, WALL_Y - 0.0255, 1.48), rotation=(math.radians(90), 0, 0))
 PH = bpy.context.active_object; PH.name = "RM_Photo"; PH.scale = (0.46, 0.62, 1); bpy.ops.object.transform_apply(scale=True)
 PH.data.materials.append(PHM)
 # ---- red-white-red flag hanging high on the back wall (x 0.45..1.15)
@@ -320,7 +320,7 @@ loc = Vector(((hmn.x + hmx.x) / 2, eye_c.y + 0.035 - bmn.y, hmx.z - 0.022 - bmx.
 BR.location = loc
 print("HEAD dims", hd, "brain scale", s_, "loc", loc)
 # pituitary gland / tumour: a small sphere at the base of the brain, 40 % back from the front, just under the cerebrum
-TUM_LOC = loc + Vector((0.0, bmn.y + 0.40 * (bmx.y - bmn.y), bmn.z + 0.30 * (bmx.z - bmn.z)))
+TUM_LOC = loc + Vector((0.0, bmn.y + 0.40 * (bmx.y - bmn.y), bmn.z - 0.002))      # hangs under the brain, where the pituitary sits
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, segments=32, ring_count=16, location=TUM_LOC)
 TUM = bpy.context.active_object; TUM.name = "Tumour"; TUM.scale = (0.006,) * 3; bpy.ops.object.shade_smooth()
 tx = bpy.data.textures.new("tumnoise", 'CLOUDS'); tx.noise_scale = 0.4

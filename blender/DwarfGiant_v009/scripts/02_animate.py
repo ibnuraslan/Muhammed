@@ -299,12 +299,12 @@ for o in VERTS:
 for f, r_ in ((1, 0.35), (200, 0.35), (320, 1.0), (1430, 1.0), (1475, 0.30), (END, 0.30)):
     TUM.scale = (TUM.scale.x if f == 1 else TUM.scale.x,) * 3
 TS0 = TUM.scale.x
-for f, r_ in ((1, 0.35), (200, 0.35), (320, 1.0), (1440, 1.0), (1478, 0.25), (END, 0.25)):
+for f, r_ in ((1, 0.35), (200, 0.35), (320, 1.0), (1400, 1.0), (1425, 1.7), (1445, 1.7), (1480, 0.25), (END, 0.25)):
     TUM.scale = (TS0 * r_,) * 3; TUM.keyframe_insert("scale", frame=f)
 pt = TUM.data.materials[0].node_tree.nodes["Principled BSDF"]
 for f, e_, col in ((1, 0.5, (1.0, 0.5, 0.6)), (200, 0.5, (1.0, 0.5, 0.6)), (300, 4.0, (1.0, 0.25, 0.02)), (330, 2.5, (1.0, 0.25, 0.02)),
                    (360, 4.5, (1.0, 0.25, 0.02)), (400, 2.5, (1.0, 0.25, 0.02)), (440, 4.0, (1.0, 0.25, 0.02)),
-                   (1430, 4.0, (1.0, 0.25, 0.02)), (1478, 0.4, (1.0, 0.5, 0.6)), (END, 0.4, (1.0, 0.5, 0.6))):
+                   (1430, 7.0, (1.0, 0.25, 0.02)), (1448, 7.0, (1.0, 0.25, 0.02)), (1480, 0.4, (1.0, 0.5, 0.6)), (END, 0.4, (1.0, 0.5, 0.6))):
     pt.inputs["Emission Strength"].default_value = e_; pt.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
     pt.inputs["Emission Color"].default_value = (*col, 1); pt.inputs["Emission Color"].keyframe_insert("default_value", frame=f)
     pt.inputs["Base Color"].default_value = (*col, 1); pt.inputs["Base Color"].keyframe_insert("default_value", frame=f)
@@ -389,7 +389,7 @@ KEYS = [
     # 1-145: wide on both men, the rod, door edge and the logo plaque; then down to his eye level
     (1,    lambda: P(0.50, -3.05, 1.50), lambda: P(0.36, 0.20, 1.15), 27),
     (60,   lambda: P(0.42, -2.65, 1.40), lambda: P(0.33, 0.20, 1.12), 28),
-    (120,  lambda: P(0.04, -1.75, 1.28), lambda: eyes(120).lerp(P(0.0, 0.2, 1.0), 0.35), 31),
+    (118,  lambda: P(0.30, -2.05, 1.30), lambda: P(0.30, 0.20, 1.10), 28),
     # 145-335: close on his head from his right-front; the x-ray reveals the brain and the swelling gland
     (175,  lambda: side_head(175, -0.42, -0.95, 0.02), lambda: headc(175), 36),
     (235,  lambda: side_head(235, -0.36, -0.62, 0.03), lambda: headc(235), 42),
@@ -410,8 +410,8 @@ KEYS = [
     (1000, lambda: P(0.10, -3.05, 0.90), lambda: P(0.25, 0.10, 1.40), 23),
     (1060, lambda: P(0.55, -2.95, 1.05), lambda: P(0.20, 0.10, 1.45), 23),
     # 1073-1196: front medium, x-ray of the curving spine as he stoops
-    (1110, lambda: P(1.10, -1.55, 1.45), lambda: P(0.0, 0.05, 1.32), 27),
-    (1175, lambda: P(1.00, -1.45, 1.55), lambda: P(0.0, 0.05, 1.40), 28),
+    (1110, lambda: P(0.85, -1.75, 1.50), lambda: P(0.0, 0.05, 1.32), 27),
+    (1175, lambda: P(0.80, -1.65, 1.58), lambda: P(0.0, 0.05, 1.38), 28),
     # 1196-1281: close on his face, the focus drifts off (his vision blurs)
     (1215, lambda: eyes(1215) + P(0.05, -0.75, -0.02), lambda: eyes(1215) + P(0, 0, -0.03), 42),
     (1270, lambda: eyes(1270) + P(-0.06, -0.68, -0.03), lambda: eyes(1270) + P(0, 0, -0.04), 44),
@@ -420,18 +420,18 @@ KEYS = [
     (1330, lambda: eyes(1330).lerp(oeyes(1330), 0.45) + P(0.05, -2.25, -0.10), lambda: eyes(1330).lerp(oeyes(1330), 0.5) + P(0, 0, -0.16), 27),
     (1400, lambda: eyes(1400).lerp(oeyes(1400), 0.45) + P(-0.05, -2.10, -0.10), lambda: eyes(1400).lerp(oeyes(1400), 0.5) + P(0, 0, -0.16), 28),
     # 1415-1496: x-ray head: the tumour is taken out (shrinks away)
-    (1440, lambda: side_head(1440, -0.55, -0.14, 0.02), lambda: headc(1440) + P(0, 0.0, -0.02), 44),
-    (1490, lambda: side_head(1490, -0.60, -0.32, 0.03), lambda: headc(1490), 40),
+    (1440, lambda: side_head(1440, -0.36, -0.46, 0.08), lambda: headc(1440) + P(0, 0.0, -0.03), 44),
+    (1490, lambda: side_head(1490, -0.40, -0.62, 0.08), lambda: headc(1490), 40),
     # 1496-1829: pull back to the wide: still growing, past the door top; officer beside him; dusk
     (1560, lambda: P(-0.40, -2.40, 1.80), lambda: P(-0.15, 0.15, 1.72), 25),
     (1640, lambda: P(-0.90, -3.00, 1.30), lambda: P(0.05, 0.15, 1.35), 23),
     (1740, lambda: P(1.10, -2.75, 1.10), lambda: P(0.40, 0.15, 1.45), 23),
     (1829, lambda: P(0.35, -2.45, 1.55), lambda: P(0.15, 0.20, 1.60), 25),
     # 1829-2083: down to the photo of his short young self, then up beside the giant he became; settle
-    (1900, lambda: P(-0.47, -2.05, 1.80), lambda: P(-0.42, 0.40, 1.72), 29),
-    (1960, lambda: P(-0.44, -1.88, 1.82), lambda: P(-0.40, 0.40, 1.72), 31),
-    (2030, lambda: P(-0.42, -1.80, 1.84), lambda: P(-0.40, 0.40, 1.74), 32),
-    (END,  lambda: P(-0.41, -1.76, 1.85), lambda: P(-0.40, 0.40, 1.75), 32.5),
+    (1900, lambda: P(-0.40, -2.40, 1.84), lambda: P(-0.40, 0.40, 1.8), 25),
+    (1960, lambda: P(-0.40, -2.32, 1.85), lambda: P(-0.40, 0.40, 1.81), 25),
+    (2030, lambda: P(-0.40, -2.25, 1.86), lambda: P(-0.40, 0.40, 1.82), 25),
+    (END,  lambda: P(-0.40, -2.22, 1.86), lambda: P(-0.40, 0.40, 1.82), 25),
 ]
 def look_q(p, a, up=Vector((0, 0, 1))):
     zc_ = (p - a).normalized(); yc = (up - zc_ * up.dot(zc_)); yc = yc.normalized() if yc.length > 1e-6 else Vector((0, 1, 0))
