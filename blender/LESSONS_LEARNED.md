@@ -88,6 +88,7 @@ camera, bright animated-but-close-to-real CGI (`STYLE_ANIMATED.md`), timed to th
 
 ## 3. Technical recipes
 - **Black-hole eyes (MPFB EnhancedEye):** the cornea uses refractive transmission. With caustics off, almost no light reaches the iris. Fix: set Principled transmission to 0 and mix in a Transparent BSDF driven by the old transmission value. The script is `blender/LegoInNose_v001/scripts/eye_fix.py` on branch `claude/connect03-lego-in-nose`, commit a44130b. Apply it to every MPFB character.
+- **Black hairline, brows or lashes:** if a packaging or texture-shrink step re-saves images with `save_render`, alpha is dropped and hair, brow and lash cards render as black bands. Re-save with `Image.save()` (keeps alpha). Found by Connect20 (HeadsetBullet), commit c3af015.
 - **MPFB vertex groups:** bodies also carry `Left/Right/Mid`, `HelperGeometry` and `JointCubes` groups. Pick the dominant group from **bone groups only**. Exclude helper and joint vertices from collision targets (`clip_scan.py` does this).
 - **Glove material:** a real MPFB hand with a latex material and posed fingers, never inflated "sausage" gloves.
 - **The cloud has no GPU.** Workbench fails (no libEGL). Preview with Cycles at 4 samples + OIDN (`pipeline/preview.py`).
@@ -99,6 +100,7 @@ camera, bright animated-but-close-to-real CGI (`STYLE_ANIMATED.md`), timed to th
 
   Then pack with sounds and the render path set, and **update the frame range in SETTINGS.md**. Several packages shipped with a stale range.
   For a new film where the VO already exists, **build to the VO timing from the start** so no retime is needed.
+- **Retime vs. Scene Time:** a VO retime warps keyframes and markers, but Geometry Nodes that read the *Scene Time* node (spray windows such as `Seconds > 21.3`, emitters, rain) keep the raw clock, so their events fire at the wrong moment. After every retime, run `pipeline/fix_scene_time.py -- anchors.json`. It keys those clocks to the original timeline and lists other raw-clock sources (frame drivers, particle start/end, Build/Wave modifiers) to check by hand. Better: drive one-off events from keyed values, not Scene Time thresholds.
 - **Packages:** `<Film>_vNNN/` holding:
   - `<Film>_vNNN_60fps.blend` (all textures packed, under 95 MB, plain git, factory-startup check)
   - `<Film>_vNNN_VO.mp3`
@@ -151,3 +153,75 @@ camera, bright animated-but-close-to-real CGI (`STYLE_ANIMATED.md`), timed to th
 - When the client has rendered a version, their list is the truth. Check it against the render and add your own findings to it.
 - Never ship a version that's still in review. If the client is rendering an older faulty version, tell them immediately and name the clean replacement.
 - Ask before any long local render or paid job. Never submit paid renders. Never ask for secrets in chat.
+
+## 8. Final rounds (Nov 15): what still failed, and the blueprint for the next batch
+The last 10 films needed 3–10 review rounds each. Almost every fault below passed the chats' own checks
+and was caught only by watching. New films start from `pipeline/CONNECT_BRIEF_v2.md`.
+
+### Faults found in the final rounds (add them to section 1)
+- **Props above or off the body:** a phone held flat above the head like a plate, a placard floating behind a head, a diving mask flying onto a face with no hands on it, a 3D-printer nozzle floating beside the print. A held prop sits **in the fingers, below the hair line**, with its arm visible.
+- **Hands from the frame edge:** a surgeon's hand touching a forehead with no body in frame; passengers' hands reaching in toward someone's back.
+- **Bodies through set pieces:** legs through a bed's foot rail, a stretcher end through the carrier's torso, an arm through a seat back while hauling someone.
+- **Lens blockers:**
+  - windscreen frames and pillars, glass panes, sun visors
+  - shelves at the start of a move
+  - reed blades, a rock slab at a cave mouth, a gear bag
+  - the tarp at the edge of a close-up
+  - a mirror frame
+  - a shoulder filling the bottom half of the frame
+  - a man's face pushed into the lens
+
+  Check the first and last frame of every shot, and every camera move through a set.
+- **Faces:**
+  - black-hole eyes on new rigs (add a small camera catchlight and check the eye material)
+  - a bleached white face from a fill light at 25 W
+  - teeth bared in a "smile" that reads as a grimace
+  - a fringe covering one eye in every close-up
+  - a background head merging with the hero's head
+- **Mannequin arms on rigs whose rest pose is bent:** the MPFB rest elbow is about 46°. With an IK limit of min 0°, the arm can never straighten, so hand passes pushed the arms out sideways into an A-pose. Open the elbow limit per character, and check every walk, run and standing idle.
+- **Skin-coloured clothes:** a flat-tinted tight suit read as a naked figure in the background. Check every crowd and background person in colour.
+- **Render faults:**
+  - blown-out white ballast with black holes (a fill light left on)
+  - a black notch on shorts (a clothes delete-group that removed thigh skin)
+  - a sleeve stretched into a skin sheet when the wrist aimed at the wrong place
+  - a bright sky sheet on flood water at grazing angles (specular above 0.05)
+- **Empty, black or blurred frames:** fades to black, murky water, empty sky between shots, empty windscreen views (about 7 s in one film), an empty pink plane at the end of a cross-section push, a ghosted double-exposure frame at a cut. Every frame shows a readable subject. Use hard cuts, never blends.
+- **Static holds:** the client now rejects any hold over about 2 s with no movement: a frozen close-up, a static wide, a frozen boy holding a box. Give every shot an action (head turn, breath, push-in), or cut.
+
+### Process lessons
+- **Never pass a shot from its middle frame alone** (B10, Nov 15). A hand through a glass and a rod through a hand were visible only at the start and end of the shots. Every review, P1 included, looks at the first, middle and last frame of every shot, zoomed, plus `body_prop_cross` on every held prop.
+- **Build to the VO from the start.** Put the beat frames at `1 + round(seconds × 60)` of the VO words, with `frame_end` just past the last word. Films built to the VO (28, 23) needed no retime. Retimed films played parts at 0.5–2.9× speed.
+  - **Never time-stretch character animation.** Extend it at 1× instead: a longer swim path or walk, or a second angle.
+  - Only camera-only shots (diagrams, cross-sections) may stretch.
+- **Particles, Wave and Build modifiers and Scene Time do not follow a retime.** Remap particle `frame_start` and `frame_end` through the anchors (34: sparks, filings) and run `fix_scene_time.py`.
+- **Preview economy:**
+  - One full preview when the chat believes the film is clean.
+  - After that, re-render only the changed ranges from the exact package and splice them in. Most chats got this right and cut a round from about 80 min to about 15 min.
+  - The director diffs the new preview against the last one (`compare -metric RMSE` per frame) to confirm only those ranges changed.
+- **No micro-tweak pushes.** One chat pushed hourly one-line script changes with no preview, and nothing could be reviewed. Batch every fix into one rebuild and push it with its preview.
+- **Simplest re-stage wins.**
+  - A shot that fails twice gets cut or replaced: drop the phone, cut the placard close-up, swap the windscreen shots for side shots, use a side medium instead of a foot-of-bed wide.
+  - The VO carries the meaning; the picture only has to be clean.
+- **Disk:**
+  - Fetch chat branches only when reviewing, and prune them right after approval.
+  - For one file, use a blobless bare clone (`git clone --filter=blob:none --bare`) plus `git show <commit>:<path>`, never a full fetch of a 10 GB branch.
+  - Never `find -name "*.blend*" -delete`: it also deleted the `*.blend.anchors.json` sync records.
+- **Keep the sync record of every delivered film** (`blender/briefs/sync/NN.anchors.json`), so previews and retimes can be rebuilt later.
+
+## Lesson from the MonkeyHeadTransplant rebuild (Nov 2026): stage contact work so it can be reached before building
+- Before animating any hand work (stitching, tool grips, carrying a body part), check that it is REACHABLE.
+  The hand, wrist and forearm must reach the work point with at least 1 cm clearance from every body, including the patient's shoulders and the carrier's own torso.
+- Work points directly above a body (for example a neck seam on a seated figure) are a trap: the tool hand ends up inside the shoulders.
+  Stage it from the start so the work faces the surgeon with open space around it: patient reclined or lying, work at chest height, surgeon facing it.
+- Ring-handled instruments (needle holders, scissors, hemostats) need a hand-keyed ring grip.
+  If the pose library doesn't have one, show the instrument held at the far end of the shaft, clear of the body, or use a different tool.
+- Run the hand-vs-body and finger-vs-head audits on the BLOCKING pass, before lighting and polish.
+  If they fail, change the staging, not the IK.
+- Ray-test tool tips and fingers against the body mesh AND the hair cards.
+
+## Lessons from the approved batch 1 rebuilds (01–10, Nov 2026)
+- Hold key props toward the camera with the important side visible (a fuse, a brick, a key bow). Never sole-out or edge-on.
+- Small props (needles, keys, bullets) get their own macro, filling about 1/3 of the frame. Never rely on them reading in a mid-shot.
+- Faces must be readable: smiles come from sculpted mouth-corner shape keys (as in BellyFat v018). Blinks use both eyes.
+- Released objects land exactly on the surface (no drop), and arms never fold behind the back.
+- Camera passes close to people and set pieces must not block the lens. Check the frustum for near objects on every frame.

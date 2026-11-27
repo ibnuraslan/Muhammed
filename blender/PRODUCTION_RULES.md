@@ -26,3 +26,35 @@
 - The main chat is the director. Connect1…Connect15 are production chats, one film each, on branch `claude/connectNN-<slug>`, in folder `blender/<slug>_v001/`.
 - Checkpoints where a Connect chat stops and waits for director approval: **A** beat sheet + camera plan, **B** blocking stills (1 per s), **C** polish stills (0.2 s sheets) + audit, **D** farm package.
 - See `pipeline/CONNECT_BRIEF.md` for the full brief every Connect chat follows.
+
+## Detailed shapes, not blocks (client, 21:00 UTC)
+> **Look update (22:45 UTC):** the films must read as **bright 3D animation, not photoreal film**. Read `blender/STYLE_ANIMATED.md`; it overrides the photo-realism wording below. Keep the detailed shapes and drop the photographic look.
+- **Nothing may read as primitive geometry:** no rounded blocks, capsules, tubes, flat slabs or smooth blobs standing in for real things. That covers anatomy, organs, tissue, rock, soil, buildings, vehicles, props, clothes and water.
+- **Use real assets first.** Search CC-BY or CC0 models (`pipeline/find_models.py`: skull, head sagittal section, nasal cavity, ear anatomy, liver, intestines, lungs, ribcage, muscles, cochlea, buildings, vehicles…) and Poly Haven scans. Build procedurally only when no real asset exists, and then sculpt or displace it until the shape is convincing (surfaced in the clean animated look).
+- **Cutaways and cross-sections** show correctly shaped anatomy in clean, colour-coded, glossy layers (see STYLE_ANIMATED.md), never wet or gory.
+- **Test:** pause any still. If a viewer could mistake it for a clay model, a toy or a diagram, it's a reject.
+
+## Logo placement (mandatory in every film, client reminder Nov 2026)
+- Every film carries the DA KRAS FILMS logo. Use the files in `blender/assets/brand/`: `DaKrasFilms_logo_dark.png` for light surfaces, `DaKrasFilms_logo_white.png` for dark ones.
+- Put it on a natural surface IN the scene: a T-shirt print, a box, a shop sign, a vehicle door, a banner or a mug. Never put it as a screen overlay.
+- It must read in full, sharp and unobstructed, for at least 1.5 s, at least once. Two or three placements is better when the story allows.
+- No other brands, logos or readable text anywhere.
+- Note the logo frames in README.md/SETTINGS.md, and check them in the preview.
+
+## Fast to render, zero errors (mandatory for every package, client direction Nov 2026)
+Render speed. Keep the look and cut the waste:
+- Cycles adaptive sampling on, with noise threshold 0.03–0.05 and max samples about 64.
+- Denoiser: OpenImageDenoise, with albedo and normal passes.
+- Light paths: max bounces 6, diffuse 3, glossy 3, transmission 6, transparent 8–16 (raise only where a shot needs it), and caustics off.
+- Turn on Persistent Data.
+- Simplify: texture limit 2048 px, child particles capped, subdivision levels kept at render level 1–2.
+- No volumetrics, motion-blur-heavy effects or huge hair counts unless a shot truly needs them. Fake glows with emission instead of volumes.
+- Delete hidden and unused objects, materials and images before packing (`Purge`). The .blend should be under about 80 MB.
+- Target under 60 s per 1080x1920 frame on the farm, and note the measured time per test frame in SETTINGS.md.
+
+Zero-error checks. Run all of these on the EXACT file you deliver, before pushing:
+1. It opens with `blender --factory-startup -b file.blend`, with no errors or warnings in the console and no missing files (`bpy.data.libraries`, missing images, missing fonts).
+2. All external files are packed. Scripts must not need auto-run, and there are no driver or Python errors.
+3. Scene camera set, resolution 1080x1920 at 100%, 60 fps, correct frame range, PNG output path set, and the VO strip present.
+4. Render 3 test frames (start, middle, end) at full resolution from the packed file. None may be black, empty or pink (missing texture).
+5. Record the results in README.md as a "Render check: PASS" block. No package goes to the client without it.

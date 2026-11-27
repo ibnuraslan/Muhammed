@@ -95,3 +95,10 @@ Fix it this way:
 5. **Grips.** Fingers wrap the object with visible contact, and the thumb opposes the fingers.
 
 Report the hand-audit count (it must be 0, or explained) with the sheet.
+
+## Colour (client direction, Nov 2026): deep and rich, never plain
+- Saturated, punchy colours with strong contrast and clean, bright exposure. No milky or hazy look, and no grey or neutral walls.
+- Deep saturated backgrounds (teal, purple, saturated blue, warm terracotta) behind warm, saturated skin and wardrobe.
+- Pure primary-coloured key props (a LEGO red brick, a yellow that is truly yellow).
+- View transform: AgX or Filmic with the "Punchy" or high-contrast look. Push material saturation about 20–30% above "realistic".
+- Reference: the client's Zack-D quicksand film (vivid cyan sky, saturated terracotta sand, purple night, a saturated teal room behind a magenta top).
