@@ -275,6 +275,7 @@ walk(N2, [N2P, Vector((-40.6, 6.7, PAVE_Z)), Vector((-43.8, 7.0, PAVE_Z))], 596,
 stand(N1, 706, END, Vector((-45.8, 6.3, PAVE_Z)), 120, seed=13)
 stand(N2, 710, END, Vector((-43.8, 7.0, PAVE_Z)), 150, seed=14)
 
+for nm_, ro_ in (("Q6", 0.08), ("Q2", 0.04), ("Q4", 0.04), ("C2", 0.04)): P[nm_].relax_out = ro_   # v009: hands off the hips (clip_scan / limb_check)
 # ---- quay crowd: watch, wave as the car passes (B4-B5), recoil from the blast (B6)
 QS = {"Q1": ((-36.4, 5.55), 8, "R"), "Q2": ((-34.5, 6.25), -10, None), "Q3": ((-30.0, 5.45), 12, "L"), "Q4": ((-28.3, 6.35), -6, None),
       "Q5": ((-46.6, 5.0), 15, "L"), "Q6": ((-38.2, 6.65), 5, None)}   # v009: Q6 no wave (hand through own head, clip_scan)
@@ -468,6 +469,7 @@ GPH = lambda p_: Vector((p_.x, p_.y, p_.z + 1.62))
 KEYS = [  # frame, camera position, look-at point, lens
     (1, Vector((3.0, 8.15, 1.62)), GPH(G_KERB) + Vector((0, 0, -0.05)), 35),
     (40, Vector((3.1, 8.35, 1.7)), GPH(G_KERB) + Vector((-0.45, -0.4, 0.0)), 33),
+    (45, Vector((3.0, 8.2, 1.78)), Vector((-1.0, 12.7, 1.8)), 31),     # v009: a whip through the street, not a target sweeping past the lens
     (50, Vector((2.9, 8.1, 1.85)), CL(50, REAR), 30),
     (68, Vector((2.5, 7.9, 2.0)), CL(68, REAR), 28),
     (95, CL(95, (3.4, -3.0, 2.4)), CL(95, REAR), 30),
@@ -490,7 +492,8 @@ KEYS = [  # frame, camera position, look-at point, lens
     (760, Vector((-37.2, 2.25, 1.35)), P_LAND + Vector((0, 0, 0.05)), 42),
     (777, Vector((-39.5, 1.2, 4.5)), Vector((-43.5, 1.0, 1.3)), 26),
     (792, Vector((-45.0, -2.4, 3.0)), SITE + Vector((2.0, 0.8, 0.9)), 26),
-    (860, Vector((-50.0, -5.6, 3.6)), SITE + Vector((3.5, 1.5, 1.6)), 26),
+    (860, Vector((-50.0, -5.6, 5.0)), SITE + Vector((3.5, 1.5, 1.6)), 26),
+    (885, Vector((-41.0, -2.0, 7.8)), CL(885, REAR), 26),      # v009: over the lamp heads, not past a lamp
     (910, CL(910, (-11.0, -1.0, 5.5)), CL(910, REAR), 26),
     (960, CL(960, (-6.5, -2.0, 6.5)), CL(960, REAR), 28),
     (1000, Vector((-8.0, -2.0, 12.0)), CL(1000, (0, 0, 1.0)), 28),
@@ -499,12 +502,15 @@ KEYS = [  # frame, camera position, look-at point, lens
     (1140, Vector((-1.6, 7.3, 4.6)), Vector((6.6, 12.2, 3.2)), 28),
     (1180, Vector((3.4, 6.6, 2.4)), GPH(G_KERB) + Vector((0, 0, 0.0)), 35),
     (1236, Vector((3.2, 8.25, 1.66)), GPH(G_KERB) + Vector((-0.06, -0.02, 0.0)), 45),
-    (1262, Vector((5.1, 8.3, 1.5)), GPH(G_KERB) + Vector((-0.35, 0.0, 0.0)), 32),
-    (1290, Vector((5.55, 10.85, 1.55)), Vector((2.7, 9.5, 1.9)), 30),
-    (1350, Vector((5.45, 10.8, 2.0)), Vector((2.4, 9.6, 1.7)), 32),
+    (1244, Vector((4.9, 8.1, 1.8)), GPH(G_KERB) + Vector((-0.2, 0.0, 0.0)), 36),
+    (1254, Vector((5.9, 9.7, 1.8)), GPH(G_KERB) + Vector((-0.3, 0.0, 0.0)), 32),
+    (1272, Vector((4.7, 13.4, 1.85)), Vector((3.3, 9.8, 1.75)), 28),     # v009: side-on from the north: profile, arm and the gap to the car read
+    (1290, Vector((4.6, 13.3, 1.85)), Vector((3.2, 9.7, 1.8)), 28),
+    (1320, Vector((4.5, 13.1, 1.9)), Vector((3.1, 9.7, 1.8)), 30),
+    (1350, Vector((4.9, 12.6, 2.6)), Vector((2.6, 9.6, 1.6)), 30),
     (1378, Vector((5.0, 10.3, 3.2)), Vector((2.0, 9.8, 1.2)), 30),
     (1405, Vector((4.6, 9.2, 6.0)), ar_stall + Vector((0, 0.3, -1.2)), 30),
-    (1432, Vector((3.8, 8.0, 14.0)), Vector((1.6, 10.5, 0.0)), 30),
+    (1432, Vector((1.6, 10.5 - 0.12 * 14.0, 14.0)), Vector((1.6, 10.5, 0.0)), 30),     # v009: meets the rise formula exactly (no 2.4 m jump at f1433)
 ]
 def alt(f):
     """the rise to the map: exponential altitude from 14 m (f1432) to 1100 m (f1560) and 2500 m (END), so the blurry low-altitude

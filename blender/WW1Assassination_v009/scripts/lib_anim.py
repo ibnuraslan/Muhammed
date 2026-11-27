@@ -93,7 +93,7 @@ class Person:
     # ---- ready-made arm poses (body frame, rest axes). sx = +1 for L, -1 for R.
     def arm_relaxed(self, s, f, swing=0.0, out=0.0):
         sx = 1 if s == "L" else -1; S = self.sh[s]
-        W = Vector((S.x + sx * (0.07 + out), S.y - 0.06 - swing, S.z - 0.50))
+        W = Vector((S.x + sx * (0.07 + out + getattr(self, 'relax_out', 0.0)), S.y - 0.06 - swing, S.z - 0.50))   # relax_out: per-character (v009)
         self.key_hand_local(s, f, W, (sx * 0.15, -0.25, -1.0), (-sx, -0.1, 0), elbow_local=(S.x + sx * 0.35, S.y + 0.45, S.z - 0.30))
     def arm_lap(self, s, f, lean=0.0):
         """seated: forearm along the thigh, hand resting just above the knee-side of the thigh"""
