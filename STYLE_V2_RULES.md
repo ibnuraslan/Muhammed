@@ -15,7 +15,8 @@ Reference: style_study_v2/ on branch claude/style-study-v2 (one creator's 3D tru
 - HARD RULE: 0 clipping. No bags, limbs or props passing through doors, bodies or other objects. Check every frame, not just samples.
 
 ## Render (budget mode until the channel is monetised)
-- Cycles, 960x540, 16 spp, adaptive sampling, OIDN, about 4 bounces, no volumes (fake fog in compositor).
-- Upscale to 1080p (lanczos plus a light unsharp); overlays in post.
-- Measured: about 9 s/frame on a 4-core cloud CPU. Upgrade to a better render after monetisation.
+- DECIDED: render at NATIVE 1920x1080. Cycles, 16 spp, adaptive sampling, OIDN, about 4 bounces, no volumes (fake fog in compositor).
+- Upscale the final to 2K, 2560x1440 (lanczos plus a light unsharp); overlays in post.
+- Measured: 38 s/frame at 1080p on a 4-core cloud CPU. On the $39 plan that's about 1.9 s per frame effective, so a 45-min film takes about 34 h (up to about 3 days if their vCores are slower).
+- Upgrade to a better render after monetisation.
 - Farm option: $39/month plan (4 workers, 80 vCores, up to 1080p).
