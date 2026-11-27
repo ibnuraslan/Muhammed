@@ -4,4 +4,4 @@ spectators keyed
 grip gap mm 150 grip local (0.0, -1.849, 0.162)
 beluga keyed
 fx points 557
-camera crosses the surface at [1532]
+camera crosses the surface at [1531]
