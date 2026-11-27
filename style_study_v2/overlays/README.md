@@ -4,4 +4,4 @@
 - `sheet_<video>_<n>.jpg`: per-video contact sheets. Every distinct overlay instance is labelled with its timecode and category (Amy 91, Caylee 85, Noida 74).
 - `<category>/`: full-resolution frames (854x480, the source resolution). Files are named `<video>_<MM-SS>_<instance>.jpg`.
 - `index.json`: every instance with its time, category and seconds on screen.
-- `scripts/`: the detection pipeline. Frames are taken at 2 fps, scored for sharp white and red pixels, OCR'd with Tesseract, then grouped into instances. Categories were checked by hand (`categories.py`). In/out timing was measured at 30 fps.
+- `scripts/`: the detection pipeline. Frames are taken at 2 fps, scored for sharp white and red pixels, then grouped into instances. A Tesseract OCR pass (`ovocr.py`) timed out and was not used. Categories were checked by hand (`categories.py`). In/out timing was measured at 30 fps.
