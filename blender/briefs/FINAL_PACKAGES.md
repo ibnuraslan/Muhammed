@@ -122,3 +122,9 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 22 | BelugaRescue | claude/rebuild22-beluga-rescue: blender/BelugaRescue_v010/BelugaRescue_v010_60fps.blend (client-approved, Render check PASS) | 1–1736 |
 | 24 | RooseveltSpeech | claude/rebuild24-roosevelt-speech: blender/RooseveltSpeech_v012/RooseveltSpeech_v012_60fps.blend (client-approved, Render check PASS) | 1–1307 |
 | 26 | DwarfGiant | claude/rebuild26-dwarf-giant: blender/DwarfGiant_v009/DwarfGiant_v009_60fps.blend (client-approved, Render check PASS) | 1–2083 |
+| 11 | WW1Assassination | claude/rebuild11-ww1-assassination: blender/WW1Assassination_v009/WW1Assassination_v009_60fps.blend (client-approved, Render check PASS) | 1–1826 |
+| 12 | NoPilotPlane | claude/rebuild12-no-pilot-plane: blender/NoPilotPlane_v012/NoPilotPlane_v012_60fps.blend (client-approved, Render check PASS; CC-BY seat credits) | 1–3481 |
+| 23 | CaveRescue | claude/rebuild23-cave-rescue: blender/CaveRescue_v012/CaveRescue_v012_60fps.blend (client-approved, Render check PASS; CC-BY ambulance credit) | 1–2436 |
+| 25 | Tsunami2004 | claude/rebuild25-tsunami-2004: blender/Tsunami2004_v013/Tsunami2004_v013_60fps.blend (client-approved, Render check PASS) | 1–2066 |
+
+Batch 1 status: 01–26 READY. 27–35 not started (next session).
