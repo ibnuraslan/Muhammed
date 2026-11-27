@@ -1401,7 +1401,7 @@
    ],
    [
     "PROPHEAD",
-    "Hormone14 inside Hero's head/face (47 pts)"
+    "Hormone14 inside Hero's head/face (46 pts)"
    ],
    [
     "PROPHEAD",
@@ -1735,7 +1735,7 @@
    ],
    [
     "PROPHEAD",
-    "Hormone15 inside Hero's head/face (48 pts)"
+    "Hormone15 inside Hero's head/face (46 pts)"
    ],
    [
     "PROPHEAD",
@@ -1957,7 +1957,7 @@
   "439": [
    [
     "PROPHEAD",
-    "Hormone16 inside Hero's head/face (47 pts)"
+    "Hormone16 inside Hero's head/face (46 pts)"
    ],
    [
     "PROPHEAD",
@@ -2067,7 +2067,7 @@
   "453": [
    [
     "PROPHEAD",
-    "Hormone17 inside Hero's head/face (45 pts)"
+    "Hormone17 inside Hero's head/face (44 pts)"
    ],
    [
     "PROPHEAD",
@@ -3216,69 +3216,15 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Hero arm.R inside own torso (2 pts)"
    ]
   ],
   "695": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Hero arm.R inside own torso (2 pts)"
    ]
   ],
-  "697": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "857": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Hero arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "859": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Hero arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "861": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Hero arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "863": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Hero arm.R inside own torso (2 pts)"
-   ]
-  ],
-  "865": [
+  "867": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
@@ -3457,10 +3403,6 @@
   "945": [
    [
     "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.L inside own torso (2 pts)"
    ],
    [
@@ -3471,10 +3413,6 @@
   "947": [
    [
     "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.L inside own torso (2 pts)"
    ],
    [
@@ -3483,10 +3421,6 @@
    ]
   ],
   "949": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
    [
     "ARMBODY",
     "Officer arm.L inside own torso (2 pts)"
@@ -4283,10 +4217,6 @@
   "1063": [
    [
     "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.L inside own torso (2 pts)"
    ],
    [
@@ -4295,10 +4225,6 @@
    ]
   ],
   "1065": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ],
    [
     "ARMBODY",
     "Officer arm.L inside own torso (2 pts)"
@@ -4708,19 +4634,7 @@
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1201": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "1203": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "1205": [
+  "1277": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
@@ -4802,6 +4716,10 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1305": [
@@ -4861,6 +4779,10 @@
    ],
    [
     "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -4868,6 +4790,10 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -5497,6 +5423,10 @@
    ],
    [
     "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -5504,6 +5434,10 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -5554,270 +5488,526 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1421": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1423": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1425": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1427": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1429": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1431": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1433": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1435": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1437": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1439": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1441": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1443": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1445": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1447": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1449": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1451": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1453": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1455": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1457": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1459": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1461": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1463": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1465": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1467": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1469": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1471": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1473": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1475": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1477": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1479": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1481": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1483": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1485": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1487": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1489": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1491": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1493": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1495": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1497": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1499": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1501": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1503": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1505": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1507": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1509": [
@@ -6004,18 +6194,30 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1571": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1573": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1575": [
@@ -6205,6 +6407,10 @@
    ],
    [
     "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -6212,6 +6418,10 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -6225,6 +6435,10 @@
    ],
    [
     "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -6232,6 +6446,10 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -7673,10 +7891,6 @@
    ],
    [
     "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -7684,10 +7898,6 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -7701,10 +7911,6 @@
    ],
    [
     "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -7712,10 +7918,6 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -7729,10 +7931,6 @@
    ],
    [
     "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -7743,10 +7941,6 @@
    ],
    [
     "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
     "Officer arm.R inside own torso (2 pts)"
    ]
   ],
@@ -7754,10 +7948,6 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
-   ],
-   [
-    "ARMBODY",
-    "Officer arm.L inside own torso (2 pts)"
    ],
    [
     "ARMBODY",
@@ -7828,12 +8018,20 @@
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1851": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Officer arm.R inside own torso (2 pts)"
    ]
   ],
   "1853": [
@@ -7866,337 +8064,61 @@
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1973": [
+  "1863": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1975": [
+  "1865": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1977": [
+  "1867": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1979": [
+  "1869": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1981": [
+  "1871": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1983": [
+  "1873": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1985": [
+  "1875": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1987": [
+  "1877": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1989": [
+  "1879": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
    ]
   ],
-  "1991": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "1993": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "1995": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "1997": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "1999": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2001": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2003": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2005": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2007": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2009": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2011": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2013": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2015": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2017": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2019": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2021": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2023": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2025": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2027": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2029": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2031": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2033": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2035": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2037": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2039": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2041": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2043": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2045": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2047": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2049": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2051": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2053": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2055": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2057": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2059": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2061": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2063": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2065": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2067": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2069": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2071": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2073": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2075": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2077": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2079": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2081": [
-   [
-    "ARMBODY",
-    "Hero arm.L inside own torso (2 pts)"
-   ]
-  ],
-  "2083": [
+  "1881": [
    [
     "ARMBODY",
     "Hero arm.L inside own torso (2 pts)"
@@ -8204,7 +8126,7 @@
   ]
  },
  "counts": {
-  "ARMBODY": 1228,
+  "ARMBODY": 1235,
   "PROPHEAD": 486
  }
 }
