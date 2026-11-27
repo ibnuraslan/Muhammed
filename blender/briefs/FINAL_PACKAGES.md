@@ -128,3 +128,9 @@ Same format as above: one packed `.blend` per folder on `claude/beautiful-ptolem
 | 25 | Tsunami2004 | claude/rebuild25-tsunami-2004: blender/Tsunami2004_v013/Tsunami2004_v013_60fps.blend (client-approved, Render check PASS) | 1–2066 |
 
 Batch 1 status: 01–26 READY. 27–35 not started (next session).
+
+## Credit overlays (add when captioning the client's renders; client-approved style)
+Small white text (Inter Medium 24 px, 85 % opacity, soft shadow), centred at y = h-60, for the whole video, under the captions:
+- 12 NoPilotPlane: Seat 3D models: "Seat" by maximmus, "Plane Seat" by icenvain (CC BY 4.0)
+- 23 CaveRescue: Ambulance 3D model: "Shvan 92 Ambulance" by Daniel Zhabotinsky (CC BY 4.0)
+Check each film's CREDITS.md for any other CC-BY asset before captioning.
