@@ -16,6 +16,9 @@
 "HERO cockpit pelvis <Vector (-0.5600, 4.0200, 0.5016)> cushion 0.39112329483032227",
 "mic grip {'finger2-3.L': 0.625, 'finger3-3.L': 0.7, 'finger4-3.L': None, 'finger5-3.L': None, 'finger1-3.L': 0.0114}",
 "owner MIC 1063 HERO wrist.L jump_mm 0.0",
+"mic to mouth cm 1110 9.2",
+"mic to mouth cm 1160 9.2",
+"mic to mouth cm 1215 9.5",
 "owner MIC 1325 None None jump_mm 0.0",
 "haul contacts <Vector (0.4920, 4.0947, 1.0654)> <Vector (0.4017, 4.0840, 0.9113)>",
 "grip HERO L YOKE_gripLL 1832 {'finger2-3.L': 0.7, 'finger3-3.L': 0.675, 'finger4-3.L': 0.55, 'finger5-3.L': 0.4, 'finger1-3.L': 0.0233}",
@@ -23,5 +26,11 @@
 "grip HERO R THR_knob0 2800 {'finger2-3.R': 0.225, 'finger3-3.R': 0.175, 'finger4-3.R': 0.125, 'finger5-3.R': 0.0, 'finger1-3.R': 0.0093}",
 "grip HERO R YOKE_gripLR 2950 {'finger2-3.R': 0.675, 'finger3-3.R': 0.7, 'finger4-3.R': 0.675, 'finger5-3.R': 0.575, 'finger1-3.R': 0.0157}",
 "altitude start 1500 at 2225 613 at 2479 553 end 322 dist end 11463",
-"field y 14163.26171875 town offset 5163.26171875"
+"field y 14163.26171875 town offset 5163.26171875",
+"clearance set objects static 250 moving 21 ['ALT_needleMesh', 'SPD_needleMesh', 'VSI_needleMesh', 'ALT2_needleMesh', 'THR_arm0', 'THR_knob0', 'THR_arm1', 'THR_knob1', 'MIC', 'MIC_grill', 'MIC_ptt', 'YOKE_colL', 'YOKE_armL', 'YOKE_gripLR', 'YOKE_gripLL', 'YOKE_hubL', 'YOKE_colR', 'YOKE_armR', 'YOKE_gripRR', 'YOKE_gripRL', 'YOKE_hubR']",
+"clearance round 0 frames pushed 83 max push 0.089",
+"clearance round 1 frames pushed 6 max push 0.006",
+"clearance round 2 frames pushed 0 max push 0.0",
+"clearance residual frames 0 max offset 0.102",
+"face blocked frames []"
 ]

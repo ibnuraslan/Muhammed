@@ -771,7 +771,7 @@ K(322, Vector((1.34, -1.34, 1.27)), Vector((1.80, -1.62, 1.22)), 30)
 eh = face_of(HERO, 352); K(352, Vector((1.28, -1.28, 1.32)), eh, 28)
 around(HERO, 395, (0.40, 0.55, 0.10), 28)
 # 6.7-9.2 s: stands up into the aisle
-around(HERO, 440, (-0.75, 0.55, 0.15), 24)
+around(HERO, 440, (-0.74, 0.36, 0.40), 24, (0, 0, -0.06))      # in the aisle gap beside his row: clear of the row-5 seat back
 around(HERO, 500, (-0.30, 1.20, 0.05), 26, (0, 0, -0.15))
 # 9.2-10.9 s: walks to the cockpit, the camera backs up the aisle ahead of him, swaying side to side (chest logo reads)
 around(HERO, 540, (-0.18, 1.30, -0.02), 28, (0, 0, -0.22))
@@ -779,8 +779,8 @@ around(HERO, 580, (0.12, 1.25, 0.02), 28, (0, 0, -0.22))
 around(HERO, 620, (-0.10, 1.30, -0.02), 28, (0, 0, -0.22))
 around(HERO, 650, (0.05, 1.30, -0.05), 26, (-0.25, 0.4, -0.35))
 # 10.9-13.2 s: the captain collapsed in the doorway: low in the cockpit looking back at both faces
-ec = face_of(CAPT, 690); eh = face_of(HERO, 690); K(690, Vector((0.38, 3.70, 0.95)), ec.lerp(eh, 0.55), 20)
-ec = face_of(CAPT, 745); eh = face_of(HERO, 745); K(745, Vector((0.42, 3.85, 1.05)), ec.lerp(eh, 0.60), 20)
+ec = face_of(CAPT, 690); eh = face_of(HERO, 690); K(690, Vector((0.10, 3.45, 1.00)), ec.lerp(eh, 0.55), 20)   # corridor between the pilot seats, clear of both seat backs
+ec = face_of(CAPT, 745); eh = face_of(HERO, 745); K(745, Vector((0.12, 3.55, 1.08)), ec.lerp(eh, 0.60), 20)
 # 13.2-15.5 s: the first officer slumped in his seat: he shakes him by the shoulder (two-shot from the front)
 ef = face_of(FO, 800); eh = face_of(HERO, 800); K(800, FC + Vector((0.10, 0, 0)), mid(ef, eh), 22)
 ef = face_of(FO, 860); eh = face_of(HERO, 860); K(860, FR, mid(ef, eh), 22)
