@@ -1,0 +1,660 @@
+{
+ "frames": {
+  "1": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "BACKHEAD",
+    "Diver"
+   ]
+  ],
+  "7": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "13": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "19": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "25": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "31": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "37": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "43": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "49": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "55": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "61": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "67": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "73": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "79": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "307": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "313": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "325": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "385": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "391": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "397": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "403": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "421": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "523": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "529": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "535": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "541": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "547": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "553": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "559": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "565": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "571": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "583": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "589": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "697": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 8.3 cm with no hand on it (nearest finger 237 cm)"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 11.9 cm with no hand on it (nearest finger 224 cm)"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 12.2 cm with no hand on it (nearest finger 211 cm)"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 10.6 cm with no hand on it (nearest finger 200 cm)"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 9.3 cm with no hand on it (nearest finger 191 cm)"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 8.3 cm with no hand on it (nearest finger 184 cm)"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 7.7 cm with no hand on it (nearest finger 177 cm)"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 7.5 cm with no hand on it (nearest finger 172 cm)"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 7.7 cm with no hand on it (nearest finger 166 cm)"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 6.8 cm with no hand on it (nearest finger 151 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 5.6 cm with no hand on it (nearest finger 147 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 3.9 cm with no hand on it (nearest finger 144 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 1.7 cm with no hand on it (nearest finger 143 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1141": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1171": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1177": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1189": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1195": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1225": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1231": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1237": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1243": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1249": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1255": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1261": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1267": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1279": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1285": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1291": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1297": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1303": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1309": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1315": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1321": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1327": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1435": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1441": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1447": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1453": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1459": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1465": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1471": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1477": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1483": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1489": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1501": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1507": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "949": [
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 7.8 cm with no hand on it (nearest finger 161 cm)"
+   ]
+  ],
+  "955": [
+   [
+    "PROPMOVE",
+    "FX_BubbleRing moves 7.6 cm with no hand on it (nearest finger 155 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "INSIDE": 69,
+  "BACKHEAD": 1,
+  "EMPTY": 29,
+  "PROPMOVE": 15
+ }
+}
