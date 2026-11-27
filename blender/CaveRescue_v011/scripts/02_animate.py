@@ -219,7 +219,7 @@ def group_a(name):
                 p = A.sh[d] + V(sx * 0.10, -0.22 * sg - 0.08, -L * 0.72 + 0.10 * max(0, sg))
                 A.hand(d, f, p, V(-sx, 0.2, 0), V(0, -0.4, -1), elbow_local=A.sh[d] + V(sx * 0.25, 0.55, -0.2))
             else:
-                A.arm_hang(d, f, swing=0.13 * sg if f < F_STOP else 0.02 * sg)
+                A.arm_hang(d, f, swing=0.13 * sg if f < F_STOP else 0.02 * sg, out=0.11)
     # faces: calm walk, alarm when they look back, effort while running
     rig = A.o
     key_face(rig, 1, smile=0.15 if "Boy" in name else 0.05); key_face(rig, F_STOP, smile=0.1)
@@ -257,6 +257,10 @@ for nm, (tn, d) in TORCH_OF.items():
     # the grip_object placed IK_hand at FS+1: re-key frame 1 hand pose unchanged (the walk keys start at 1)
     t.rotation_mode = 'QUATERNION'
     owner_switch(t, FS + 3, A.o, "wrist." + d, log=log)
+    for c_ in t.constraints:
+        if c_.type == 'CHILD_OF':
+            try: c_.keyframe_delete("influence", frame=0)
+            except Exception: pass
     beam = O[tn + "_Beam"]; beam.location = (0, 0, 0)
     # spot along the lantern front (local -Y), from its front face
     vs = [v.co for v in t.data.vertices]; ymin = min(v.y for v in vs)
@@ -290,7 +294,7 @@ def chamber_group(name, f0, f1, events=None):
         br = math.sin(2 * math.pi * f / 230 + rnd.random() * 6)
         hy, hp = 8 * math.sin(f / 97.0 + rnd.random()), 6 + 4 * math.sin(f / 61.0)
         if 975 <= f <= 1070: hy, hp = -25, -4                              # squint into the diver's lamp (pool side)
-        if 1330 <= f <= 1460: hy, hp = -30, 12                             # stare at the dark water
+        if 1330 <= f <= 1460: hy, hp = -30, -4                             # stare at the dark water
         if 1470 <= f <= 1880: hy, hp = 28 if name != "Coach" else 35, 8      # watch the rescuers at Boy1
         if events: hy, hp = events(f, hy, hp)
         sit(A, f, x, y, yaw, head=(hy, hp, 0), breathe=br)
@@ -309,6 +313,8 @@ def b1_events(f, hy, hp):
     if f > 1700: return (0, 8 + 4 * ss(1700, 1760, f))   # drifting off: head drops a little, forward
     return (hy, hp)
 chamber_group("Boy1", 890, 1888, b1_events)
+for f in range(1682, 1889, 12):
+    sit(B1, f, *SIT["Boy1"], hunch=-4.0 * ss(1682, 1730, f), lean_back=14.0 * ss(1682, 1730, f), head=(0, 4, 0))
 key_face(B1.o, 1700, brow=0.1); eyes_closed(B1.o, 1725, 2436, ramp=30)
 
 # ---- the lanterns rest on the shelf beside the boys (lit) while they sit; gone after the rescue
@@ -357,7 +363,7 @@ def path_pts(keys):
     f_ = catmull([(k[0], Vector(k[1])) for k in keys]); return f_
 # Diver 1: rises in the pool (900-1000), lamp on the boys, dives back (1060-1160) toward the gap
 D1_P = path_pts([(890, (288.5, 0.3, -1.2)), (935, (291.5, 0.4, 0.5)), (965, (295.5, 1.0, 0.65)), (1000, (297.4, 1.2, 1.38)), (1060, (297.6, 1.25, 1.38)),
-                 (1090, (294.5, 0.8, 0.6)), (1105, (291.0, 0.3, 0.5)), (1125, (288.5, 0.0, -1.3)), (1165, (285.8, 0.0, -2.5))])
+                 (1090, (294.5, 0.8, 0.6)), (1105, (291.0, 0.3, 0.5)), (1125, (288.6, 0.45, -1.2)), (1165, (287.2, 0.65, -1.9))])
 for f in range(890, 1170, 3):
     p = D1_P(f)
     if 990 <= f <= 1066:
@@ -410,13 +416,13 @@ fs(1600); upd()
 def b1_world(bone, f, tail=False):
     fs(f); upd(); return (Wt if tail else Wh)(B1.o, bone)
 # Diver 1 kneels at Boy1's left (the -Y side as Boy1 faces the pool), facing +Y toward the boy's left arm
-D1K = (B1x + 0.05, B1y - 0.78, 0.0)
+D1K = (B1x + 0.02, B1y - 0.53, 0.0)
 SYR = O["Syringe"]
 def d1_hands_idle(A, f):
     for d in "LR":
         sx = 1 if d == "L" else -1
         A.hand(d, f, A.sh[d] + V(sx * 0.12, -0.32, -0.42), V(0, 0, -1), V(-sx * 0.3, -1, 0), elbow_local=A.sh[d] + V(sx * 0.4, 0.3, -0.3))
-for f in range(1440, 1592, 15):
+for f in range(1352, 1592, 15):
     half_kneel(D1, f, D1K[0], D1K[1], 0.0 + 180.0, head=(5 * math.sin(f / 50.0), 18, 0), hands=d1_hands_idle)
 # ---- the syringe: pinched at the barrel in his right hand from 1460; the injection 1600-1700 into the left deltoid
 FSET = 1455
@@ -441,7 +447,7 @@ def delt(f):
     out = (s_ - b1_world("upperarm01.R", f)); out.z = 0; out.normalize()
     return s_ + (e_ - s_) * 0.28 + out * 0.045, out
 for f in range(1592, 1736, 4):
-    half_kneel(D1, f, D1K[0], D1K[1], 180.0, head=(0, 22, 0), torso=(16, 0, 0))
+    half_kneel(D1, f, D1K[0], D1K[1], 180.0, head=(0, 22, 0), torso=(30, -8, 0))
     P, out = delt(f)
     t_in = ss(1610, 1650, f) - ss(1690, 1720, f)                 # approach, hold (press plunger), withdraw
     tip_gap = 0.10 * (1 - t_in) + 0.006
@@ -463,14 +469,14 @@ owner_switch(SYR, 1738, None, log=log)
 show_ranges([SYR], [(1455, 1745)])
 
 # Diver 2: kneels facing Boy1 (in front of him, between him and the pool), mask fitting 1761-1845
-D2K = (B1x - 0.42, B1y + 0.52, 0.0)
+D2K = (B1x - 0.55, B1y + 0.62, 0.0)
 D2Y = 40.5
 FFM, STR = O["FullMask"], O["FullMaskStraps"]
 def d2_idle(A, f):
     for d in "LR":
         sx = 1 if d == "L" else -1
         A.hand(d, f, A.sh[d] + V(sx * 0.14, -0.30, -0.45), V(0, 0, -1), V(-sx * 0.3, -1, 0), elbow_local=A.sh[d] + V(sx * 0.4, 0.3, -0.3))
-for f in range(1440, 1700, 15):
+for f in range(1352, 1700, 15):
     half_kneel(D2, f, D2K[0], D2K[1], D2Y, head=(10 * math.sin(f / 40.0), 15, 0), hands=d2_idle)
 # fitted mask pose = its build pose relative to Boy1's head bone at rest
 head_rest = B1.o.data.bones["head"].matrix_local.copy()
@@ -543,7 +549,7 @@ for f in range(1882, 2054, 3):
         if d != "L": return False
         lp = loop_world(f_, 1)
         A.hand("L", f_, lp + V(0, 0, 0.03), V(0, 0, -1), V(-1, 0, 0), elbow_local=lp + V(0.1, 0.35, 0.35), world=True); return True
-    swim(D1, f, head_end + V(-0.35, 0.40, 0.50), -90, f * 0.2, pitch=-4, hand_fn=tow_hand, look=-30)
+    swim(D1, f, head_end + V(-0.35, 0.58, 0.66), -90, f * 0.2, pitch=-4, hand_fn=tow_hand, look=-30)
 apply_pose(D1.o, "L", "wrap_grip", 1882, 0.8)
 # B13: Diver 1 carries the front (walking -X ahead of the sked), Diver 2 the back; hands on the end loops
 def carry(A, f0, f1, front):
@@ -568,7 +574,7 @@ carry(D2, 2104, 2436, False)
 for A in (D1, D2):
     key_face(A.o, 2104, smile=0.0); key_face(A.o, 2260, smile=0.6, squint=0.2); blinks(A.o, [2150, 2300, 2400])
 # B13 crowd: the coach, the other boys and the medic wait outside and cheer (each with his own timing and pose)
-CROWD = {"Coach": (-5.2, -2.0, 150), "Boy2": (-6.2, -2.3, 140), "Boy3": (-5.6, 1.0, 35), "Boy4": (-6.8, 0.7, 25), "Medic": (-4.2, -2.3, 160)}
+CROWD = {"Coach": (-5.2, -2.0, 150), "Boy2": (-6.2, -2.3, 140), "Boy3": (-5.6, 1.0, 35), "Boy4": (-6.8, 0.7, 25), "Medic": (-9.4, -8.7, -133)}
 for nm, (x, y, yaw) in CROWD.items():
     A = CAST[nm]; rnd = random.Random(hash(nm) % 991); ph = rnd.random() * 6
     for f in range(2100, 2437, 6):
@@ -596,30 +602,30 @@ show_ranges(char_objs("Boy2"), [(1, 641), (890, 1885), (2100, 2437)])
 show_ranges(char_objs("Boy3"), [(1, 641), (890, 1885), (2100, 2437)])
 show_ranges(char_objs("Boy4"), [(1, 641), (890, 1885), (2100, 2437)])
 show_ranges(char_objs("Boy1"), [(1, 641), (890, 1889), (1896, 2056), (2104, 2437)])
-show_ranges(char_objs("Diver1"), [(895, 1172), (1440, 1877), (1882, 2056), (2104, 2437)])
-show_ranges(char_objs("Diver2"), [(1058, 1172), (1440, 1892), (2104, 2437)])
+show_ranges(char_objs("Diver1"), [(895, 1172), (1352, 1877), (1882, 2056), (2104, 2437)])
+show_ranges(char_objs("Diver2"), [(1058, 1172), (1352, 1892), (2104, 2437)])
 show_ranges(char_objs("Diver3"), [(1148, 1324)])
 show_ranges(char_objs("Medic"), [(2100, 2437)])
 def gear(n): return [O[x] for x in O[n]["gear"].split(",")]
-for n, rngs in (("Diver1", [(895, 1172), (1440, 1877), (1882, 2056), (2104, 2437)]), ("Diver2", [(1058, 1172), (1440, 1892), (2104, 2437)]), ("Diver3", [(1148, 1324)])):
+for n, rngs in (("Diver1", [(895, 1172), (1352, 1877), (1882, 2056), (2104, 2437)]), ("Diver2", [(1058, 1172), (1352, 1892), (2104, 2437)]), ("Diver3", [(1148, 1324)])):
     fins = [o for o in gear(n) if "Fin" in o.name]
     show_ranges([o for o in gear(n) if o not in fins], rngs)
     show_ranges(fins, [r for r in ((895, 1172), (1058, 1172), (1148, 1324), (1882, 2056)) if any(a_ <= r[0] < b_ for a_, b_ in rngs)])
 torches = [O[t] for t, _ in TORCH_OF.values()]
 show_ranges(torches + [O[t.name + "_Beam"] for t in torches], [(1, 641), (890, 1885)])
-show_ranges([O["GearBag"], O["SpareTank"]], [(1440, 1892)])
-for o, loc, rz in ((O["GearBag"], (B1x - 0.3, B1y - 1.35), 25), (O["SpareTank"], (B1x + 0.55, B1y - 1.30), -10)):
+show_ranges([O["GearBag"], O["SpareTank"]], [(1352, 1892)])
+for o, loc, rz in ((O["GearBag"], (B1x + 1.05, B1y - 1.15), 25), (O["SpareTank"], (B1x + 1.45, B1y - 0.75), -10)):
     z = ground_z(*loc) + 0.2 if o.name == "GearBag" else ground_z(*loc) + 0.088
     o.location = (loc[0], loc[1], z); o.rotation_euler = (0, 0, math.radians(rz))
 
 # ================================================================== the cutaway, flood, route, orbs, water, rain, silt, bubbles
 FRONT.location = (0, 0, 0)
-for fr, z in ((571, 0.0), (600, -160.0), (955, -160.0), (995, 0.0), (2012, 0.0), (2040, -160.0), (2078, -160.0), (2112, 0.0)):
+for fr, z in ((572, 0.0), (573, -300.0), (955, -300.0), (995, 0.0), (2013, 0.0), (2014, -300.0), (2078, -300.0), (2112, 0.0)):
     FRONT.location.z = z; FRONT.keyframe_insert("location", index=2, frame=fr)
 _amb = set(desc(O["Ambulance"]))
 fronts = [o for o in desc(FRONT) if o is not FRONT and o not in _amb and not o.name.startswith("PoolSurf")]
-show_ranges(fronts, [(0, 603), (952, 2043), (2075, 2437)])
-XS_R = [(596, 962), (2012, 2112)]
+show_ranges(fronts + [O["PoolSurf_Front"]], [(0, 573), (952, 2014), (2075, 2437)])
+XS_R = [(596, 938), (2016, 2108)]
 RT = O["FX_Route"]; show_ranges([RT, O["FX_Beacon"], O["FX_BeaconRing"]], XS_R)
 RT.data.bevel_factor_end = 0.0; RT.data.keyframe_insert("bevel_factor_end", frame=600)
 RT.data.bevel_factor_end = 1.0; RT.data.keyframe_insert("bevel_factor_end", frame=690)
@@ -645,15 +651,15 @@ for o in waters:
     o.scale = (1, 1, 0.02); o.keyframe_insert("scale", index=2, frame=700)
     o.scale = (1, 1, 1.0); o.keyframe_insert("scale", index=2, frame=840)
 WM = bpy.data.materials["M_WaterVol"]; pv = [n for n in WM.node_tree.nodes if n.type == 'PRINCIPLED_VOLUME'][0]
-for fr, e in ((0, 0.6), (950, 0.6), (975, 0.004), (2012, 0.004), (2030, 0.6), (2100, 0.6), (2112, 0.004)):
+for fr, e in ((0, 3.0), (950, 3.0), (975, 0.03), (2012, 0.03), (2030, 3.0), (2100, 3.0), (2112, 0.03)):
     pv.inputs["Emission Strength"].default_value = e; pv.inputs["Emission Strength"].keyframe_insert("default_value", frame=fr)
-show_ranges([O["PoolSurf_Back"], O["PoolSurf_Front"]], [(840, 2437)])
+show_ranges([O["PoolSurf_Back"]], [(840, 2437)])
 # the flood surge across the mouth floor and into the passage (B2)
 SU = O["FX_Surge"]
-for fr, sx_ in ((340, 0.02), (430, 0.24), (500, 0.40), (570, 0.52), (640, 0.62)):
+for fr, sx_ in ((420, 0.18), (440, 0.25), (500, 0.40), (570, 0.52), (640, 0.62)):
     SU.scale = (sx_, 1, 1); SU.keyframe_insert("scale", index=0, frame=fr)
 SU.location = (-14.0, 0, 0)
-show_ranges([SU], [(341, 700)])
+show_ranges([SU], [(420, 570)])
 # the rain (B2): a looping fall of two stacked sheets
 RC = O["RainCtl"]
 RC.location.z = 0.0; RC.keyframe_insert("location", index=2, frame=341)
@@ -694,9 +700,9 @@ bubbles("b1", lambda f: (fs(f), upd(), FFM.matrix_world.translation + V(0, 0, 0.
 # lights: the sump glow only while we are underwater; the sun brightens at the end
 SG = O["SU_Glow"].data
 SGo = O["SU_Glow"]
-for fr, x_ in ((1060, 290.0), (1160, 286.8), (1320, 286.2), (1885, 290.0), (2050, 287.5)):
+for fr, x_ in ((1060, 290.0), (1160, 283.2), (1320, 282.5), (1885, 290.0), (2050, 287.5)):
     SGo.location = (x_, -0.2, floor_route(x_) + 0.9); SGo.keyframe_insert("location", frame=fr)
-for fr, e in ((0, 0.0), (1060, 0.0), (1080, 90.0), (1330, 90.0), (1345, 0.0), (1885, 0.0), (1905, 250.0), (2050, 250.0), (2060, 0.0)):
+for fr, e in ((0, 0.0), (1060, 0.0), (1080, 160.0), (1330, 160.0), (1345, 0.0), (1885, 0.0), (1905, 250.0), (2050, 250.0), (2060, 0.0)):
     SG.energy = e; SG.keyframe_insert("energy", frame=fr)
 SUN = O["Sun"].data
 for fr, e in ((0, 3.0), (2280, 3.0), (2436, 5.0)):
@@ -704,7 +710,7 @@ for fr, e in ((0, 3.0), (2280, 3.0), (2436, 5.0)):
 show_ranges(desc(O["Ambulance"]), [(2112, 2437)])
 
 for n in ("JG_MouthFern0", "JG_MouthFern2"):
-    for o in desc(O[n]): bpy.data.objects.remove(o, do_unlink=True)
+    if n in O: [bpy.data.objects.remove(o, do_unlink=True) for o in desc(O[n])]
 # ================================================================== the ONE camera
 cam = bpy.data.objects.new("CAM_Film", bpy.data.cameras.new("CAM_Film")); sc.collection.objects.link(cam); sc.camera = cam
 cam.data.sensor_fit = 'VERTICAL'; cam.data.sensor_height = 36.0; cam.data.clip_start = 0.05; cam.data.clip_end = 2000
@@ -712,33 +718,38 @@ CK = [
     (1, (-3.0, -3.3, 1.55), (-6.6, 0.0, 1.2), 30), (120, (-1.2, -1.5, 1.6), (-4.8, -0.2, 1.3), 30),
     (230, (2.6, -1.35, 1.65), (-1.8, 0.1, 1.35), 30), (340, (5.6, -1.1, 1.6), (0.8, 0.1, 1.35), 30),
     (400, (7.1, -0.9, 1.55), (2.4, 0.2, 1.4), 30), (460, (8.6, -0.8, 1.5), (2.0, 0.0, 1.45), 28),
-    (520, (11.6, -0.9, 1.5), (6.4, 0.2, 1.3), 28), (566, (13.6, -1.2, 1.6), (9.6, 0.6, 1.3), 28),
-    (590, (13.6, -1.6, 1.75), (11.0, 0.6, 1.2), 28), (612, (13.5, -8.0, 3.6), (11.5, 0.5, 1.0), 28),
+    (520, (11.6, -0.9, 1.5), (6.4, 0.2, 1.3), 28), (566, (13.2, -1.1, 1.6), (10.5, 1.0, 1.3), 28),
+    (590, (13.0, -4.5, 2.6), (11.0, 0.5, 1.1), 28), (612, (13.5, -9.0, 3.8), (11.5, 0.5, 1.0), 28),
     (645, (40.0, -60.0, 15.0), (60.0, 0.0, 5.0), 30),
-    (686, (150.0, -330.0, 45.0), (150.0, 0.0, 10.0), 30), (780, (190.0, -300.0, 40.0), (185.0, 0.0, 5.0), 32),
-    (890, (240.0, -210.0, 30.0), (250.0, 0.0, 3.0), 32), (930, (296.0, -60.0, 10.0), (301.0, 0.0, 3.0), 30),
+    (686, (150.0, -270.0, 10.0), (150.0, 0.0, 0.0), 30), (780, (190.0, -240.0, 6.0), (185.0, 0.0, -2.0), 32),
+    (890, (240.0, -180.0, 4.0), (250.0, 0.0, -2.0), 32), (930, (296.0, -60.0, 10.0), (301.0, 0.0, 3.0), 30),
     (956, (302.8, -2.0, 3.2), (305.5, 3.0, 2.2), 24), (968, (303.4, 0.45, 3.0), (306.0, 3.4, 2.0), 24),
     (998, (303.3, 0.6, 2.95), (305.9, 3.3, 2.0), 25), (1032, (301.8, -0.7, 2.3), (298.0, 1.2, 1.5), 28),
     (1060, (301.6, -0.4, 2.2), (297.6, 1.0, 1.3), 28), (1080, (299.6, 0.1, 1.65), (296.8, 0.7, 0.3), 24),
     (1096, (297.8, 0.25, 0.7), (292.0, 0.3, 0.0), 22), (1114, (293.4, 0.15, 0.65), (287.0, 0.0, -1.5), 22),
-    (1136, (289.6, -0.2, -0.7), (280.0, 0.1, -3.4), 24),
-    (1160, (285.2, -0.35, -2.45), (278.0, 0.0, -3.7), 26), (1240, (284.0, -0.3, -2.6), (268.0, 0.0, -4.7), 30),
+    (1136, (289.6, -0.45, -0.7), (280.0, 0.1, -3.4), 24),
+    (1160, (285.4, -0.5, -2.35), (278.0, 0.0, -3.7), 26), (1240, (284.0, -0.3, -2.6), (268.0, 0.0, -4.7), 30),
     (1318, (283.4, -0.3, -2.75), (262.0, 0.0, -5.3), 32), (1334, (287.0, -0.2, -1.4), (292.0, 0.3, 0.4), 24),
     (1350, (291.2, 0.1, 0.55), (300.0, 1.0, 1.2), 24),
     (1368, (299.2, 0.6, 1.4), (304.5, 2.2, 2.3), 26), (1400, (302.6, 0.95, 2.45), (304.6, 2.25, 2.5), 35),
     (1460, (302.9, 0.75, 2.5), (304.6, 2.25, 2.45), 38), (1520, (302.5, -1.5, 3.2), (305.3, 2.3, 1.9), 26),
-    (1590, (303.0, -0.2, 2.9), (304.7, 2.0, 2.2), 28), (1640, (303.35, 1.55, 2.45), (304.6, 1.95, 2.35), 30),
-    (1700, (303.3, 1.6, 2.45), (304.55, 2.0, 2.38), 32), (1760, (303.0, 1.6, 2.75), (304.35, 2.3, 2.45), 40),
-    (1830, (303.1, 1.65, 2.72), (304.35, 2.3, 2.47), 44), (1884, (302.6, 0.6, 2.4), (300.0, 1.2, 1.2), 26),
+    (1590, (302.4, 0.2, 2.8), (304.6, 2.0, 2.2), 30), (1640, (302.6, 1.75, 2.35), (304.5, 1.85, 2.3), 40),
+    (1700, (302.55, 1.7, 2.4), (304.5, 1.95, 2.35), 42), (1760, (302.4, 1.4, 2.7), (304.35, 2.3, 2.45), 45),
+    (1830, (302.5, 1.45, 2.68), (304.35, 2.3, 2.47), 48), (1874, (302.6, 1.5, 2.65), (304.35, 2.3, 2.45), 46),
+    (1890, (300.5, 0.8, 1.9), (297.0, 0.5, 0.9), 26),
     (1906, (297.5, 0.3, 0.7), (292.0, 0.2, -0.6), 22), (1925, (291.3, 0.0, 0.55), (288.0, 0.2, -1.6), 22),
     (1948, (288.6, -0.85, -1.75), (287.6, 0.3, -2.2), 22),
-    (2008, (286.6, -0.9, -1.8), (285.8, 0.3, -2.25), 22), (2026, (286.0, -1.0, -1.9), (285.0, 0.3, -2.2), 24),
-    (2052, (270.0, -90.0, 20.0), (262.0, 0.0, -2.0), 28),
-    (2080, (190.0, -280.0, 40.0), (160.0, 0.0, 5.0), 30), (2108, (60.0, -200.0, 35.0), (40.0, 0.0, 5.0), 30),
-    (2140, (-28.0, -40.0, 12.0), (-2.0, 0.0, 3.0), 28), (2178, (-8.0, -1.6, 1.8), (-1.0, -0.5, 1.4), 28),
-    (2249, (-7.4, -1.5, 1.75), (-2.6, -0.6, 1.4), 28), (2300, (-3.6, -6.0, 2.0), (-6.4, -7.4, 1.5), 28),
-    (2380, (-3.8, -5.6, 2.6), (-6.2, -6.8, 1.6), 30), (2436, (-4.6, -3.6, 9.0), (-6.5, -6.0, 2.0), 30)]
+    (2010, (286.6, -1.0, -1.8), (285.8, 0.3, -2.25), 22),
+    (2034, (276.0, -45.0, 8.0), (266.0, 0.0, -2.0), 28),
+    (2080, (190.0, -240.0, 8.0), (160.0, 0.0, 0.0), 30), (2108, (60.0, -200.0, 35.0), (40.0, 0.0, 5.0), 30),
+    (2140, (-28.0, -40.0, 12.0), (-2.0, 0.0, 3.0), 28), (2178, (-9.0, -0.6, 1.9), (-1.0, -0.5, 1.4), 28),
+    (2249, (-8.6, -0.6, 1.85), (-2.0, -0.5, 1.35), 28), (2280, (-12.5, -5.0, 2.0), (-8.0, -6.0, 1.5), 28),
+    (2305, (-11.5, -12.1, 1.9), (-8.3, -6.4, 1.5), 30), (2395, (-11.2, -12.4, 2.2), (-8.3, -6.4, 1.6), 30), (2436, (-12.5, -14.0, 7.0), (-7.5, -5.5, 2.0), 30)]
 cp_ = catmull([(k[0], Vector(k[1])) for k in CK]); ct_ = catmull([(k[0], Vector(k[2])) for k in CK]); cl_ = catmull([(k[0], float(k[3])) for k in CK])
+_ext = [cp_(f) for f in list(range(1, 600, 5)) + list(range(2100, END + 1, 5))]
+for o in [o for o in O if o.name.startswith("JG_") and o.parent is None or (o.name.startswith("JG_") and o.parent and o.parent.name == "FRONT_CTL")]:
+    if any((o.matrix_world.translation.to_2d() - q.to_2d()).length < 3.2 + 1.5 * o.scale.x and q.z < 14 for q in _ext):
+        for c_ in desc(o): bpy.data.objects.remove(c_, do_unlink=True)
 for f in range(1, END + 1, 2):
     p = cp_(f); t_ = ct_(f); cam.location = p
     cam.rotation_mode = 'QUATERNION'; q = (t_ - p).to_track_quat('-Z', 'Y')

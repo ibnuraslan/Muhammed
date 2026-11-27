@@ -194,7 +194,7 @@ bot = [[None] * len(XS) for _ in YS]
 for j in range(len(YS) - 1):
     for i in range(len(XS) - 1):
         bm.faces.new((grid[j][i], grid[j][i + 1], grid[j + 1][i + 1], grid[j + 1][i]))
-ZB = -45.0
+ZB = -130.0
 ring = [grid[0][i] for i in range(len(XS))] + [grid[j][-1] for j in range(1, len(YS))] + \
        [grid[-1][i] for i in range(len(XS) - 2, -1, -1)] + [grid[j][0] for j in range(len(YS) - 2, 0, -1)]
 low = [bm.verts.new((v.co.x, v.co.y, ZB)) for v in ring]
@@ -377,7 +377,7 @@ for o in (POOL_B, POOL_F):
 # ---- mud bank strip where the flood surges in near the mouth (B2): a thin water sheet that slides in along +X
 M_SURGE = mat("M_Surge", (0.32, 0.26, 0.15), rough=0.12)
 M_SURGE.node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 0.3
-SURGE = plane("FX_Surge", -14.0, 40.0, -2.4, 2.4, 0.0, M_SURGE, res=0.2)
+SURGE = plane("FX_Surge", -14.0, 40.0, -2.4, 2.4, 0.0, M_WSURF, res=0.2)
 bm = bmesh.new(); bm.from_mesh(SURGE.data)
 for v in bm.verts:
     x = v.co.x; v.co.z = floor_z(x) + 0.07 + 0.03 * noise.noise(Vector((x * 1.2, v.co.y * 1.2, 0.3)))
@@ -444,8 +444,7 @@ for i in range(16):
     x = rnd.uniform(3, 40); y = rnd.uniform(-30, 30)
     place("island_tree_01" if i % 2 else "island_tree_02", "JG_TopTree%02d" % i, (x, y, -0.2), rnd.uniform(0, 6.28), rnd.uniform(2.2, 2.8))
 # ferns hanging around the mouth lip
-for i, (x, y) in enumerate(((-1.6, -3.4), (-1.4, 3.6), (-2.2, -2.9), (-2.0, 3.0))):
-    place("fern_02", "JG_MouthFern%d" % i, (x, y, 0.0), rnd.uniform(0, 6.28), 1.6)
+pass
 
 # ================================================================== the route line, the boys' marker, the flood fill
 def route_curve(name, x0, x1, step=1.0, y=-0.02, lift=0.9):
@@ -558,7 +557,7 @@ for nm, hair, c1, c2, age, hgt in BOYS:
     hair_tint(r, (0.18, 0.15, 0.13))
     CHARS[nm] = (r, finish_char(r))
 r, b = human("Coach", 1.0, 0.42, ASIAN, "short02/short02.mhclo", "young_asian_male/young_asian_male.mhmat", "eyebrow002/eyebrow002.mhclo",
-             height=0.55, weight=0.45, muscle=0.6, clothes=["male_casualsuit01/male_casualsuit01.mhclo", "shoes01/shoes01.mhclo"])
+             height=0.55, weight=0.45, muscle=0.6, clothes=["male_casualsuit04/male_casualsuit04.mhclo", "shoes01/shoes01.mhclo"])
 cl = [c for c in r.children if c.type == 'MESH' and "casualsuit" in c.name][0]
 suit_split(cl, r, fabric("M_CoachShirt", (0.0, 0.42, 0.40), scale=700))      # deep teal shirt over dark jeans
 hair_tint(r, (0.18, 0.15, 0.13)); CHARS["Coach"] = (r, finish_char(r))
@@ -573,7 +572,7 @@ for nm, race, hair, h_ in (("Diver1", {"asian": 0.5, "caucasian": 0.45, "african
     # the wetsuit: re-skin the whole top as neoprene too, keep the coloured panel only on the upper chest/shoulders
     for p in cl.data.polygons:
         c_ = p.center
-        if p.material_index == 1 and not (c_.z > 1.25 and abs(c_.x) < 0.30): p.material_index = 0
+        if p.material_index == 1 and not (c_.z > 1.36 and abs(c_.x) > 0.13): p.material_index = 0
     hair_tint(r, (0.35, 0.28, 0.22))
     sh = [c for c in r.children if c.type == 'MESH' and "shoes" in c.name][0]
     sh.data.materials.clear(); sh.data.materials.append(mat("M_Booty", (0.02, 0.02, 0.02), rough=0.6))
@@ -887,15 +886,15 @@ RAINCTL = bpy.data.objects.new("RainCtl", None); C_FX.objects.link(RAINCTL)
 bm = bmesh.new(); rr = random.Random(3)
 for i in range(4500):
     x = rr.uniform(-40, -0.8); y = rr.uniform(-16, 16); z = rr.uniform(0, 24)
-    v0 = bm.verts.new((x, y, z)); v1 = bm.verts.new((x + 0.05, y + 0.02, z + 0.55)); v2 = bm.verts.new((x + 0.055, y + 0.024, z + 0.55))
-    v3 = bm.verts.new((x + 0.005, y + 0.004, z)); bm.faces.new((v0, v3, v2, v1))
+    v0 = bm.verts.new((x, y, z)); v1 = bm.verts.new((x + 0.05, y + 0.02, z + 0.7)); v2 = bm.verts.new((x + 0.065, y + 0.03, z + 0.7))
+    v3 = bm.verts.new((x + 0.015, y + 0.01, z)); bm.faces.new((v0, v3, v2, v1))
 me_ = bpy.data.meshes.new("FX_Rain"); bm.to_mesh(me_); bm.free()
 RAIN = bpy.data.objects.new("FX_Rain", me_); C_FX.objects.link(RAIN)
 mr_ = bpy.data.materials.new("M_Rain"); mr_.use_nodes = True; nt = mr_.node_tree
 for n in list(nt.nodes):
     if n.type != 'OUTPUT_MATERIAL': nt.nodes.remove(n)
 tr = nt.nodes.new("ShaderNodeBsdfTransparent"); em = nt.nodes.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.8, 0.88, 1.0, 1)
-em.inputs["Strength"].default_value = 1.2; ms = nt.nodes.new("ShaderNodeMixShader"); ms.inputs["Fac"].default_value = 0.35
+em.inputs["Strength"].default_value = 2.5; ms = nt.nodes.new("ShaderNodeMixShader"); ms.inputs["Fac"].default_value = 0.6
 nt.links.new(tr.outputs[0], ms.inputs[1]); nt.links.new(em.outputs[0], ms.inputs[2])
 nt.links.new(ms.outputs[0], [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'][0].inputs["Surface"])
 me_.materials.append(mr_)
@@ -927,7 +926,7 @@ def ambulance():
         o = cyl("Amb_Wheel%d" % k_, 0.38, 0.28, (x, y, 0.38), M_BLACK, rot=(0, math.radians(90), 0)); to_col(o, C_SET); parts.append(o)
     root = bpy.data.objects.new("Ambulance", None); C_SET.objects.link(root)
     for o in parts: o.parent = root
-    root.location = (-6.5, -7.5, mount_h(-6.5, -7.5)); root.rotation_euler.z = math.radians(-156)
+    root.location = (-7.0, -6.0, mount_h(-7.0, -6.0)); root.rotation_euler.z = math.radians(60)
     root.parent = FRONT
     return root
 AMB = ambulance()
@@ -941,8 +940,8 @@ def light(name, kind, energy, loc, rot=(0, 0, 0), size=1.0, color=(1, 1, 1)):
     return o
 SUN = light("Sun", 'SUN', 3.0, (0, 0, 50), rot=(math.radians(40), 0, math.radians(-60)), color=(1.0, 0.92, 0.78))
 # the chamber: warm torch-bounce fills (the boys' torches + the divers' lamps carry the key)
-light("CH_Fill1", 'AREA', 420, (300.0, -3.5, 6.0), rot=(math.radians(30), 0, math.radians(-20)), size=3.0, color=(1.0, 0.72, 0.45))
-light("CH_Fill2", 'AREA', 260, (308.0, -2.0, 5.5), rot=(math.radians(35), 0, math.radians(30)), size=3.0, color=(0.55, 0.75, 1.0))
+light("CH_Fill1", 'AREA', 800, (300.0, -3.5, 6.0), rot=(math.radians(30), 0, math.radians(-20)), size=3.0, color=(1.0, 0.72, 0.45))
+light("CH_Fill2", 'AREA', 500, (308.0, -2.0, 5.5), rot=(math.radians(35), 0, math.radians(30)), size=3.0, color=(0.55, 0.75, 1.0))
 light("CH_Rim", 'AREA', 200, (306.0, 6.5, 5.0), rot=(math.radians(-50), 0, 0), size=2.0, color=(1.0, 0.6, 0.3))
 # the passage near the mouth: daylight spill + a warm fill deeper in
 light("TN_Fill0", 'AREA', 500, (3.5, 0.0, 3.6), rot=(0, 0, 0), size=3.0, color=(1.0, 0.8, 0.6))
