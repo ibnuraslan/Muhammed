@@ -263,7 +263,7 @@ THR = [O["THR_piv0"], O["THR_piv1"]]
 for k in (0, 1):
     arm = O["THR_arm%d" % k]; h = max(c[2] for c in arm.bound_box)
     arm.scale.z = (0.162 - arm.location.z) / h
-for f, a in ((1, -12), (2812, -12), (2840, -4), (2852, -5), (2880, 4), (2900, 4), (END, 4)):
+for f, a in ((1, -12), (2812, -12), (2842, 0), (2854, -2), (2884, 10), (2900, 10), (END, 10)):
     for t in THR:
         t.rotation_euler = (math.radians(a), 0, 0); t.keyframe_insert("rotation_euler", frame=f)
 
@@ -517,7 +517,7 @@ for f in (1030, 1062, 1100):
 HERO.ikw("L", 1040, Matrix.Translation(Vector((0.10, -0.02, 0.03))) @ W_grab)
 apply_pose(HERO.rig, "L", "shield", 1040)
 owner_switch(MIC, 1063, HERO.rig, "wrist.L", log=log)
-def mic_at_mouth(f, fwd=0.14, down=0.09, side=0.05):
+def mic_at_mouth(f, fwd=0.11, down=0.035, side=0.04):
     """the hand pose that puts the mic grill `fwd` m in front of his mouth (head frame), mic upright"""
     fs(f)
     hm = HERO.rig.matrix_world @ HERO.rig.pose.bones["head"].matrix
@@ -598,9 +598,9 @@ for s in "LR":
 # loses grip: hands fly off, he stumbles back, then drops into the seat (sit_down 1505)
 for s in "LR":                                  # grip lost: hands spring up and back off his shoulder (clear of the headrest)
     fs(1498); fw_ = yaw_vec(128); rt = Vector((fw_.y, -fw_.x, 0)); sg = -1 if s == "L" else 1
-    HERO.ikw(s, 1506, Matrix.Translation(-fw_ * 0.12 + UP * 0.12 + rt * sg * 0.12) @ HERO.ik_world(s))
+    HERO.ikw(s, 1506, Matrix.Translation(-fw_ * 0.14 + UP * 0.02 + rt * sg * 0.14) @ HERO.ik_world(s))
     apply_pose(HERO.rig, s, "open_alarm", 1506)
-    chest_hand(HERO, s, 1520, yaw_vec(128), height=0.05, ahead=0.26, out=0.30)
+    chest_hand(HERO, s, 1520, yaw_vec(128), height=-0.06, ahead=0.22, out=0.28)
 SIT2 = 1505
 sit_down(SIT2, HAUL_P + yaw_vec(128) * -0.18, 128)
 for s in "LR":
@@ -788,10 +788,11 @@ eh = face_of(HERO, 228); K(228, Vector((0.25, -1.02, 1.42)), eh, 26)
 # 4-6.7 s: flying perfectly level: from above the empty window seat: his face, a pan to the window (wing, level horizon), back
 eh = face_of(HERO, 255); K(255, Vector((0.55, -1.05, 1.45)), eh, 24)
 # over his shoulder to the window (wing, level horizon) with his head in frame
-eh = face_of(HERO, 285); K(285, Vector((0.32, -1.22, 1.46)), eh.lerp(Vector((1.80, -1.62, 1.22)), 0.5), 20)
-eh = face_of(HERO, 322); K(322, Vector((0.30, -1.26, 1.44)), eh.lerp(Vector((1.80, -1.62, 1.22)), 0.5), 21)
+eh = face_of(HERO, 285); K(285, Vector((0.32, -1.22, 1.46)), eh.lerp(Vector((1.80, -1.62, 1.22)), 0.38), 20)
+eh = face_of(HERO, 322); K(322, Vector((0.30, -1.26, 1.44)), eh.lerp(Vector((1.80, -1.62, 1.22)), 0.38), 21)
 eh = face_of(HERO, 352); K(352, Vector((0.42, -1.12, 1.42)), eh, 26)
 around(HERO, 395, (0.40, 0.55, 0.10), 28)
+around(HERO, 420, (-0.12, 0.62, 0.26), 26)
 # 6.7-9.2 s: stands up into the aisle
 around(HERO, 445, (-0.74, 0.36, 0.40), 24, (0, 0, -0.06))      # in the aisle gap beside his row: clear of the row-5 seat back
 around(HERO, 500, (-0.30, 1.20, 0.05), 26, (0, 0, -0.15))
@@ -820,16 +821,17 @@ eh = face_of(HERO, 1258); K(1258, Vector((0.05, 4.60, 1.32)), mid(eh, Vector((0.
 eh = face_of(HERO, 1305); K(1305, FC + Vector((-0.25, 0, -0.02)), eh, 26)
 eh = face_of(HERO, 1370); K(1370, FR + Vector((0.0, 0.0, 0.04)), eh, 20)
 ef = face_of(FO, 1420); eh = face_of(HERO, 1420); K(1420, FC + Vector((0.05, 0, 0.02)), mid(ef, eh, 0.72), 20)
-ef = face_of(FO, 1470); eh = face_of(HERO, 1470); K(1470, FR + Vector((0, 0, 0.06)), mid(ef, eh, 0.70) + Vector((0, 0, -0.06)), 19)
-ef = face_of(FO, 1505); eh = face_of(HERO, 1505); K(1505, FR + Vector((0.04, 0, 0.10)), mid(ef, eh, 0.75) + Vector((0, 0, -0.08)), 18)
+ef = face_of(FO, 1470); eh = face_of(HERO, 1470); K(1470, FC + Vector((0.10, 0, 0.14)), mid(ef, eh, 0.70) + Vector((0, 0, -0.06)), 18)
+ef = face_of(FO, 1505); eh = face_of(HERO, 1505); K(1505, FR + Vector((0.10, 0.04, 0.14)), mid(ef, eh, 0.80) + Vector((0, 0, -0.04)), 17)
+eh = face_of(HERO, 1530); K(1530, FC + Vector((0.05, 0, 0.14)), eh, 18)
 # 25.8-28.7 s: alarms, red light: he drops into the seat; on his face, with the red beacon flashing behind him
-eh = face_of(HERO, 1550); K(1550, FC + Vector((0.0, 0.0, 0.10)), eh, 21)
+eh = face_of(HERO, 1550); K(1550, FC + Vector((-0.05, 0.0, 0.12)), eh, 20)
 eh = face_of(HERO, 1600); K(1600, FC + Vector((-0.35, 0, -0.04)), eh, 28)
 eh = face_of(HERO, 1660); K(1660, FL + Vector((0.12, 0.02, -0.02)), eh, 28)
 eh = face_of(HERO, 1700); K(1700, FC + Vector((-0.20, 0, -0.03)), eh, 26)
 # 28.7-30.3 s: diving: the camera rides the corridor back to over his shoulder: the windscreen with the ground rushing up
-prof_k(1740, 20, 0.02)
-prof_k(1790, 20, 0.05)
+prof_k(1740, 18, 0.25)
+prof_k(1790, 18, 0.28)
 # 30.3-37 s: he grabs the controls: back through the corridor to the front, face + hands on the yoke, orbit left
 eh = face_of(HERO, 1826); K(1826, FC + Vector((0.0, 0, 0.02)), eh, 22)
 eh = face_of(HERO, 1840); K(1840, FC + Vector((-0.30, 0, -0.04)), mid(eh, Vector((-0.56, 4.40, 0.88)), 0.40), 22)
@@ -838,13 +840,16 @@ eh = face_of(HERO, 1965); K(1965, FL + Vector((0.08, 0.02, 0.16)), mid(eh, Vecto
 eh = face_of(HERO, 2006); K(2006, FL + Vector((0.0, -0.02, -0.02)), mid(eh, Vector((-0.56, 4.40, 0.88)), 0.30), 22)
 eh = face_of(HERO, 2050); K(2050, FC + Vector((-0.30, 0, 0.02)), eh, 25)
 eh = face_of(HERO, 2100); K(2100, FL + Vector((0.30, 0.03, 0.02)), eh, 26)
-eh = face_of(HERO, 2195); K(2195, FC + Vector((-0.10, 0, 0)), eh, 26)
+eh = face_of(HERO, 2180); K(2180, FC + Vector((-0.10, 0, 0)), eh, 26)
 # 37-41.3 s: level but sinking: down over the pedestal to the altimeter unwinding, then up to his face
-K(2228, Vector((-0.10, 4.70, 1.16)), Vector((-0.26, 5.01, 0.76)), 40)
-K(2248, Vector((-0.12, 4.72, 1.00)), Vector((-0.26, 5.01, 0.75)), 48)
-K(2290, Vector((-0.11, 4.73, 0.98)), Vector((-0.26, 5.01, 0.75)), 54)
-K(2314, Vector((-0.10, 4.71, 1.22)), Vector((-0.26, 5.01, 0.75)).lerp(face_of(HERO, 2314), 0.5), 34)
-eh = face_of(HERO, 2340); K(2340, Vector((-0.05, 4.66, 1.32)), eh, 28)
+DIAL = Vector((-0.26, 5.01, 0.75)); PTOP = Vector((-0.26, 5.0, 1.05))
+fs(2292); HANDR = HERO.wh("wrist.R")
+eh = face_of(HERO, 2204); K(2204, FC + Vector((-0.12, 0, 0.0)), eh, 28)
+K(2226, Vector((-0.12, 4.62, 1.30)), PTOP, 36)
+K(2237, Vector((-0.18, 4.70, 1.06)), DIAL, 48)
+K(2258, Vector((-0.20, 4.72, 1.02)), DIAL, 56)
+K(2267, Vector((-0.12, 4.62, 1.30)), PTOP, 36)
+eh = face_of(HERO, 2292); K(2292, Vector((-0.05, 4.66, 1.32)), eh, 28)
 eh = face_of(HERO, 2440); K(2440, FC + Vector((-0.12, 0, 0)), eh, 28)
 # 41.3-44.2 s: the long field ahead: through the corridor to over his shoulder, then back to his face
 prof_k(2480)
