@@ -850,9 +850,100 @@ around(HERO, END, (0.14, 0.45, 0.03), 40)
 CAMK.sort(key=lambda k: k[0])
 cl = vpchip([(f, l) for f, l, t, n in CAMK]); ctg = vpchip([(f, t) for f, l, t, n in CAMK]); cln = pchip([(f, n) for f, l, t, n in CAMK])
 CAM = O["CAM_Film"]; CTG = O["CAM_Target"]
+SHK = {f: Vector((shake(f, 1550, 2006, 0.010, 1.7, 1), shake(f, 1550, 2006, 0.006, 2.1, 3), shake(f, 1550, 2006, 0.010, 1.9, 5)))
+       for f in range(1, END + 1)}
+BASE = {f: cl(f) + SHK[f] for f in range(1, END + 1)}
+
+# ---------- clearance pass (v012 fix): the lens keeps MIN_SET from every set mesh (static + keyed: yokes, throttles,
+# mic, needles) and MIN_BODY from every character's bones (capsules round the bone axes). Pushes are solved on every
+# 2nd frame, smoothed over +-0.3 s so the move stays fluid, then re-checked; three rounds, then an exact final push.
+MIN_SET, MIN_BODY = 0.12, 0.10
+SETOBJS = [o for c in ("CABIN", "COCKPIT") for o in bpy.data.collections[c].all_objects if o.type == 'MESH' and not o.hide_render]
+def animated(o):
+    while o:
+        if o.animation_data and o.animation_data.action: return True
+        o = o.parent
+    return False
+MOV = [o for o in SETOBJS if animated(o)]; STA = [o for o in SETOBJS if o not in MOV]
+fs(1); B_STA = bvh_of(STA)
+log("clearance set objects static", len(STA), "moving", len(MOV), [o.name for o in MOV][:30])
+CAPS = [("head", 0.12), ("neck01", 0.07), ("spine01", 0.15), ("spine03", 0.16), ("spine05", 0.15), ("pelvis.L", 0.10), ("pelvis.R", 0.10)]
+for s_ in "LR":
+    CAPS += [("upperarm01." + s_, 0.065), ("upperarm02." + s_, 0.06), ("lowerarm01." + s_, 0.055), ("lowerarm02." + s_, 0.05),
+             ("wrist." + s_, 0.055), ("upperleg01." + s_, 0.10), ("upperleg02." + s_, 0.09), ("lowerleg01." + s_, 0.07),
+             ("lowerleg02." + s_, 0.06), ("foot." + s_, 0.06)]
+def seg_dist(p, a, b):
+    ab = b - a; t = max(0.0, min(1.0, (p - a).dot(ab) / max(ab.length_squared, 1e-9))); q = a + ab * t
+    return (p - q).length, q
+def need(f, p, bm):
+    """the push vector that clears p at frame f (the frame must be set)"""
+    push = Vector((0, 0, 0))
+    for _ in range(4):
+        q = p + push; worst = None
+        for B in (B_STA, bm):
+            if B is None: continue
+            h = B.find_nearest(q, 1.0)
+            if h[0] is not None and h[3] < MIN_SET:
+                n = (q - h[0]); n = n.normalized() if n.length > 1e-6 else h[1]
+                if worst is None or MIN_SET - h[3] > worst[0]: worst = (MIN_SET - h[3], n)
+        for ch in C.values():
+            if (ch.eyes() - q).length > 1.8: continue
+            for bn, r in CAPS:
+                if bn not in ch.rig.pose.bones: continue
+                d, qq = seg_dist(q, ch.wh(bn), Wt(ch.rig, bn))
+                gap = r + MIN_BODY - d
+                if gap > 0 and (worst is None or gap > worst[0]):
+                    n = q - qq; worst = (gap, n.normalized() if n.length > 1e-6 else Vector((0, -1, 0)))
+        if worst is None: break
+        push += worst[1] * (worst[0] + 0.004)
+    return push
+OFF = {f: Vector((0, 0, 0)) for f in range(1, END + 1)}
+FR_S = list(range(1, END + 1, 2)) + [END]
+def solve_round(fr):
+    raw = {}
+    for f in fr:
+        fs(f); bm = bvh_of(MOV) if MOV else None
+        raw[f] = need(f, BASE[f] + OFF[f], bm)
+    return raw
+W = 18                     # +-18 frames (0.3 s)
+GK = [math.exp(-0.5 * (k / (W / 2.2)) ** 2) for k in range(-W, W + 1)]
+for rnd in range(3):
+    raw = solve_round(FR_S)
+    nbad = sum(1 for v in raw.values() if v.length > 0.002)
+    log("clearance round", rnd, "frames pushed", nbad, "max push", round(max(v.length for v in raw.values()), 3))
+    if nbad == 0: break
+    full = {}
+    for f in range(1, END + 1):
+        a_ = max(k for k in FR_S if k <= f); b_ = min(k for k in FR_S if k >= f)
+        u = 0 if b_ == a_ else (f - a_) / (b_ - a_); full[f] = raw[a_].lerp(raw[b_], u)
+    for f in range(1, END + 1):
+        acc = Vector((0, 0, 0)); ws = 0.0
+        for k, g in zip(range(-W, W + 1), GK):
+            ff = min(END, max(1, f + k)); acc += full[ff] * g; ws += g
+        sm = acc / ws
+        # keep at least the raw need at this frame (smoothing must never thin the clearance)
+        if full[f].length > sm.length: sm = full[f].copy()
+        OFF[f] += sm * 1.15
+# exact residual push on every frame
+res_n = 0
 for f in range(1, END + 1):
-    sh = Vector((shake(f, 1550, 2006, 0.010, 1.7, 1), shake(f, 1550, 2006, 0.006, 2.1, 3), shake(f, 1550, 2006, 0.010, 1.9, 5)))
-    CAM.location = cl(f) + sh; CAM.keyframe_insert("location", frame=f)
+    fs(f); bm = bvh_of(MOV) if MOV else None
+    r_ = need(f, BASE[f] + OFF[f], bm)
+    if r_.length > 0.002: res_n += 1; OFF[f] += r_
+log("clearance residual frames", res_n, "max offset", round(max(v.length for v in OFF.values()), 3))
+# the face must not hide behind set geometry when the camera is on the hero: report it (lens blockers are re-staged by hand)
+blk = []
+for f in range(1, END + 1, 4):
+    fs(f); p = BASE[f] + OFF[f]; e = HERO.eyes(); d = e - p
+    fwd = (ctg(f) - p).normalized()
+    if d.normalized().dot(fwd) > 0.85:
+        bm = bvh_of(MOV) if MOV else None
+        if B_STA.ray_cast(p, d.normalized(), d.length - 0.06)[0] is not None or (bm and bm.ray_cast(p, d.normalized(), d.length - 0.06)[0] is not None):
+            blk.append(f)
+log("face blocked frames", blk)
+for f in range(1, END + 1):
+    sh = SHK[f]
+    CAM.location = BASE[f] + OFF[f]; CAM.keyframe_insert("location", frame=f)
     CTG.location = ctg(f) + sh * 0.5; CTG.keyframe_insert("location", frame=f)
     CAM.data.lens = cln(f); CAM.data.keyframe_insert("lens", frame=f)
 
