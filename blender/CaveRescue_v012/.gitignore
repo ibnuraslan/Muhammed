@@ -1,2 +1,5 @@
 *.blend1
 render/
+# the .blend is force-added only with the README "Render check: PASS" block
+*.blend
+review/checks_v012.json
