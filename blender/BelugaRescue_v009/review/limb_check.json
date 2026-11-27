@@ -1,0 +1,4455 @@
+{
+ "frames": {
+  "1": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "5": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "9": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "13": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "17": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "21": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "29": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "33": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "37": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "41": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "45": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "49": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "53": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "57": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "61": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "65": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "69": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "77": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "81": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "85": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "89": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "93": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "97": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "101": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "105": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "109": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "113": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "117": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "121": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "137": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "141": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "145": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "149": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "153": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "157": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "161": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "165": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "169": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "173": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "177": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "181": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "185": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "189": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "193": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "197": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "201": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "205": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "209": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "213": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "217": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "221": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "225": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "229": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "233": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "237": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "241": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "245": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "249": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "253": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "257": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "261": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "265": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "269": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "273": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "277": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "281": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "285": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "289": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "293": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "297": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "301": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "305": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "309": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "313": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "317": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "321": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "325": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "329": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "333": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "337": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "341": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "345": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "349": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "353": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "357": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "361": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "365": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "369": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "373": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "377": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "381": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "385": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "389": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "393": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "397": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "401": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "405": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "409": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "413": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "417": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "421": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "425": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "429": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "433": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "437": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "441": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "445": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "449": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "453": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "457": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "461": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "465": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "469": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "473": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "477": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "481": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "485": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "489": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "493": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "497": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "501": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "505": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "509": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "513": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "517": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "521": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "525": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "529": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "533": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "537": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "541": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "545": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "549": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "553": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "557": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "561": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "565": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ]
+  ],
+  "569": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "573": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "577": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "581": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "585": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "589": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "593": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "597": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "601": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "605": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "609": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "613": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "617": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "621": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "625": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "629": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "633": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "637": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "641": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "645": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "649": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "653": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "657": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "661": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "665": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "669": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "673": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "677": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "681": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "685": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "689": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "693": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "697": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "701": [
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (7 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "705": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "709": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "713": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "717": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "721": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "725": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "729": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "733": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "737": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "741": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "745": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "749": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "753": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "757": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "761": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "765": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "769": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "773": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "777": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "785": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "789": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "797": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "801": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "805": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "809": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "813": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "821": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "825": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "833": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "837": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "841": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "845": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "849": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "853": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "857": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "861": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "865": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "869": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "873": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "877": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "881": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "885": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "889": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "893": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "897": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "901": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "905": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "909": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "913": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "917": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "921": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "925": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "929": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "933": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "937": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "941": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "945": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "949": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "953": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "957": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "961": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "965": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "969": [
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1049": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1053": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1061": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1065": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1069": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1073": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1077": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1081": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1085": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1089": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ]
+  ],
+  "1093": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ]
+  ],
+  "1097": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1125": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1129": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1133": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1137": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1141": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1145": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1149": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1153": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1157": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1161": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1165": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1169": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1173": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1177": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1185": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1189": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1193": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1197": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1201": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1205": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1209": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1265": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1277": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1281": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1285": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1289": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1293": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1297": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1301": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1305": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1309": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1313": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1317": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1321": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1325": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1329": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1333": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1337": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1341": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1345": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1349": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1353": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1357": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1361": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1365": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1369": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1373": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1377": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1381": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1385": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1389": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1393": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1397": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1401": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1405": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1409": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1413": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1417": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1421": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1425": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1429": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1433": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1437": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1441": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1445": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1449": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1453": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1457": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1461": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1465": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1469": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1473": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1477": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1481": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1485": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1489": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1493": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1497": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1501": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1505": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1509": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1513": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1517": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1521": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1525": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1529": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1533": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1537": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1541": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1545": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1549": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1553": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1557": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1561": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1565": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1569": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1573": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1577": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1581": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1585": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1589": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1593": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1597": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1601": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1605": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1609": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1613": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1617": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1621": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1625": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1629": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1633": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Diver arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1637": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1641": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1645": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1649": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1653": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1657": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1661": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1665": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1669": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1673": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1677": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1681": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1685": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1689": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1693": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1697": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1701": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1705": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1709": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1713": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1717": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1721": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1725": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1729": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1733": [
+   [
+    "ARMBODY",
+    "Diver arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "SpecMan arm.R inside own torso (2 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 908
+ }
+}

@@ -1,0 +1,199 @@
+{
+ "frames": {
+  "331": {
+   "Diver": {
+    "self": 436,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "337": {
+   "Diver": {
+    "self": 432,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "343": {
+   "Diver": {
+    "self": 428,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "349": {
+   "Diver": {
+    "self": 430,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "355": {
+   "Diver": {
+    "self": 424,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "361": {
+   "Diver": {
+    "self": 412,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "367": {
+   "Diver": {
+    "self": 403,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "373": {
+   "Diver": {
+    "self": 402,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "379": {
+   "Diver": {
+    "self": 392,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "385": {
+   "Diver": {
+    "self": 385,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "391": {
+   "Diver": {
+    "self": 375,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "397": {
+   "Diver": {
+    "self": 368,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "403": {
+   "Diver": {
+    "self": 359,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "409": {
+   "Diver": {
+    "self": 355,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "415": {
+   "Diver": {
+    "self": 355,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "421": {
+   "Diver": {
+    "self": 358,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "427": {
+   "Diver": {
+    "self": 361,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "433": {
+   "Diver": {
+    "self": 372,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "439": {
+   "Diver": {
+    "self": 381,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "445": {
+   "Diver": {
+    "self": 392,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "451": {
+   "Diver": {
+    "self": 401,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "457": {
+   "Diver": {
+    "self": 404,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "463": {
+   "Diver": {
+    "self": 412,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "469": {
+   "Diver": {
+    "self": 419,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1573": {
+   "Diver": {
+    "self": 0,
+    "clothes": 0,
+    "other": 81
+   }
+  },
+  "1579": {
+   "Diver": {
+    "self": 0,
+    "clothes": 0,
+    "other": 744
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   331,
+   469
+  ],
+  [
+   1573,
+   1579
+  ]
+ ],
+ "fps": 60
+}
