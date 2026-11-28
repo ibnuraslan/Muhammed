@@ -56,7 +56,7 @@ def overlays():
         "P1-13": [("person", dict(photo=g("chantal"), name="CHANTAL", role="PARIS"), 2.2)],
         "P1-16": [("phrase", dict(text="a doctor"), 1.8)],
         "P1-18": [("place", dict(photo=g("paris"), name="PARIS", country="FRANCE", coords="48.8566° N  2.3522° E"), 2.6)],
-        "P1-24": [("title", dict(text="THE ADVERSARY?", sub="PLACEHOLDER: FILM TITLE FROM THE HUB"), 3.2)],
+        "P1-24": [("title", dict(text="[ FILM TITLE ]", sub="PLACEHOLDER UNTIL THE TITLE IS CHOSEN"), 3.9)],
         "P1-25": [("disclaimer", dict(discretion=True), 6.0)],
         "P1-26": [("person", dict(photo=g("romand"), name="JEAN-CLAUDE ROMAND", role="\"WHO RESEARCHER\""), 2.2)],
         "P1-27": [("linkboard", dict(cards=fam_cards, links=fam_links), 6.2)],

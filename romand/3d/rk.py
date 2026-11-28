@@ -109,7 +109,7 @@ def M():
         win=emission("window_warm", (1.0, 0.62, 0.22), 6.0), lamp=emission("lamp", (1.0, 0.6, 0.18), 25.0),
         head=emission("headlight", (1.0, 0.92, 0.75), 40.0), tail=emission("taillight", (0.9, 0.25, 0.04), 4.0),
         tv=emission("tv_glow", (0.55, 0.75, 1.0), 8.0), candle=emission("candle", (1.0, 0.6, 0.2), 30.0),
-        slab=mat("explainer_slab", (0.08, 0.1, 0.12), 0.6), pawn=mat("pawn", (0.8, 0.79, 0.76), 0.6),
+        slab=mat("explainer_slab", (0.11, 0.085, 0.055), 0.6), pawn=mat("pawn", (0.8, 0.79, 0.76), 0.6),
         hot=mat("seldom_yellow", (0.78, 1.0, 0.0), 0.4, emit=(0.78, 1.0, 0.0), estr=1.5),
     )
     STATE["pal"] = P

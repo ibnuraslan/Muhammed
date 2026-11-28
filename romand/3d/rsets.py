@@ -120,7 +120,7 @@ def hallway(seed=9):
     rk.fade_to_void([P["light"]], (0, 0.5), 2.4, 4.0)
     box("hpi_door", (0.4, 1.88, 1.05), (0.95, 0.06, 2.1), P["wood"])
     cyl("hpi_knob", (0.0, 1.84, 1.0), (0.0, 1.8, 1.0), 0.03, P["chrome"], 10)
-    PR.boots("hpi_boots_a", (-1.4, 1.5, 0.0), 0.15, 0.55); PR.boots("hpi_boots_b", (-1.05, 1.55, 0.0), -0.1, 0.5)
+    PR.rubber_boots("hpi_boots", (-1.2, 1.5, 0.0), 0.08, 0.17)      # the asset holds two pairs: one per child
     box("hpi_rack", (-2.25, 0.8, 1.55), (0.06, 1.4, 0.06), P["wood"])
     for i, y in enumerate((0.35, 0.75, 1.15)):
         PR.cone(f"hpi_coat{i}", (-2.2, y, 1.1), 0.18 if i else 0.12, 0.08, 0.8 if i else 0.55, P["coat"], 16)
@@ -190,12 +190,13 @@ def diploma_wall():
 
 # ------------------------------------------------------------------------------------------------- EXP: explainer slab
 def explainer(size=(8, 5)):
-    """Dark blue-grey ground and world (never pitch black); cool neutral light; key objects get P['hot']."""
+    """Dark warm charcoal-amber ground and world (never pitch black, stays inside the yellow world); warm-neutral light;
+    key objects get P['hot'] (#E3FF00)."""
     P = M()
-    rk.world_color((0.012, 0.016, 0.022), 1.0)
+    rk.world_color((0.018, 0.013, 0.008), 1.0)
     box("exp_slab", (0, 0, -0.1), (size[0], size[1], 0.2), P["slab"], bevel=0.05)
-    rk.area("exp_key", (0, -1.5, 7), (0, 0, 0), 6, 380, (0.85, 0.9, 1.0))
-    rk.area("exp_fill", (-6, -4, 4), (0, 0, 0), 4, 120, (0.6, 0.7, 0.85))
+    rk.area("exp_key", (0, -1.5, 7), (0, 0, 0), 6, 380, (1.0, 0.86, 0.66))
+    rk.area("exp_fill", (-6, -4, 4), (0, 0, 0), 4, 120, (1.0, 0.7, 0.4))
     return dict(center=Vector((0, 0, 0)))
 
 

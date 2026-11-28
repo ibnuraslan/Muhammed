@@ -508,6 +508,16 @@ def _split(o, pred, name):
     return n
 
 
+def _bisect(o, co, no):
+    """Cut mesh o along a world-space plane (clean straight seams before splitting panels off)."""
+    import bmesh
+    mw = o.matrix_world; inv = mw.inverted()
+    pc = inv @ Vector(co); pn = (inv.to_3x3().transposed().inverted() @ Vector(no)).normalized() if False else (mw.to_3x3().transposed() @ Vector(no)).normalized()
+    b = bmesh.new(); b.from_mesh(o.data)
+    bmesh.ops.bisect_plane(b, geom=b.verts[:] + b.edges[:] + b.faces[:], plane_co=pc, plane_no=pn)
+    b.to_mesh(o.data); b.free()
+
+
 def car405(name="car", loc=(0, 0, 0), rz=0.0, boot=0.0, lights=True, dome=0.0, beams=True, hl_energy=300.0, door_l=0.0, door_r=0.0):
     """The Romand car: a 1994 Peugeot 405 (Sketchfab CC-BY), scaled to 4.41 m, front facing +X, windows cut into
     see-through glass, boot lid separated on a hinge (boot 0..1), a simple interior (seats, dash, wheel, floor).
@@ -543,10 +553,41 @@ def car405(name="car", loc=(0, 0, 0), rz=0.0, boot=0.0, lights=True, dome=0.0, b
             mwk = w_.matrix_world.copy(); w_.parent = pivot; w_.matrix_world = mwk
     # boot lid: body faces on the rear deck behind the rear screen
     lid = _split(body, lambda c, n: c.x < -1.55 and c.z > 0.84 and n.z > 0.25, name + "_boot_lid")
+    # front doors: cut the door skin (and its window glass) out of the body and hang each on a hinge at its front edge
+    doors = {}
+    if door_l or door_r:
+        for o in [x for x in (body, plast, win) if x is not None]:
+            for co, no in (((-0.42, 0, 0), (1, 0, 0)), ((0.98, 0, 0), (1, 0, 0)), ((0, 0, 0.3), (0, 0, 1))):
+                _bisect(o, co, no)
+    for side, amt in ((1, door_l), (-1, door_r)):
+        if not amt:
+            continue
+        def in_door(c, n, side=side):
+            return side * c.y > 0.55 and -0.42 < c.x < 0.98 and 0.3 < c.z < 1.42 and side * n.y > 0.35
+        pieces = [x for x in (_split(body, in_door, name + f"_door{side}"),
+                              _split(plast, lambda c, n, f=in_door: f(c, n) and c.z < 0.98, name + f"_doortrim{side}"),
+                              _split(win, in_door, name + f"_doorwin{side}") if win is not None else None) if x is not None]
+        card = box(name + f"_doorcard{side}", (0.28, side * 0.74, 0.68), (1.3, 0.03, 0.62), P["cloth"])
+        pieces.append(card)
+        if not pieces:
+            continue
+        bpy.context.view_layer.update()
+        vs = [p.matrix_world @ v.co for p in pieces for v in p.data.vertices]
+        hx = max(v.x for v in vs); hy = sum(v.y for v in vs) / len(vs)
+        h = rk.empty(name + f"_door_hinge{side}", (hx, hy, 0.7)); bpy.context.view_layer.update()
+        for p in pieces:
+            p.parent = h; p.matrix_parent_inverse = h.matrix_world.inverted()
+        h.rotation_euler.z = math.radians(side * 62 * amt)
+        doors[side] = (h, pieces)
     # paint everything neutral (the world tint comes from the light)
-    for o in (body, lid):
+    for o in [body, lid] + [p for d in doors.values() for p in d[1] if "_door" in p.name and ("win" not in p.name and "trim" not in p.name and "card" not in p.name)]:
         if o is not None:
             o.data.materials.clear(); o.data.materials.append(P["carpaint"])
+    for d in doors.values():
+        for p in d[1]:
+            if "_doorwin" in p.name:
+                p.data.materials.clear(); p.data.materials.append(rk.mat("car_glass", (0.05, 0.05, 0.05), 0.04, alpha=0.18))
+    parts_doors = [d[0] for d in doors.values()]
     # lamps: front half headlamps, rear half tail lamps
     hl_ = _split(lights_o, lambda c, n: c.x > 0, name + "_headlamps")
     tl_ = lights_o
@@ -583,6 +624,7 @@ def car405(name="car", loc=(0, 0, 0), rz=0.0, boot=0.0, lights=True, dome=0.0, b
     sw = bpy.context.active_object; sw.name = name + "_wheel"; sw.data.materials.append(P["dark"]); parts.append(sw)
     if dome:
         parts.append(rk.point(name + "_dome", (-0.3, 0, 1.3), dome, (1.0, 0.85, 0.6), soft=0.2))
+    parts += parts_doors
     bpy.context.view_layer.update()
     for p_ in parts:
         p_.parent = pivot; p_.matrix_parent_inverse = pivot.matrix_world.inverted()
@@ -617,3 +659,22 @@ def model_house(name, loc, s=1.0, lit=True, rz=0.0):
         parts.append(box(name + f"_win{i}", (x * s, -0.401 * s, 0.35 * s), (0.18 * s, 0.01 * s, 0.18 * s), P["hot"] if lit else P["dark"]))
     parts.append(box(name + "_door", (0, -0.401 * s, 0.14 * s), (0.14 * s, 0.01 * s, 0.26 * s), P["dark"]))
     return group(name, parts, loc, rz)
+
+
+def rubber_boots(name, loc, rz=0.0, h=0.17):
+    """A pair of real rubber boots (Poly Haven CC0 'rubber_boots'), scaled so the shaft is h metres tall (child size)."""
+    import ph
+    root, ms = ph.model("rubber_boots", res="1k")
+    lo, hi = ph.bounds(ms)
+    s = h / max(hi.z - lo.z, 1e-6)
+    piv = rk.empty(name)
+    root.parent = piv; root.location = (-(lo.x + hi.x) / 2, -(lo.y + hi.y) / 2, -lo.z)
+    piv.scale = (s, s, s); piv.location = loc; piv.rotation_euler.z = rz
+    bpy.context.view_layer.update()
+    for o in ms:                 # pale clay like the rest of the world's small objects
+        o.data.materials.clear(); o.data.materials.append(P_coat())
+    return piv
+
+
+def P_coat():
+    return M()["coat"]

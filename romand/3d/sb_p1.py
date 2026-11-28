@@ -75,15 +75,27 @@ def s07():
 
 
 def s08(lifted=False):
-    """Macro into the open boot from above (no figure in frame): the red coil under the boot lamp."""
+    """Macro into the open boot: the red coil, and his clay hand (attached to his figure) reaching down to it."""
     A, car, f = forest_scene(dict(lights=True, boot=1.0, beams=False), driver=False, passenger=False)
-    mw = car["root"].matrix_world
+    mw = car["root"].matrix_world; R = mw.to_3x3()
     bf = car["boot_floor"]
-    coil = PR.cord_coil("cord", bf + Vector((0.05, 0.12, 0.0)), 0.12)
-    rk.look(center=bf, extent=3, fill=20, moon=20)
-    rk.accent(coil, energy=60, size_deg=22, offset=(-0.3, -0.4, 1.2))
-    d = 0.55 if lifted else 0.85
-    rk.camera(bf + mw.to_3x3() @ Vector((-0.55, -0.35, 0.0)) + Vector((0, 0, d)), bf + Vector((0.03, 0.1, 0.02)), lens=50, fstop=2.0)
+    fig = rk.person("romand", tuple(mw @ Vector((-2.62, 0.12, 0))), 90, "boot", "man", seed=4)
+    arm = fig["arm"]; fwd = R @ Vector((1, 0, 0)); lat = R @ Vector((0, 1, 0))
+    # bend at the hips and lower the right arm until the hand hangs 10 cm above the boot floor (never touching it)
+    for _ in range(40):
+        hand = rk.bone_world(fig, "hand_r_051")
+        if hand.z <= bf.z + 0.10:
+            break
+        rk._rot(arm, "spine_01_03", lat, -3.0 if (hand - bf).dot(fwd) < 0 else 0.0)
+        rk._rot(arm, "upperarm_r_049", lat, -3.0)
+    hand = rk.bone_world(fig, "hand_r_051")
+    coil = PR.cord_coil("cord", Vector((hand.x, hand.y, bf.z)), 0.11)
+    rk.look(center=bf, extent=3, fill=20, moon=20, key=160, rim=160, fig_target=hand)
+    rk.accent(coil, energy=60, size_deg=22, offset=(0.3, -0.4, 1.2))
+    tgt = Vector((hand.x, hand.y, bf.z + 0.05))
+    d = 0.75 if lifted else 1.0
+    rk.camera(tgt + R @ Vector((0.35, -0.9, 0.0)) + Vector((0, 0, d)), tgt, lens=40 if not lifted else 50, fstop=2.2)
+    print("HAND z", round(hand.z, 3), "floor", round(bf.z, 3))
 
 def s09():
     s08(lifted=True)
@@ -201,19 +213,16 @@ def s22():
 
 
 def s23():
-    """Both houses side by side in the void, lights off."""
-    P = rk.M()
-    for i, x in enumerate((-8.0, 8.0)):
-        m = rk.mat(f"lawn{i}", (0.75, 0.74, 0.7), 0.5)
-        rk.box(f"slab{i}", (x, 0, -0.1), (11, 9, 0.2), m)
-        rk.fade_to_void([m], (x, 0), 3.5, 5.6)
-        PR.gable_house(f"house{i}", (x, 0.5, 0), 0.0, w=8 if i else 9, d=6.5, h=5.0, roof=2.6, snow=True)
-        for k in range(6):
-            a = k / 6 * 6.28 + i
-            PR.pine(f"p{i}{k}", (x + math.cos(a) * 4.4, math.sin(a) * 3.4, 0), 4.5, seed=k + 10 * i)
-    rk.look(center=(0, 0, 0), extent=22, fill=420, moon=300)
-    rk.orbit_cam((0, 0.5, 1.0), -90, 55, 46, lens=35)
-
+    """Both houses side by side in the void, lights off: Prevessin-Moens (left) and Clairvaux-les-Lacs (right)."""
+    for i, x in enumerate((-7.0, 7.0)):
+        m = rk.mat(f"lawn{i}", (0.7, 0.69, 0.66), 0.5)
+        rk.box(f"slab{i}", (x, 0, -0.15), (10, 8, 0.3), m, bevel=0.05)
+        PR.gable_house(f"house{i}", (x, 0.6, 0), 0.0, w=7.5 if i else 8.5, d=6.0, h=4.6, roof=2.5, snow=True)
+        for k, (dx, dy) in enumerate(((-4.0, 2.5), (4.0, 2.8), (-3.6, -2.6), (3.8, -2.2))):
+            PR.pine(f"p{i}{k}", (x + dx, dy, 0), 4.5, seed=k + 10 * i)
+        rk.area(f"slab_fill{i}", (x - 2, -9, 9), (x, 0, 1), 6, 900, rk.AMBER)
+    rk.look(center=(0, 0, 0), extent=18, fill=200, moon=200)
+    rk.orbit_cam((0, 0.5, 1.6), -90, 30, 33, lens=35)
 
 def s26():
     A = ST.garden_table()
