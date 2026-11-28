@@ -123,6 +123,7 @@ def hallway(seed=9):
         PR.cone(f"hpi_coat{i}", (-2.2, y, 1.1), 0.18 if i else 0.12, 0.08, 0.8 if i else 0.55, P["coat"], 16)
     # snow-melt puddles round the boots
     box("hpi_mat", (-1.2, 1.4, 0.006), (1.1, 0.6, 0.012), P["cloth"])
+    rk.point("hpi_ceiling", (-0.4, 0.6, 2.6), 45, (1.0, 0.72, 0.38), soft=0.3)
     return dict(boots=Vector((-1.25, 1.52, 0.05)), door=Vector((0.4, 1.85, 1.0)))
 
 

@@ -36,15 +36,13 @@ def crop(sid, box):
 def overlays():
     ph = {}
     try:
-        ph["chantal"] = crop("P1-13", (380, 120, 600, 400))
-        ph["romand"] = crop("P1-26", (300, 140, 480, 380))
-        ph["florence"] = crop("P1-26", (420, 120, 560, 300))
-        ph["aime"] = crop("P1-26", (440, 230, 600, 430))
-        ph["annemarie"] = crop("P1-26", (540, 230, 700, 430))
-        ph["kids"] = crop("P1-21", (300, 150, 700, 450))
+        ph["chantal"] = crop("P1-13", (360, 20, 600, 330))
+        ph["romand"] = crop("P1-26", (195, 270, 335, 440))
+        ph["florence"] = crop("P1-26", (255, 180, 355, 300))
+        ph["aime"] = crop("P1-26", (410, 230, 640, 400))
+        ph["kids"] = crop("P1-21", (240, 160, 780, 440))      # children: no portrait, their boots by the door
         ph["paris"] = crop("P1-18", (200, 60, 800, 400))
         ph["lyon"] = crop("P1-33", (150, 60, 810, 430))
-        ph["house"] = crop("P1-20", (200, 80, 800, 440))
     except Exception as e:
         print("photo crops:", e)
     g = ph.get
@@ -65,7 +63,7 @@ def overlays():
         "P1-28": [("phrase", dict(text="no job"), 1.6)],
         "P1-29": [("phrase", dict(text="no qualification"), 2.2)],
         "P1-31": [("datestamp", dict(top="JANUARY", big="1993"), 1.8)],
-        "P1-32": [("timeline", dict(events=(("1975", "", "LYON"), ("1980", "", "MARRIAGE"), ("1988", "", "PIERRE CROLET"),
+        "P1-32": [("timeline", dict(events=(("1975", "", "LYON"), ("1980", "", "MARRIAGE"), ("1988", "", "THE MONEY"),
                                             ("JAN 1993", "", "THE MURDERS")), now=0), 4.0)],
         "P1-33": [("place", dict(photo=g("lyon"), name="LYON", country="FRANCE", coords="45.7640° N  4.8357° E"), 2.6)],
     }

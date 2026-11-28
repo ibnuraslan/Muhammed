@@ -217,18 +217,15 @@ def s23():
 
 def s26():
     A = ST.garden_table()
-    seats = [((-1.95, 0.0), -90, "man", "romand"), ((-1.1, 0.75), 180, "woman", "florence"), ((-0.2, 0.75), 180, "girl", "caroline"),
-             ((0.7, 0.75), 180, "child", "antoine"), ((-0.6, -0.75), 0, "old_man", "aime"), ((0.4, -0.75), 0, "old_woman", "annemarie")]
+    # far side (y>0) faces -Y (heading 0) toward the table, near side faces +Y (heading 180); Romand at the head
+    seats = [((-1.95, 0.0), 90, "man", "romand"), ((-1.1, 0.78), 0, "woman", "florence"), ((-0.2, 0.78), 0, "girl", "caroline"),
+             ((0.7, 0.78), 0, "child", "antoine"), ((-0.6, -0.78), 180, "old_man", "aime"), ((0.4, -0.78), 180, "old_woman", "annemarie")]
     for i, ((x, y), hd, kind, nm) in enumerate(seats):
-        if x < -1.5:
-            PR.chair(f"ch_{nm}", (x, y, 0), math.radians(-90))
-        else:
-            PR.chair(f"ch_{nm}", (x, y + (0.0), 0), math.radians(hd + 180 if hd == 0 else 0))
-        hip = 0.56 if kind in ("man", "woman", "old_man", "old_woman") else 0.56
-        rk.person(nm, (0, 0, 0), hd, "sit_table", kind, seed=20 + i, hip_at=Vector((x, y + (0.08 if hd == 180 else -0.08 if hd == 0 else 0), hip)))
+        PR.chair(f"ch_{nm}", (x, y, 0), math.radians(hd))
+        back = {0: (0, 0.06), 180: (0, -0.06), 90: (-0.06, 0)}[hd]
+        rk.person(nm, (0, 0, 0), hd, "sit_table", kind, seed=20 + i, hip_at=Vector((x + back[0], y + back[1], 0.55)))
     rk.look(center=(0, 0, 0), extent=8, fill=120, moon=160, key=320, rim=320)
     rk.orbit_cam((0, 0, 0.7), -125, 38, 7.2, lens=35)
-
 
 def s28():
     A = ST.who_ext()

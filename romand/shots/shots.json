@@ -50,7 +50,7 @@
     "set": "CAR",
     "kind": "MAC",
     "cam": "MACRO push on the boot lid",
-    "act": "Boot latch pops, the lid rises 5 cm under the red tail-light glow. HARD STOP: cut to black for 0.4 s.",
+    "act": "Boot latch pops, the lid rises 5 cm, boot-lamp light spills from the gap (tail lights amber: red is kept for the accent). HARD STOP: cut to black for 0.4 s.",
     "ov": "",
     "sfx": "latch clunk, then total silence (hook ends ~10 s)"
    },
@@ -102,7 +102,7 @@
     "set": "FOR",
     "kind": "MAC",
     "cam": "MACRO RACK FOCUS boot floor to his hand",
-    "act": "Inside the boot: a coil of cord, the ONLY red in frame, under the boot lamp. His clay hand closes on it.",
+    "act": "Inside the boot, from above: a coil of cord, the ONLY red in frame, under the boot lamp. (Final: his clay hand enters and closes on it.)",
     "ov": "",
     "sfx": "nylon rasp, low sub hit"
    },
