@@ -12,7 +12,10 @@ SPP = int(E("SPP", "10"))
 
 
 def fig_in_seat(name, seat, heading, kind="man", pose="drive", seed=0):
-    return rk.person(name, (0, 0, 0), heading, pose, kind, seed=seed, hip_at=Vector(seat) + Vector((0, 0, 0.08)))
+    import ranim
+    f = rk.person(name, (0, 0, 0), heading, pose, kind, seed=seed, hip_at=Vector(seat) + Vector((0, 0, 0.08)))
+    ranim.seat_fit(f)
+    return f
 
 
 def forest_scene(car_kw=None, driver=True, passenger=True, pass_pose="car_sit", seed=3):
@@ -147,7 +150,11 @@ def explainer_pair(notes=False):
     rk.person("a", (0, 0, 0), 90, "sit_table", "woman", seed=8, hip_at=Vector((-1.15, 0, 0.56)))
     rk.person("b", (0, 0, 0), -90, "sit_table", "man", seed=9, hip_at=Vector((1.15, 0, 0.56)))
     for x in (-1.15, 1.15):
-        PR.chair(f"exp_ch{x}", (x, 0, 0), math.radians(-90 if x < 0 else 90))
+        PR.chair(f"exp_ch{x}", (x, 0, 0), math.radians(90 if x < 0 else -90))     # chair faces its sitter's heading
+    import ranim
+    for nm in ("a", "b"):
+        f = dict(pivot=bpy.data.objects[nm], arm=[o for o in bpy.data.objects[nm].children_recursive if o.type == 'ARMATURE'][0])
+        ranim.seat_fit(f, objs=ranim.near_objs(f["pivot"], 1.3, extra=("exp_slab", "exp_table")))
     if notes:
         PR.notes_stack("notes", (0.25, 0.0, 0.76), n=7, rz=0.2, hot=True)
     rk.look(center=(0, 0, 0), extent=5, fill=0.0, moon=0.0, key=160, rim=120, key_from=(-1, -2, 4))
@@ -230,9 +237,18 @@ def s26():
     seats = [((-1.95, 0.0), 90, "man", "romand"), ((-1.1, 0.78), 0, "woman", "florence"), ((-0.2, 0.78), 0, "girl", "caroline"),
              ((0.7, 0.78), 0, "child", "antoine"), ((-0.6, -0.78), 180, "old_man", "aime"), ((0.4, -0.78), 180, "old_woman", "annemarie")]
     for i, ((x, y), hd, kind, nm) in enumerate(seats):
+        y = y * 1.05                                   # a little more room between the chairs and the table
         PR.chair(f"ch_{nm}", (x, y, 0), math.radians(hd))
         back = {0: (0, 0.06), 180: (0, -0.06), 90: (-0.06, 0)}[hd]
-        rk.person(nm, (0, 0, 0), hd, "sit_table", kind, seed=20 + i, hip_at=Vector((x + back[0], y + back[1], 0.55)))
+        child = kind in ("child", "girl")
+        if child:                                       # a booster cushion on the chair; the child sits on it
+            rk.box(f"ch_{nm}_cushion", (x, y, 0.5), (0.36, 0.36, 0.08), rk.M()["cloth"], bevel=0.02)
+        rk.person(nm, (0, 0, 0), hd, "sit_child" if child else "sit_table", kind, seed=20 + i,
+                  hip_at=Vector((x, y - (0.02 if hd == 0 else -0.02), 0.6)) if child else Vector((x + back[0], y + back[1], 0.55)))
+    import ranim
+    for nm in ("romand", "florence", "caroline", "antoine", "aime", "annemarie"):
+        f = dict(pivot=bpy.data.objects[nm], arm=[o for o in bpy.data.objects[nm].children_recursive if o.type == 'ARMATURE'][0])
+        ranim.seat_fit(f, objs=ranim.near_objs(f["pivot"], 1.2, extra=("gt_lawn", "gt_table")))
     rk.look(center=(0, 0, 0), extent=8, fill=120, moon=160, key=320, rim=320)
     rk.orbit_cam((0, 0, 0.7), -125, 38, 7.2, lens=35)
 
@@ -271,8 +287,9 @@ def s31():
 
 def s33():
     A = ST.faculty()
-    for i in range(6):
-        rk.person(f"st{i}", (-3.5 + i * 1.4, -2.5 + (i % 3) * 1.0, 0), [10, 170, 30, 200, -20, 160][i], "walk", "man" if i % 2 else "woman", seed=30 + i)
+    lanes = [(-3.0, -3.4, 90), (3.0, -2.8, -90), (-3.0, -2.2, 90), (3.0, -1.6, -90), (-3.0, -1.0, 90), (3.0, -0.4, -90)]
+    for i, (x, y, hd) in enumerate(lanes):          # crossing the courtyard in their own lanes; the wings start at |x| = 3.5
+        rk.person(f"st{i}", (x, y, 0), hd, "walk", "man" if i % 2 else "woman", seed=30 + i)
     rk.look(center=(0, 0, 0), extent=16, fill=260, moon=260, key=300, rim=300)
     rk.orbit_cam((0, 0.5, 2.5), -100, 40, 24, lens=35)
 

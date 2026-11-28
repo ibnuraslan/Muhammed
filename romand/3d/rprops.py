@@ -577,7 +577,7 @@ def car405(name="car", loc=(0, 0, 0), rz=0.0, boot=0.0, lights=True, dome=0.0, b
         h = rk.empty(name + f"_door_hinge{side}", (hx, hy, 0.7)); bpy.context.view_layer.update()
         for p in pieces:
             p.parent = h; p.matrix_parent_inverse = h.matrix_world.inverted()
-        h.rotation_euler.z = math.radians(side * 62 * amt)
+        h.rotation_euler.z = math.radians(-side * 62 * amt)   # swing outward
         doors[side] = (h, pieces)
     # paint everything neutral (the world tint comes from the light)
     for o in [body, lid] + [p for d in doors.values() for p in d[1] if "_door" in p.name and ("win" not in p.name and "trim" not in p.name and "card" not in p.name)]:

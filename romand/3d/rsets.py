@@ -19,9 +19,9 @@ def _slab(name, size, m, z=0.0, fade=None, center=(0, 0)):
 def forest(seed=3, car_kw=None, size=(18, 14), density=120, car_at=(0.0, 0.0), car_rz=0.0, snow=False):
     P = M(); rng = random.Random(seed)
     _slab("forest_floor", size, P["soil"], fade=(5.0, 8.0))
-    road = box("road", (0, 0, 0.005), (size[0], 3.6, 0.02), P["asphalt"])
+    road = box("road", (0, 0, -0.01), (size[0], 3.6, 0.02), P["asphalt"])     # flush with the ground: feet stand on z = 0
     rk.fade_to_void([P["asphalt"]], (0, 0), 5.0, 8.5)
-    box("verge_l", (0, 2.1, 0.01), (size[0], 0.6, 0.02), P["soil"]); box("verge_r", (0, -2.1, 0.01), (size[0], 0.6, 0.02), P["soil"])
+    box("verge_l", (0, 2.1, -0.008), (size[0], 0.6, 0.02), P["soil"]); box("verge_r", (0, -2.1, -0.008), (size[0], 0.6, 0.02), P["soil"])
     trees = []
     for i in range(density):
         x = rng.uniform(-size[0] / 2 + 0.5, size[0] / 2 - 0.5)
@@ -296,3 +296,174 @@ def abbey(seed=19):
 SET_BUILDERS = dict(FOR=forest, FTB=country_house, PAR=paris_street, HPM=house_pm, HPI=hallway, CLV=parents_house,
                     WHO=who_ext, UNI=faculty, CAF=cafe, LIB=library, HOT=airport_hotel, CRT=courtroom, PRI=prison, ABB=abbey,
                     EXP=explainer)
+
+
+# ================================================================================================= Part 2 interiors
+def _room(name, size, wall_h=3.0, floor_key="wet", wall_key="light", walls=("b", "l"), fade=None):
+    """A cutaway room: floor + back (and optional left/right) walls, edges falling into the void."""
+    P = M(); w, d = size
+    _slab(name + "_floor", (w, d), P[floor_key])
+    if "b" in walls:
+        box(name + "_wall_b", (0, d / 2, wall_h / 2), (w, 0.2, wall_h), P[wall_key])
+    if "l" in walls:
+        box(name + "_wall_l", (-w / 2, 0, wall_h / 2), (0.2, d, wall_h), P[wall_key])
+    if "r" in walls:
+        box(name + "_wall_r", (w / 2, 0, wall_h / 2), (0.2, d, wall_h), P[wall_key])
+    f = fade or (max(w, d) * 0.32, max(w, d) * 0.55)
+    rk.fade_to_void([P[floor_key], P[wall_key]], (0, 0), f[0], f[1])
+
+
+def exam_hall(rows=5, cols=6):
+    """Rows of single desks with chairs (faces -Y, toward the invigilator's table)."""
+    P = M(); _room("exam", (12, 10), 3.6)
+    seats = []
+    for r in range(rows):
+        for c in range(cols):
+            x = -4.0 + c * 1.6; y = -2.6 + r * 1.4
+            PR.table(f"exam_desk{r}{c}", (x, y - 0.45, 0), w=0.9, d=0.55, h=0.74)
+            PR.chair(f"exam_ch{r}{c}", (x, y, 0), 0.0)
+            box(f"exam_paper{r}{c}", (x, y - 0.42, 0.745), (0.3, 0.21, 0.002), P["paper"])
+            seats.append(Vector((x, y, 0)))
+    PR.table("exam_front", (0, -4.4, 0), w=2.2, d=0.8)
+    for i, x in enumerate((-4.5, -1.5, 1.5, 4.5)):
+        PR.window(f"exam_win{i}", (x, 4.88, 2.0), 1.6, 2.0, "y", lit=False, sign=-1)
+        rk.area(f"exam_sky{i}", (x, 6.0, 2.2), (x, 0, 0.5), 1.6, 120, (1.0, 0.75, 0.4))
+    return dict(seats=seats)
+
+
+def results_corridor():
+    P = M(); _room("cor", (12, 4.5), 3.2, walls=("b",))
+    box("cor_board", (0, 2.1, 1.55), (2.6, 0.06, 1.3), P["wood"])
+    for i in range(8):
+        box(f"cor_sheet{i}", (-1.05 + (i % 4) * 0.7, 2.06, 1.85 - (i // 4) * 0.62), (0.5, 0.01, 0.55), P["paper"])
+    for i, x in enumerate((-4.5, 4.5)):
+        box(f"cor_door{i}", (x, 2.12, 1.1), (1.0, 0.06, 2.2), P["wood"])
+    rk.point("cor_lamp", (0, 1.2, 3.0), 120, (1.0, 0.75, 0.4))
+    return dict(board=Vector((0, 2.0, 1.55)))
+
+
+def registration_office():
+    P = M(); _room("reg", (8, 6), 3.0)
+    box("reg_counter", (0, 0.4, 0.55), (3.4, 0.6, 1.1), P["wood"], bevel=0.02)
+    box("reg_top", (0, 0.4, 1.12), (3.5, 0.7, 0.04), P["light"])
+    PR.shelf("reg_files", (-2.4, 2.75, 0), 2.0, 2.4, seed=8)
+    box("reg_form", (0.1, 0.35, 1.145), (0.3, 0.21, 0.002), P["paper"])
+    stamp = rk.group("reg_stamp", [cyl("reg_stamp_h", (0, 0, 0), (0, 0, 0.09), 0.02, P["wood"], 12),
+                                   box("reg_stamp_b", (0, 0, 0.0), (0.07, 0.045, 0.025), P["dark"])], (0.45, 0.3, 1.16))
+    rk.point("reg_lamp", (0, 0.4, 2.6), 90, (1.0, 0.72, 0.38))
+    return dict(counter=Vector((0, 0.4, 1.14)), stamp=stamp)
+
+
+def lecture_hall(rows=6):
+    """Tiered benches rising toward the back (+Y); lectern and blackboard at the front."""
+    P = M(); _room("lec", (13, 11), 6.0)
+    seats = []
+    for r in range(rows):
+        z = r * 0.32; y = -2.0 + r * 1.0
+        box(f"lec_tier{r}", (0, y + 0.2, z / 2), (11, 1.0, max(z, 0.02)), P["grey"])
+        box(f"lec_desk{r}", (0, y - 0.15, z + 0.75), (10, 0.35, 0.04), P["wood"])
+        box(f"lec_front{r}", (0, y - 0.32, z + 0.38), (10, 0.03, 0.74), P["wood"])
+        box(f"lec_bench{r}", (0, y + 0.3, z + 0.44), (10, 0.36, 0.05), P["wood"])
+        for k in range(9):
+            seats.append(Vector((-4.4 + k * 1.1, y + 0.3, z)))
+    box("lec_board", (0, -4.8, 1.9), (5.5, 0.06, 1.6), P["dark"])
+    box("lec_lectern", (1.8, -3.6, 0.55), (0.6, 0.5, 1.1), P["wood"])
+    return dict(seats=seats, rows=rows)
+
+
+def student_room():
+    P = M(); _room("stu", (6, 5), 2.8)
+    PR.table("stu_desk", (0.2, 1.6, 0), w=1.4, d=0.7)
+    PR.chair("stu_chair", (0.2, 1.0, 0), math.pi)
+    PR.shelf("stu_shelf", (-2.3, 2.2, 0), 1.2, 2.0, seed=5)
+    rng = random.Random(2)
+    for i in range(5):     # stacks of textbooks and notes on the desk
+        for k in range(rng.randint(2, 5)):
+            box(f"stu_book{i}_{k}", (-0.35 + i * 0.24, 1.75 + rng.uniform(-0.05, 0.05), 0.76 + 0.035 * k + 0.0175),
+                (0.2, 0.27, 0.033), rng.choice([P["paper"], P["grey"], P["light"]]), rot=(0, 0, rng.uniform(-0.2, 0.2)))
+    box("stu_notes", (0.55, 1.45, 0.752), (0.3, 0.21, 0.004), P["paper"], rot=(0, 0, 0.25))
+    PR.cone("stu_lampshade", (0.75, 1.85, 1.15), 0.14, 0.06, 0.16, P["lamp"], 16)
+    rk.point("stu_lamp", (0.75, 1.8, 1.05), 30, (1.0, 0.65, 0.28))
+    box("stu_door", (2.98, 0.0, 1.05), (0.06, 0.95, 2.1), P["wood"])
+    return dict(desk=Vector((0.2, 1.6, 0.76)), door=Vector((2.6, 0.0, 0)))
+
+
+def church():
+    P = M(); rng = random.Random(21)
+    _slab("chu_square", (18, 14), P["wet"], fade=(5.5, 8.5))
+    box("chu_front", (0, 4.0, 5.0), (8, 1.2, 10.0), P["light"], bevel=0.05)
+    PR.cone("chu_gable", (0, 4.0, 11.5), 4.8, 0.05, 3.0, P["light"], 4, rot=(0, 0, math.radians(45)))
+    box("chu_portal", (0, 3.38, 1.8), (2.0, 0.1, 3.6), P["dark"])
+    for i in range(5):
+        box(f"chu_step{i}", (0, 2.6 - i * 0.35, 0.09 + i * -0.0), (6.0 - i * 0.0, 0.35, 0.18 * (5 - i)), P["grey"])
+    rk.fade_to_void([P["light"], P["grey"]], (0, 2), 6.0, 9.5)
+    for i in range(6):
+        PR.bare_tree(f"chu_tree{i}", (rng.choice((-1, 1)) * rng.uniform(5.5, 8.0), rng.uniform(-4, 3), 0), 6.0, seed=700 + i)
+    return dict(steps_top=Vector((0, 2.6, 0.9)), square=Vector((0, -1.5, 0)))
+
+
+def pharmacy():
+    P = M(); _room("pha", (8, 5), 3.0)
+    for i, x in enumerate((-2.4, -0.8, 0.8, 2.4)):
+        sh = PR.shelf(f"pha_shelf{i}", (x, 2.2, 0), 1.5, 2.4, seed=40 + i)
+    box("pha_counter", (0, 0.2, 0.5), (4.0, 0.6, 1.0), P["light"], bevel=0.02)
+    rk.point("pha_lamp", (0, 0.8, 2.6), 100, (1.0, 0.8, 0.5))
+    return dict(counter=Vector((0, 0.2, 1.0)))
+
+
+def who_lobby():
+    P = M(); _room("lob", (16, 12), 7.0, floor_key="wet", wall_key="light")
+    for i in range(6):
+        cyl(f"lob_col{i}", (-6 + i * 2.4, 1.0, 0), (-6 + i * 2.4, 1.0, 7.0), 0.28, P["light"], 24)
+    box("lob_rack", (-4.5, 4.6, 0.9), (1.6, 0.4, 1.8), P["wood"])
+    for k in range(12):
+        box(f"lob_booklet{k}", (-5.1 + (k % 4) * 0.4, 4.42, 0.45 + (k // 4) * 0.5), (0.22, 0.02, 0.3), P["paper"])
+    box("lob_desk", (3.5, 3.0, 0.55), (3.0, 0.8, 1.1), P["wood"], bevel=0.02)
+    for i in range(4):
+        PR.window(f"lob_win{i}", (-6 + i * 4, 5.9, 3.5), 2.8, 5.0, "y", lit=False, sign=-1)
+        rk.area(f"lob_sky{i}", (-6 + i * 4, 7.0, 4.0), (-6 + i * 4, 0, 0.5), 2.8, 260, (1.0, 0.78, 0.45))
+    return dict(rack=Vector((-4.5, 4.2, 0)))
+
+
+def waiting_room():
+    P = M(); _room("wai", (8, 6), 2.8)
+    for i in range(6):
+        PR.chair(f"wai_ch{i}", (-2.6 + i * 0.6, 2.4, 0), 0.0)
+    box("wai_door", (2.6, 2.86, 1.05), (0.95, 0.06, 2.1), P["wood"])
+    box("wai_plate", (2.6, 2.82, 1.7), (0.3, 0.01, 0.12), P["paper"])
+    PR.table("wai_table", (-1.1, 1.5, 0), w=1.0, d=0.5, h=0.42)
+    rk.point("wai_lamp", (0, 1.0, 2.5), 60, (1.0, 0.75, 0.4))
+    return dict(door=Vector((2.6, 2.8, 1.0)))
+
+
+def empty_office(meeting=False):
+    P = M(); _room("off", (8, 6), 2.8)
+    if meeting:
+        PR.table("off_table", (0, 0.6, 0), w=3.0, d=1.2)
+        for i in range(4):
+            for s_ in (-1, 1):
+                PR.chair(f"off_ch{i}{s_}", (-1.1 + i * 0.73, 0.6 + s_ * 0.9, 0), 0.0 if s_ > 0 else math.pi)
+        for i in range(3):
+            box(f"off_bench{i}", (-2.4 + i * 2.4, 2.4, 0.45), (1.8, 0.7, 0.9), P["light"])
+    else:
+        PR.table("off_desk", (0, 1.4, 0), w=1.6, d=0.8)
+        PR.chair("off_chair", (0, 0.75, 0), math.pi)
+        box("off_monitor", (0, 1.6, 0.98), (0.45, 0.06, 0.36), P["dark"])
+        PR.shelf("off_shelf", (2.6, 2.6, 0), 1.6, 2.0, seed=9)
+    PR.window("off_win", (-1.6, 2.88, 1.6), 1.8, 1.6, "y", lit=False, sign=-1)
+    return dict(center=Vector((0, 1.0, 0)))
+
+
+def round_dinner(n=6):
+    P = M(); _room("rd", (8, 7), 3.0)
+    cyl("rd_table_top", (0, 0, 0.72), (0, 0, 0.76), 0.85, P["paper"], 48); cyl("rd_leg", (0, 0, 0), (0, 0, 0.72), 0.08, P["wood"], 12)
+    seats = []
+    for i in range(n):
+        a = i / n * 2 * math.pi
+        p = Vector((math.cos(a) * 1.25, math.sin(a) * 1.25, 0)); hd = math.degrees(math.atan2(-p.x, p.y))  # face the centre
+        PR.chair(f"rd_ch{i}", (p.x, p.y, 0), math.radians(hd)); seats.append((p, hd))
+        q = Vector((math.cos(a) * 0.55, math.sin(a) * 0.55, 0.765)); PR.place_setting(f"rd_ps{i}", q, a)
+    for i in range(3):
+        PR.candle(f"rd_candle{i}", (math.cos(i * 2.1) * 0.15, math.sin(i * 2.1) * 0.15, 0.765))
+    rk.point("rd_pendant", (0, 0, 2.2), 70, (1.0, 0.68, 0.3))
+    return dict(seats=seats)

@@ -250,11 +250,14 @@ POSES = {
     "drive": [("upperleg_l_074", X, -78), ("upperleg_r_081", X, -78), ("lowerleg_l_075", X, 62), ("lowerleg_r_082", X, 62),
               ("upperarm_l_024", Y, 36), ("upperarm_r_049", Y, -36), ("upperarm_l_024", X, -30), ("upperarm_r_049", X, -30),
               ("lowerarm_l_025", X, -45), ("lowerarm_r_050", X, -45), ("spine_01_03", X, -6)],
-    "car_drive": [("upperleg_l_074", X, -96), ("upperleg_r_081", X, -96), ("lowerleg_l_075", X, 42), ("lowerleg_r_082", X, 42),
+    "sit_child": [("upperleg_l_074", X, -88), ("upperleg_r_081", X, -88), ("lowerleg_l_075", X, 58), ("lowerleg_r_082", X, 58),
+                  ("upperarm_l_024", Y, 40), ("upperarm_r_049", Y, -40), ("upperarm_l_024", X, -22), ("upperarm_r_049", X, -22),
+                  ("lowerarm_l_025", X, -70), ("lowerarm_r_050", X, -70), ("spine_01_03", X, 4)],
+    "car_drive": [("upperleg_l_074", X, -96), ("upperleg_r_081", X, -96), ("lowerleg_l_075", X, 30), ("lowerleg_r_082", X, 30),
                   ("foot_l_076", X, 20), ("foot_r_083", X, 20),
                   ("upperarm_l_024", Y, 36), ("upperarm_r_049", Y, -36), ("upperarm_l_024", X, -30), ("upperarm_r_049", X, -30),
                   ("lowerarm_l_025", X, -45), ("lowerarm_r_050", X, -45), ("spine_01_03", X, -6)],
-    "car_sit": [("upperleg_l_074", X, -96), ("upperleg_r_081", X, -96), ("lowerleg_l_075", X, 42), ("lowerleg_r_082", X, 42),
+    "car_sit": [("upperleg_l_074", X, -96), ("upperleg_r_081", X, -96), ("lowerleg_l_075", X, 30), ("lowerleg_r_082", X, 30),
                 ("foot_l_076", X, 20), ("foot_r_083", X, 20),
                 ("upperarm_l_024", Y, 40), ("upperarm_r_049", Y, -40), ("upperarm_l_024", X, -12), ("upperarm_r_049", X, -12),
                 ("lowerarm_l_025", X, -62), ("lowerarm_r_050", X, -62), ("lowerarm_l_025", Z, -18), ("lowerarm_r_050", Z, 18),
@@ -320,7 +323,7 @@ def person(name, loc=(0, 0, 0), heading=0.0, pose="stand", kind="man", extra=(),
     hd.rotation_euler = up.to_track_quat('Z', 'Y').to_euler()
     mw_ = hd.matrix_world.copy(); hd.parent = arm; hd.parent_type = 'BONE'; hd.parent_bone = "head_07"
     bpy.context.view_layer.update(); hd.matrix_world = mw_; parts.append(hd)
-    if K["skirt"] and pose not in ("sit", "sit_table", "drive", "car_drive", "car_sit"):
+    if K["skirt"] and pose not in ("sit", "sit_table", "sit_child", "drive", "car_drive", "car_sit"):
         hz = (arm.matrix_world @ arm.pose.bones["hip_02"].head).z
         sk = cone(name + "_skirt", (0, 0, hz - 0.3 * K["s"]), 0.27 * K["s"], 0.17 * K["s"], 0.62 * K["s"], P["coat"], verts=32)
         sk.modifiers.new("sol", "SOLIDIFY").thickness = 0.01
