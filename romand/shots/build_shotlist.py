@@ -101,12 +101,12 @@ def write(out):
           "- Disclaimer: `disclaimer(discretion=True)` straight after the cold open and title (P1-24/25).",
           "- Person cards use our own faceless mannequin renders, never real photos (victims especially). Children get no portrait (a coat on a hook).",
           "- 0 clipping: every animated shot gets the per-frame clip check (bags, briefcases, doors, seats) before the final render.", "",
-          "## Open questions for the hub", "",
-          "1. Film title for the creepy title card (P1-24): placeholder only.",
-          "2. Bernard Kouchner card (P6-02): mannequin portrait, text-only, or no card?",
-          "3. Map card: the kit ships a Benelux dataset; I will add France/Switzerland outlines (Natural Earth, public domain) to the kit's map template.",
-          "4. Document cards are illustrative recreations (French wording, no invented numbers or years). OK?",
-          "5. Body pacing ~5–6 s: keep, or slow to the reference ~7–8 s?", "",
+          "## Hub decisions", "",
+          "1. Film title: placeholder until the user decides.",
+          "2. Bernard Kouchner (P6-02): text-only name card, no portrait or likeness.",
+          "3. Map: France/Switzerland outlines (Natural Earth) added (romand/graphics/rmap.py).",
+          "4. Documents: illustrative recreations; generic stylised seals/logos only (no real WHO logo).",
+          "5. Pacing: keep ~5 s body shots with constant motion.", "",
           "## Reusable sets", "", "| Code | Set |", "|---|---|"]
     L += [f"| {k} | {v} |" for k, v in SETS.items()]
     L += ["", "## Summary per part", "", "| Part | Title | Shots | Words | Est. length |", "|---|---|---|---|---|"]

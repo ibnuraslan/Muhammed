@@ -748,7 +748,7 @@
     "kind": "2D",
     "cam": "-",
     "act": "Document card: an ID badge in the WHO style. The badge is the RED accent (it never existed).",
-    "ov": "document(title=\"BADGE\", lines=[\"DR J.-C. ROMAND\", \"RESEARCHER\"], highlight=1)",
+    "ov": "document(title=\"BADGE\", lines=[\"DR J.-C. ROMAND\", \"RESEARCHER\"], highlight=1)  # generic stylised badge, no real WHO logo",
     "sfx": "card slide"
    },
    {
@@ -2054,7 +2054,7 @@
     "kind": "CIN",
     "cam": "TRACK along the phantom table",
     "act": "The country-house dinner table (callback), every chair empty.",
-    "ov": "person(photo=placeholder, name=\"BERNARD KOUCHNER\", role=\"FRENCH POLITICIAN\")  # hub: photo or text-only",
+    "ov": "name card, TEXT ONLY (hub: no portrait or likeness of a real living person): BERNARD KOUCHNER / FRENCH POLITICIAN",
     "sfx": "phantom piano"
    },
    {
