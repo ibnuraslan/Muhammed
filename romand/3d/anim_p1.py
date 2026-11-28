@@ -124,6 +124,7 @@ def run(sid):
         return
     sc.render.filepath = os.path.join(out, "frames", sid, "f_####.png")
     sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_depth = '8'
+    sc.render.use_persistent_data = True        # keep static geometry (the instanced forests) between frames
     bpy.ops.render.render(animation=True)
     print("RENDERED", sid, N, "frames", "clipping" if bad else "clean")
 

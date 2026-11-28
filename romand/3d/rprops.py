@@ -1,7 +1,7 @@
 """Romand film: procedural props, built in neutral greys (the world tint comes from the light). Every builder makes
 its parts around the origin and returns a group empty (rk.group) you can move/turn; sizes are in metres.
 RED accent props (cord, canister, rifle silhouette, rolling pin, petrol can, badge, ankle tag) use P['red']."""
-import math, random
+import math, random, os
 import bpy
 from mathutils import Vector, Matrix
 import rk
@@ -177,9 +177,20 @@ def _fix_alpha(aid, objs):
             m["alpha_fixed"] = 1
 
 
+TREE_LIB = os.environ.get("TREE_LIB", "")     # farm mode: link the tree collections from this shared .blend
+
+
 def _tree_coll(kind):
-    """Load one tree variant once into a hidden collection, base at the origin; returns (collection, height)."""
+    """Load one tree variant once into a hidden collection, base at the origin; returns (collection, height).
+    With TREE_LIB set (farm packaging) the collection is LINKED from the shared lib/trees.blend instead, so every
+    shot file references one copy of the heavy tree meshes."""
     if kind in _TREES and _TREES[kind][0].name in bpy.data.collections:
+        return _TREES[kind]
+    if TREE_LIB:
+        with bpy.data.libraries.load(TREE_LIB, link=True) as (src_, dst_):
+            dst_.collections = ["tree_" + kind]
+        col = dst_.collections[0]
+        _TREES[kind] = (col, float(col.get("height", 6.0)) if hasattr(col, "get") else 6.0)
         return _TREES[kind]
     src, aid, filt = TREE_SRC[kind]
     before = set(bpy.data.objects)
@@ -219,6 +230,7 @@ def _tree_coll(kind):
     for o in new:
         if o not in keep and o.name in bpy.data.objects:
             bpy.data.objects.remove(o)
+    col["height"] = hi.z - lo.z
     _TREES[kind] = (col, hi.z - lo.z)
     return _TREES[kind]
 
