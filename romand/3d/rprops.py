@@ -122,29 +122,124 @@ def car(name="car", loc=(0, 0, 0), rz=0.0, boot=0.0, door_l=0.0, door_r=0.0, lig
 
 
 # ------------------------------------------------------------------------------------------------- nature
+# ------------------------------------------------------------------------------------------------- real trees (instanced)
+TREE_SRC = {  # kind: (source, id, mesh-name filter) -- Poly Haven CC0 firs, Sketchfab CC-BY leafless trees
+    "fir_a": ("ph", "fir_tree_01", "_c_LOD0"), "fir_b": ("ph", "fir_tree_01", "_b_LOD0"),
+    "sap_a": ("ph", "fir_sapling_medium", "_a_LOD0"), "sap_b": ("ph", "fir_sapling_medium", "_c_LOD0"),
+    "bare_a": ("sf", "4aed7a078d574e1f946a43c31ca16715", ""), "bare_b": ("sf", "09c2c4f4124a4603b37d92a330c89292", ""),
+}
+_TREES = {}
+
+
+def _darken(m, k=0.32):
+    """Keep the asset's textures and alpha, but dye it dark so trees read as silhouettes that catch the amber rim."""
+    if not m.use_nodes or m.get("darkened"):
+        return
+    nt = m.node_tree; p = nt.nodes.get("Principled BSDF")
+    if p is None:
+        return
+    src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+    mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+    mx.inputs[7].default_value = (k, k * 0.95, k * 0.85, 1)
+    if src is not None:
+        nt.links.new(src, mx.inputs[6])
+    else:
+        mx.inputs[6].default_value = p.inputs['Base Color'].default_value
+    nt.links.new(mx.outputs[2], p.inputs['Base Color'])
+    m["darkened"] = 1
+
+
+def _fix_alpha(aid, objs):
+    """Poly Haven glTFs ship the leaf/twig colour as JPG; fetch the separate <part>_alpha map and wire it to Alpha."""
+    import ph, os
+    files = ph._files(aid)
+    for o in objs:
+        for m in o.data.materials:
+            if m is None or m.get("alpha_fixed"):
+                continue
+            part = m.name.replace(aid + "_", "")
+            key = part + "_alpha"
+            if key not in files:
+                continue
+            info = files[key]["1k"]; fmt = "png" if "png" in info else list(info.keys())[0]
+            url = info[fmt]["url"]
+            path = ph._get(url, os.path.join(ph.ROOT, aid, "textures", os.path.basename(url)))
+            nt = m.node_tree; p = nt.nodes["Principled BSDF"]
+            tex = nt.nodes.new("ShaderNodeTexImage"); tex.image = bpy.data.images.load(path, check_existing=True)
+            tex.image.colorspace_settings.name = 'Non-Color'
+            uv = None
+            for n in nt.nodes:
+                if n.type == 'TEX_IMAGE' and n is not tex and n.inputs['Vector'].links:
+                    uv = n.inputs['Vector'].links[0].from_socket; break
+            if uv is not None:
+                nt.links.new(uv, tex.inputs['Vector'])
+            nt.links.new(tex.outputs['Color'], p.inputs['Alpha'])
+            m["alpha_fixed"] = 1
+
+
+def _tree_coll(kind):
+    """Load one tree variant once into a hidden collection, base at the origin; returns (collection, height)."""
+    if kind in _TREES and _TREES[kind][0].name in bpy.data.collections:
+        return _TREES[kind]
+    src, aid, filt = TREE_SRC[kind]
+    before = set(bpy.data.objects)
+    if src == "ph":
+        import ph
+        bpy.ops.import_scene.gltf(filepath=ph.fetch_model(aid, "1k"))
+    else:
+        import sf
+        bpy.ops.import_scene.gltf(filepath=sf.fetch(aid))
+    new = [o for o in bpy.data.objects if o not in before]
+    bpy.context.view_layer.update()
+    keep = [o for o in new if o.type == 'MESH' and filt in o.name]
+    if src == "sf":     # drop ground patches / bases that come with some tree scans (flat, wide meshes)
+        def _hz(o):
+            zs = [(o.matrix_world @ Vector(c)).z for c in o.bound_box]
+            return max(zs) - min(zs)
+        H = max(_hz(o) for o in keep)
+        keep = [o for o in keep if _hz(o) > 0.15 * H]
+    col = bpy.data.collections.new("tree_" + kind)
+    for o in keep:
+        mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+    bpy.context.view_layer.update()
+    pts = [o.matrix_world @ Vector(c) for o in keep for c in o.bound_box]
+    lo = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
+    hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
+    base = Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z))
+    for o in keep:
+        o.matrix_world = Matrix.Translation(-base) @ o.matrix_world
+        for us in list(o.users_collection):
+            us.objects.unlink(o)
+        col.objects.link(o)
+        for m in o.data.materials:
+            if m:
+                _darken(m, 0.12 if src == "sf" else 1.0)
+    if src == "ph":
+        _fix_alpha(aid, keep)
+    for o in new:
+        if o not in keep and o.name in bpy.data.objects:
+            bpy.data.objects.remove(o)
+    _TREES[kind] = (col, hi.z - lo.z)
+    return _TREES[kind]
+
+
+def tree(name, kind, loc, h, rz=0.0):
+    col, h0 = _tree_coll(kind)
+    o = bpy.data.objects.new(name, None); o.instance_type = 'COLLECTION'; o.instance_collection = col
+    bpy.context.scene.collection.objects.link(o)
+    s = h / h0; o.scale = (s, s, s); o.location = loc; o.rotation_euler.z = rz
+    return o
+
+
 def pine(name, loc, h=7.0, seed=0):
-    """A spruce silhouette: a bare trunk and 7 drooping, overlapping tiers that narrow to a spike."""
-    P = M(); rng = random.Random(seed); parts = [cyl(name + "_trunk", (0, 0, 0), (0, 0, h * 0.5), 0.1 * h / 7, P["bark"], 8)]
-    n = 7
-    for i in range(n):
-        f = i / (n - 1)
-        z0 = h * (0.16 + 0.68 * f); r = h * (0.2 - 0.16 * f) * rng.uniform(0.9, 1.1)
-        c = cone(name + f"_c{i}", (0, 0, z0 + h * 0.08), r, r * 0.12, h * 0.2, P["foliage"], verts=14,
-                 rot=(math.radians(rng.uniform(-4, 4)), math.radians(rng.uniform(-4, 4)), rng.uniform(0, 6)))
-        parts.append(c)
-    parts.append(cone(name + "_tip", (0, 0, h * 0.95), h * 0.03, 0.0, h * 0.12, P["foliage"], verts=8))
-    return group(name, parts, loc, rng.uniform(0, 6.28))
+    rng = random.Random(seed)
+    kind = rng.choice(["fir_a", "fir_b", "fir_b", "sap_a", "sap_b", "sap_b"])
+    return tree(name, kind, loc, h * rng.uniform(0.9, 1.15), rng.uniform(0, 6.28))
 
 
 def bare_tree(name, loc, h=6.0, seed=0):
-    P = M(); rng = random.Random(seed); parts = []
-    parts.append(cyl(name + "_trunk", (0, 0, 0), (0, 0, h * 0.6), 0.13 * h / 6, P["bark"], 8))
-    for i in range(7):
-        z = h * rng.uniform(0.3, 0.6); a = rng.uniform(0, 6.28); el = rng.uniform(25, 60)
-        ln = h * rng.uniform(0.25, 0.45)
-        d = Vector((math.cos(a) * math.cos(math.radians(el)), math.sin(a) * math.cos(math.radians(el)), math.sin(math.radians(el))))
-        parts.append(cyl(name + f"_b{i}", (0, 0, z), Vector((0, 0, z)) + d * ln, 0.035 * h / 6, P["bark"], 6))
-    return group(name, parts, loc, rng.uniform(0, 6.28))
+    rng = random.Random(seed)
+    return tree(name, rng.choice(["bare_a", "bare_a", "bare_b"]), loc, h * rng.uniform(0.9, 1.15), rng.uniform(0, 6.28))
 
 
 def bush(name, loc, r=0.5, seed=0):

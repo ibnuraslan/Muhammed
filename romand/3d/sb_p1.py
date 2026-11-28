@@ -113,8 +113,8 @@ def s12():
     mw = car["root"].matrix_world
     rk.person("romand", tuple(mw @ Vector((0.3, 1.6, 0))), -20, "stand", "man", seed=5)
     rk.person("chantal", tuple(mw @ Vector((-1.2, -1.7, 0))), 150, "stand_bow", "woman", seed=6)
-    for i, (x, y) in enumerate(((-9.0, -6.8), (-3.6, -7.6))):
-        PR.bare_tree(f"fg{i}", (x, y, 0), 6.0, seed=50 + i)
+    for i, (x, y) in enumerate(((-10.5, -6.0), (-2.0, -8.6))):     # framing trunks at the edges of frame
+        PR.pine(f"fg{i}", (x, y, 0), 7.0, seed=50 + i)
     rk.look(center=(0, 0, 0), extent=10, fill=200, moon=200, key=200, rim=300)
     rk.camera((-7.5, -10.5, 2.2), (0, -0.8, 0.8), lens=45, fstop=5.6, focus=13.0)
 

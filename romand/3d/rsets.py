@@ -16,7 +16,7 @@ def _slab(name, size, m, z=0.0, fade=None, center=(0, 0)):
 
 
 # ------------------------------------------------------------------------------------------------- FOR: forest road
-def forest(seed=3, car_kw=None, size=(18, 14), density=70, car_at=(0.0, 0.0), car_rz=0.0, snow=False):
+def forest(seed=3, car_kw=None, size=(18, 14), density=120, car_at=(0.0, 0.0), car_rz=0.0, snow=False):
     P = M(); rng = random.Random(seed)
     _slab("forest_floor", size, P["soil"], fade=(5.0, 8.0))
     road = box("road", (0, 0, 0.005), (size[0], 3.6, 0.02), P["asphalt"])
@@ -34,6 +34,9 @@ def forest(seed=3, car_kw=None, size=(18, 14), density=70, car_at=(0.0, 0.0), ca
             trees.append(PR.pine(f"pine{i}", (x, y, 0), rng.uniform(4.5, 6.5) * hk, seed=i))
         else:
             trees.append(PR.bare_tree(f"tree{i}", (x, y, 0), rng.uniform(4.0, 6.0) * hk, seed=i))
+    # amber backlight from deep in the forest: the trees read as dark silhouettes with a warm rim
+    rk.area("forest_rim", (0, size[1] * 0.9, 7.0), (0, -2.0, 2.0), 10.0, 2200.0, (1.0, 0.55, 0.12), size_y=3.0)
+    rk.area("forest_rim_l", (-size[0] * 0.7, size[1] * 0.3, 5.0), (0, 0, 2.0), 6.0, 900.0, (1.0, 0.5, 0.1))
     car = PR.car405("car", (car_at[0], car_at[1] - 0.8, 0), car_rz, **(car_kw or {}))
     return dict(car=car, trees=trees, center=Vector((0, 0, 0)))
 
